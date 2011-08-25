@@ -65,6 +65,8 @@
             <groupId>beencode</groupId>
             <artifactId>beencode</artifactId>
             <version>0.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../lib/bee-encode-0.2.jar</systemPath>
         </dependency>
 
     </dependencies>
