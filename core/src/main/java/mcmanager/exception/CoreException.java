@@ -1,9 +1,13 @@
-package rmanager.exception;
+package mcmanager.exception;
 
 public class CoreException extends Exception {
 
     public CoreException() {
         super();
+    }
+
+    public CoreException(String message) {
+        super(message);
     }
 
     public CoreException(Throwable cause) {

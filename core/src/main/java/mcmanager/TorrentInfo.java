@@ -1,4 +1,4 @@
-package rmanager;
+package mcmanager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,8 +12,9 @@ import java.util.TreeMap;
 
 import org.ardverk.coding.BencodingInputStream;
 
-import rmanager.exception.CoreException;
-
+import mcmanager.exception.CoreException;
+import mcmanager.utils.CloseUtils;
+//TODO допелить
 public class TorrentInfo {
 
     private Set<String> fileList;

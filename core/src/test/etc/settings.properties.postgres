@@ -1,0 +1,43 @@
+#Драйвер базы данных
+#Oracle
+#jdbc.driverClassName=oracle.jdbc.driver.OracleDriver
+
+#SQLite
+#jdbc.driverClassName=org.sqlite.JDBC
+
+#PostgresSql
+jdbc.driverClassName=org.postgresql.Driver
+
+#HSQLDB
+#jdbc.driverClassName=org.hsqldb.jdbcDriver
+
+#URL подключения
+#jdbc.url=jdbc:oracle:thin:@server:1521:MAIN
+#jdbc.url=jdbc:sqlite:/home/n4ela/rut33.db
+jdbc.url=jdbc:postgresql://192.168.1.6:5432/rutracker?charSet=UTF-8
+#jdbc.url=jdbc:hsqldb:mem:public
+
+# Диалект hibernate
+#hibernate.dialect=org.hibernate.dialect.OracleDialect
+#hibernate.dialect=dialect.SQLiteDialect 
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#hibernate.dialect=org.hibernate.dialect.HSQLDialect
+
+#Схема базы данных
+jdbc.schema=rutracker
+#jdbc.schema=public
+
+# Имя пользователя, подключающегося к БД                                                                                              
+jdbc.username=rutracker
+                                                                                                                                      
+# Пароль пользователя, подключающегося к БД                                                                                           
+jdbc.password=alaktoGlAs
+
+# Время запуска задачи по мониторингу в cron формате
+monitor.time=0/60 * * * * ? 
+
+#Имя пользователя rutracker.org
+rutracker.user=rutracker-manager
+
+#Пароль к rutracker.org
+rutracker.password=z1x2c3v4

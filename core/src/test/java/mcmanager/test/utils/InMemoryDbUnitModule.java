@@ -1,3 +1,4 @@
+package mcmanager.test.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -28,13 +29,11 @@ public class InMemoryDbUnitModule extends DbUnitModule {
     }
 
     public void initializeSchema() {
-
         try {
             String schemaName = configuration.getProperty(DATABASE_SCHEMA_NAME, DEFAULT_SCHEMA_NAME);
 
             DbUnitDatabaseConnection connection = getDbUnitDatabaseConnection(schemaName);
             Statement statement = connection.getConnection().createStatement();
-//            System.out.println("HELLO");
 //            for (String tableString : getTableStatements())
 //            {
 //                System.out.println(tableString);

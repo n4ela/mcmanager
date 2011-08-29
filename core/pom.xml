@@ -55,11 +55,11 @@
             <artifactId>javassist</artifactId>
             <version>3.14.0-GA</version>
         </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
+        <!-- <dependency> -->
+        <!-- <groupId>commons-dbcp</groupId> -->
+        <!-- <artifactId>commons-dbcp</artifactId> -->
+        <!-- <version>1.4</version> -->
+        <!-- </dependency> -->
 
         <dependency>
             <groupId>beencode</groupId>
@@ -67,6 +67,12 @@
             <version>0.2</version>
             <scope>system</scope>
             <systemPath>${basedir}/../lib/bee-encode-0.2.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.0-801.jdbc4</version>
         </dependency>
 
     </dependencies>
@@ -83,6 +89,11 @@
                     <groupId>org.unitils</groupId>
                     <artifactId>unitils</artifactId>
                     <version>2.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>junit-addons</groupId>
+                    <artifactId>junit-addons</artifactId>
+                    <version>1.4</version>
                 </dependency>
                 <dependency>
                     <groupId>org.dbunit</groupId>

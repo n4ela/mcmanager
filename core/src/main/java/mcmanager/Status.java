@@ -1,4 +1,4 @@
-package rmanager;
+package mcmanager;
 
 public enum Status {
     OFF(0, "Выкл"),
