@@ -57,6 +57,7 @@ public class ReflectUtils {
                 equals(expectedObject, actualObject, method.getName());
             }
         } else {
+            //TODO тут может быть NullPointerException
             throw new CoreException("Не известный класс: " + expected.getClass() + " " + actual.getClass());
         }
     }

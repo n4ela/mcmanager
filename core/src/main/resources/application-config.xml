@@ -13,8 +13,7 @@
     <!-- Файл с настройками пользователя -->
     <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location"
-            value="file://${catalina.home}/etc/settings.properties" />
+        <property name="location" value="file://${catalina.home}/etc/settings.properties" />
     </bean>
 
     <!-- Настройка подключения к БД -->
@@ -22,8 +21,8 @@
         destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}" />
         <property name="url" value="${jdbc.url}" />
-<!--         <property name="username" value="${jdbc.username}"/> -->
-<!--         <property name="password" value="${jdbc.password}"/> -->
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <!-- Настройки фабрики сессий Хибернейта -->
@@ -70,8 +69,4 @@
    <bean id="hibernateGroupDao" class="mcmanager.dao.DaoFactory">                                                                           
       <property name="groupDao" ref="hibernateGroup"/>                                                                                                             
    </bean>
-<!--     <bean id="hibernateGroup" -->
-<!--         class="name.samolisov.jta.xa.demo.crm.hibernate.HibernateCrmDao"> -->
-<!--         <property name="hibernateTemplate" ref="hibernateTemplate" /> -->
-<!--     </bean> -->
 </beans>

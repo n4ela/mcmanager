@@ -55,11 +55,11 @@
             <artifactId>javassist</artifactId>
             <version>3.14.0-GA</version>
         </dependency>
-        <!-- <dependency> -->
-        <!-- <groupId>commons-dbcp</groupId> -->
-        <!-- <artifactId>commons-dbcp</artifactId> -->
-        <!-- <version>1.4</version> -->
-        <!-- </dependency> -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
 
         <dependency>
             <groupId>beencode</groupId>
@@ -79,11 +79,37 @@
     <profiles>
         <profile>
             <id>test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <systemProperties>
+                                <catalina.home>${basedir}/src/test</catalina.home>
+                            </systemProperties>
+                            <includes>
+                                <include>**/UTest*.java</include>
+                            </includes>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${basedir}/src/test/java</additionalClasspathElement>
+                            </additionalClasspathElements>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <dependencies>
                 <dependency>
                     <groupId>hsqldb</groupId>
                     <artifactId>hsqldb</artifactId>
                     <version>1.8.0.10</version>
+                </dependency>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <version>4.8.2</version>
+                    <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.unitils</groupId>
