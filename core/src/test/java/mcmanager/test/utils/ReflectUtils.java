@@ -54,6 +54,7 @@ public class ReflectUtils {
                         method.getParameterTypes(), new Object[]{});
                 Object actualObject = PrivateAccessor.invoke(actualDistribution, method.getName(), 
                         method.getParameterTypes(), new Object[]{});
+                System.out.println("expectedObject: " + expectedObject + " actualObject: " + actualObject);
                 equals(expectedObject, actualObject, method.getName());
             }
         } else {

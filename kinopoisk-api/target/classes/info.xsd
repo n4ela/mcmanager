@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="unqualified" targetNamespace="http://kinopoisk.mcmanager/info"
+    xmlns:info="http://kinopoisk.mcmanager/info">
+
+    <xs:element name="tvshow">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="xs:string" />
+                <xs:element name="rating" type="xs:string" />
+                <xs:element name="year" type="xs:string" />
+                <xs:element name="top250" type="xs:string" />
+                <xs:element name="season" type="xs:string" />
+                <xs:element name="episode" type="xs:string" />
+                <xs:element name="displayseason" type="xs:string" />
+                <xs:element name="displayepisode" type="xs:string" />
+                <xs:element name="votes" type="xs:string" />
+                <xs:element name="outline" type="xs:string" />
+                <xs:element name="plot" type="xs:string" />
+                <xs:element name="runtime" type="xs:string" />
+                <xs:element name="tagline" type="xs:string" />
+                <xs:element name="thumb" type="info:thumb" maxOccurs="unbounded"/>
+                <xs:element name="fanart" type="info:fanart"/>
+                <xs:element name="mpaa" type="xs:string" />
+                <xs:element name="playcount" type="xs:string" />
+                <xs:element name="lastplayed" type="xs:string" />
+                <xs:element name="episodeguide">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="url" type="info:url"/>
+                    </xs:sequence>
+                </xs:complexType> 
+                </xs:element>
+                <xs:element name="id" type="xs:string" />
+                <xs:element name="genre" type="xs:string" />
+                <xs:element name="set" type="xs:string" />
+                <xs:element name="credits" type="xs:string" />
+                <xs:element name="director" type="xs:string" />
+                <xs:element name="premiered" type="xs:string" />
+                <xs:element name="status" type="xs:string" />
+                <xs:element name="code" type="xs:string" />
+                <xs:element name="aired" type="xs:string" />
+                <xs:element name="studio" type="xs:string" />
+                <xs:element name="trailer" type="xs:string" />
+                <xs:element name="actor" type="info:actor" maxOccurs="unbounded" />
+                
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="movie">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="xs:string" />
+                <xs:element name="originaltitle" type="xs:string" />
+                <xs:element name="sorttitle" type="xs:string" />
+                <xs:element name="set" type="xs:string" />
+                <xs:element name="rating" type="xs:string" />
+                <xs:element name="year" type="xs:string" />
+                <xs:element name="top250" type="xs:string" />
+                <xs:element name="votes" type="xs:string" />
+                <xs:element name="outline" type="xs:string" />
+                <xs:element name="plot" type="xs:string" />
+                <xs:element name="tagline" type="xs:string" />
+                <xs:element name="runtime" type="xs:string" />
+                <xs:element name="thumb" type="xs:string" />
+                <xs:element name="mpaa" type="xs:string" />
+                <xs:element name="playcount" type="xs:string" />
+                <xs:element name="watched" type="xs:string" />
+                <xs:element name="id" type="xs:string" />
+                <xs:element name="filenameandpath" type="xs:string" />
+                <xs:element name="trailer" type="xs:string" />
+                <xs:element name="genre" type="xs:string" />
+                <xs:element name="credits" type="xs:string" />
+                <xs:element name="fileinfo" type="info:fileinfo" />
+                <xs:element name="director" type="xs:string" />
+                <xs:element name="actor" type="info:actor" maxOccurs="unbounded" />
+                <xs:element name="artist" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="episodedetails">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="xs:string" />
+                <xs:element name="rating" type="xs:string" />
+                <xs:element name="season" type="xs:string" />
+                <xs:element name="episode" type="xs:string" />
+                <xs:element name="plot" type="xs:string" />
+                <xs:element name="thumb" type="xs:string" />
+                <xs:element name="playcount" type="xs:string" />
+                <xs:element name="lastplayed" type="xs:string" />
+                <xs:element name="credits" type="xs:string" />
+                <xs:element name="director" type="xs:string" />
+                <xs:element name="aired" type="xs:string" />
+                <xs:element name="premiered" type="xs:string" />
+                <xs:element name="studio" type="xs:string" />
+                <xs:element name="mpaa" type="xs:string" />
+                <xs:element name="epbookmark" type="xs:string" />
+                <xs:element name="displayseason" type="xs:string" />
+                <xs:element name="displayepisode" type="xs:string" />
+                <xs:element name="actor" type="info:actor" maxOccurs="unbounded" />
+                <xs:element name="fileinfo" type="info:fileinfo" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="actor">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="role" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="fileinfo">
+        <xs:sequence>
+            <xs:element name="streamdetails" type="info:streamdetails" />
+        </xs:sequence>
+    </xs:complexType>
+    
+
+    <xs:complexType name="streamdetails">
+        <xs:sequence>
+            <xs:element name="video" type="info:video" />
+            <xs:element name="audio" type="info:audio"
+                maxOccurs="unbounded" />
+            <xs:element name="subtitle" type="info:subtitle"
+                maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="video">
+        <xs:sequence>
+            <xs:element name="codec" type="xs:string" />
+            <xs:element name="aspect" type="xs:string" />
+            <xs:element name="width" type="xs:string" />
+            <xs:element name="height" type="xs:string" />
+            <xs:element name="durationinseconds" type="xs:string" />
+            <xs:element name="language" type="xs:string" />
+            <xs:element name="longlanguage" type="xs:string" />
+            <xs:element name="scantype" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="audio">
+        <xs:sequence>
+            <xs:element name="codec" type="xs:string" />
+            <xs:element name="language" type="xs:string" />
+            <xs:element name="channels" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="subtitle">
+        <xs:sequence>
+            <xs:element name="language" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="thumb">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="info:thumb-type"/>
+                <xs:attribute name="season" type="xs:string" />
+
+                <xs:attribute name="dim" type="xs:string" />
+                <xs:attribute name="colors" type="xs:string" />
+                <xs:attribute name="preview" type="xs:string" />
+            </xs:extension>
+       </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="thumb-type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="season" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="fanart">
+        <xs:sequence>
+            <xs:element name="thumb" type="info:thumb" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="url" type="xs:string" />
+    </xs:complexType>
+    
+    <xs:complexType name="url">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="cache" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>
+

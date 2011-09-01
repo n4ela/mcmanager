@@ -1,0 +1,40 @@
+<episodedetails>
+    <title>My TV Episode</title>
+    <rating>10.00</rating>
+    <season>2</season>
+    <episode>1</episode>
+    <plot>he best episode in the world</plot>
+    <thumb>http://thetvdb.com/banners/episodes/164981/2528821.jpg</thumb>
+    <playcount>0</playcount>
+    <credits>Writer</credits>
+    <director>Mr. Vision</director>
+    <aired>2000-12-31</aired>
+    <premiered>2010-09-24</premiered>
+    <studio>Production studio or channel</studio>
+    <mpaa>MPAA certification</mpaa>
+    <epbookmark>200</epbookmark>
+    <displayseason>3</displayseason>
+    <displayepisode>4096</displayepisode>
+    <actor>
+        <name>Little Suzie</name>
+        <role>Pole Jumper/Dancer</role>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.778</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>587</durationinseconds>
+                <language>eng</language>
+                <longlanguage>English</longlanguage>
+                <scantype>Progressive</scantype>
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <channels>6</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+</episodedetails>

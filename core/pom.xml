@@ -10,6 +10,11 @@
         <version>HEAD-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>javax.persistence</groupId>
@@ -75,58 +80,27 @@
             <version>9.0-801.jdbc4</version>
         </dependency>
 
-    </dependencies>
-    <profiles>
-        <profile>
-            <id>test</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.9</version>
-                        <configuration>
-                            <systemProperties>
-                                <catalina.home>${basedir}/src/test</catalina.home>
-                            </systemProperties>
-                            <includes>
-                                <include>**/UTest*.java</include>
-                            </includes>
-                            <additionalClasspathElements>
-                                <additionalClasspathElement>${basedir}/src/test/java</additionalClasspathElement>
-                            </additionalClasspathElements>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <version>1.8.0.10</version>
-                </dependency>
-                <dependency>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                    <version>4.8.2</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.unitils</groupId>
-                    <artifactId>unitils</artifactId>
-                    <version>2.4</version>
-                </dependency>
-                <dependency>
-                    <groupId>junit-addons</groupId>
-                    <artifactId>junit-addons</artifactId>
-                    <version>1.4</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.dbunit</groupId>
-                    <artifactId>dbunit</artifactId>
-                    <version>2.4.8</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+
+        <!-- ТЕСТЫ -->
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit-addons</groupId>
+            <artifactId>junit-addons</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.8</version>
+        </dependency>
+        </dependencies>
 </project>
