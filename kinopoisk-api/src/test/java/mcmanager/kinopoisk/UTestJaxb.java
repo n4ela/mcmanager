@@ -1,14 +1,11 @@
 package mcmanager.kinopoisk;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 
-import mcmanager.kinopoisk.exception.KinopoiskException;
 import mcmanager.kinopoisk.info.Actor;
 import mcmanager.kinopoisk.info.Audio;
 import mcmanager.kinopoisk.info.Episodedetails;
@@ -20,14 +17,13 @@ import mcmanager.kinopoisk.info.Subtitle;
 import mcmanager.kinopoisk.info.Thumb;
 import mcmanager.kinopoisk.info.ThumbType;
 import mcmanager.kinopoisk.info.Tvshow;
+import mcmanager.kinopoisk.info.Tvshow.Episodeguide;
 import mcmanager.kinopoisk.info.Url;
 import mcmanager.kinopoisk.info.Video;
-import mcmanager.kinopoisk.info.Tvshow.Episodeguide;
 import mcmanager.kinopoisk.utils.JaxbUtils;
 
 import org.custommonkey.xmlunit.XMLTestCase;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 public class UTestJaxb extends XMLTestCase {
 
@@ -52,7 +48,9 @@ public class UTestJaxb extends XMLTestCase {
         movie.setOutline("A look at the role of the Buckeye State in the 2004 Presidential Election.");
         movie.setPlot("A look at the role of the Buckeye State in the 2004 Presidential Election.");
         movie.setRuntime("90 min");
-        movie.setThumb("http://ia.ec.imdb.com/media/imdb/01/I/25/65/31/10f.jpg");
+        Thumb thumb = new Thumb();
+        thumb.setValue("http://ia.ec.imdb.com/media/imdb/01/I/25/65/31/10f.jpg");
+        movie.getThumb().add(thumb);
         movie.setMpaa("Not available");
         movie.setPlaycount("0");
         movie.setWatched("false");
@@ -225,7 +223,9 @@ public class UTestJaxb extends XMLTestCase {
         episodedetails.setSeason("2");
         episodedetails.setEpisode("1");
         episodedetails.setPlot("he best episode in the world");
-        episodedetails.setThumb("http://thetvdb.com/banners/episodes/164981/2528821.jpg");
+        Thumb thumb = new Thumb();
+        thumb.setValue("http://thetvdb.com/banners/episodes/164981/2528821.jpg");
+        episodedetails.getThumb().add(thumb);
         episodedetails.setPlaycount("0");
         episodedetails.setCredits("Writer");
         episodedetails.setDirector("Mr. Vision");
