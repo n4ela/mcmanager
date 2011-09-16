@@ -7,7 +7,7 @@ import mcmanager.data.Distribution;
 import mcmanager.data.Group;
 import mcmanager.test.utils.MockObjectDb;
 import mcmanager.test.utils.ReflectUtils;
-import mcmanager.utils.FileUtils;
+import mcmanager.utils.ApplicationUtils;
 
 import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
@@ -15,11 +15,11 @@ import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringApplicationContext;
 
 
-@SpringApplicationContext({"application-config.xml"})
+@SpringApplicationContext({"core-config.xml"})
 @DataSet
 public class UTestDaoFactory extends UnitilsJUnit4 {
 
-    private final String testPath = FileUtils.getApplicationHome() + 
+    private final String testPath = ApplicationUtils.getApplicationHome() + 
                                     File.separator + "data" + 
                                     File.separator + "dao-factory" +
                                     File.separator;
@@ -34,11 +34,13 @@ public class UTestDaoFactory extends UnitilsJUnit4 {
         Group groupSerial = groups.get((long)1);
         Group groupFilms = groups.get((long)2);
         Distribution distributionSerial = distributions.get((long)1);
+        distributionSerial.setGroup(groupFilms);
         Distribution distributionFilms = distributions.get((long)2);
+        distributionFilms.setGroup(groupSerial);
         DaoFactory.getInstance().getGroupDao().addGroup(groupFilms);
         DaoFactory.getInstance().getGroupDao().addGroup(groupSerial);
-        DaoFactory.getInstance().getDistributionDao().addOrUpdateDistribution(distributionSerial);
-        DaoFactory.getInstance().getDistributionDao().addOrUpdateDistribution(distributionFilms);
+        DaoFactory.getInstance().getDistributionDao().addDistribution(distributionSerial);
+        DaoFactory.getInstance().getDistributionDao().addDistribution(distributionFilms);
     }
     
     @Test
@@ -54,7 +56,9 @@ public class UTestDaoFactory extends UnitilsJUnit4 {
         Group expectedGroupSerial = groups.get((long)3); 
         Group expectedGroupFilms = groups.get((long)4);
         Distribution expectedDistributionSerial = distributions.get((long)3); 
+        expectedDistributionSerial.setGroup(expectedGroupSerial);
         Distribution expectedDistributionFilm = distributions.get((long)4);
+        expectedDistributionFilm.setGroup(expectedGroupFilms);
         
         ReflectUtils.equalsByGetMethod(expectedGroupFilms, actualGroupFilms);
         ReflectUtils.equalsByGetMethod(expectedGroupSerial, actualGroupSerial);

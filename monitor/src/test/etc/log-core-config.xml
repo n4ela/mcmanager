@@ -2,20 +2,21 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
-	<!-- Аппендери http клиента -->
-	<appender name="kinopoisk" class="org.apache.log4j.DailyRollingFileAppender">
+	<!-- Аппендери хибернейта -->
+	<appender name="unitils" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Append" value="true" />
 		<param name="Threshold" value="TRACE" />
-		<param name="File" value="../logs/kinopoisk.log" />
+		<param name="File" value="../logs/org.unitils.core.ConfigurationLoader.log" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
 		</layout>
 	</appender>
 
-	<!-- Логгер отправки на email -->
-    <logger name="kinopoisk" additivity="false">
-      <level value="debug"/>
-      <appender-ref ref="kinopoisk"/>
+    <!-- Логгер Юинитилс -->
+    <logger name="org.unitils.core.ConfigurationLoader" additivity="false">
+        <level value="trace" />
+        <appender-ref ref="unitils" />
     </logger>
+
 </log4j:configuration>

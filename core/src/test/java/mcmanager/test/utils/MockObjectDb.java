@@ -9,9 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junitx.util.PrivateAccessor;
+import mcmanager.data.Group;
 import mcmanager.data.ObjectDB;
 import mcmanager.exception.CoreException;
-import mcmanager.utils.LogUtils;
+import mcmanager.utils.CloseUtils;
 import mcmanager.utils.StringUtils;
 
 /**
@@ -39,7 +40,7 @@ public class MockObjectDb {
                 int endKey = str.indexOf("=");
                 if (endKey < 1 || StringUtils.isEmpty(str.substring(endKey + 1)) 
                         || endKey + 1 == str.length()) {
-                    LogUtils.getDefaultLog().warn("Строка " + str + " будет " +
+                    System.out.println("Строка " + str + " будет " +
                             "пропущена при разборе файла настроек");
                     continue;
                 }
@@ -60,7 +61,7 @@ public class MockObjectDb {
                 objects.put(object.getId(), object);
             }
         } finally {
-
+            CloseUtils.softClose(br);
         }
         return objects;
     }

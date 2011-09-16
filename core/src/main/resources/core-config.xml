@@ -9,13 +9,21 @@
     <!-- Работа с анотациями -->
     <context:annotation-config />
     <context:component-scan base-package="mcmanager" />
-
+    
+<!--     <bean id="coreLog" class="mcmanager.utils.Initializing"> -->
+<!--         <property name="logFiles"> -->
+<!--             <list> -->
+<!--                 <value>log-core-config.xml</value> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+    
     <!-- Файл с настройками пользователя -->
     <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="file://${catalina.home}/etc/settings.properties" />
     </bean>
-
+    
     <!-- Настройка подключения к БД -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
@@ -39,7 +47,7 @@
         <property name="schemaUpdate" value="true" />
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>

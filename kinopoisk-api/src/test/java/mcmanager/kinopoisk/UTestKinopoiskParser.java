@@ -8,6 +8,8 @@ import java.io.StringReader;
 
 import javax.xml.bind.JAXBException;
 
+import mcmanager.kinopoisk.info.Movie;
+import mcmanager.kinopoisk.info.Tvshow;
 import mcmanager.kinopoisk.utils.JaxbUtils;
 
 import org.custommonkey.xmlunit.XMLTestCase;
@@ -25,8 +27,11 @@ public class UTestKinopoiskParser extends XMLTestCase {
         try {
             expected = new FileReader(new File(testPath + 
                     "Аргентина. Интервью с мертвым наркодилером.nfo"));
-            actual = new StringReader(JaxbUtils.jaxbMarshalToString(
-                    WebExploer.parseMovie("http://www.kinopoisk.ru/level/1/film/468770/")));
+            Movie movie = WebExploer.parseMovie("http://www.kinopoisk.ru/level/1/film/468770/");
+            //К сожалению заполнения рейтинга протестировать нельзя т.к. он все время меняется
+            movie.setRating("7.570");
+            movie.setVotes("463");
+            actual = new StringReader(JaxbUtils.jaxbMarshalToString(movie));
             assertXMLEqual(expected, actual);
         } finally {
             if (expected != null)
@@ -43,8 +48,11 @@ public class UTestKinopoiskParser extends XMLTestCase {
         try {
             expected = new FileReader(new File(testPath + 
                     "Блудливая Клифорния.nfo"));
-            actual = new StringReader(JaxbUtils.jaxbMarshalToString(
-                    WebExploer.parseTvShow("http://www.kinopoisk.ru/level/1/film/394375/")));
+            Tvshow tvshow = WebExploer.parseTvShow("http://www.kinopoisk.ru/level/1/film/394375/"); 
+            //К сожалению заполнения рейтинга протестировать нельзя т.к. он все время меняется
+            tvshow.setRating("8.360");
+            tvshow.setVotes("13 915");
+            actual = new StringReader(JaxbUtils.jaxbMarshalToString(tvshow));
             assertXMLEqual(expected, actual);
         } finally {
             if (expected != null)

@@ -13,11 +13,11 @@ import mcmanager.kinopoisk.info.Episodedetails;
 import mcmanager.kinopoisk.info.Movie;
 import mcmanager.kinopoisk.info.Thumb;
 import mcmanager.kinopoisk.info.Tvshow;
-import mcmanager.kinopoisk.utils.JSoupUtils;
+import mcmanager.log.LogEnum;
+import mcmanager.web.JSoupUtils;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -29,9 +29,9 @@ import org.jsoup.select.Elements;
  */
 public class WebExploer {
 
-    private static Logger log = Logger.getLogger("kinopoisk");
+    private static final Log log = LogEnum.KINOPOISK.getLog();
 
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 15000;
 
     private static final String ACTOR_INFO_LINK = "19";
     /** Глубина поиска по актерам */
@@ -56,8 +56,7 @@ public class WebExploer {
      */
     public static Movie parseMovie(String url) throws IOException {
         Movie movie = new Movie();
-        Connection connection = JSoupUtils.setHeader(SettingWebClient.toMap(), 
-                Jsoup.connect(url).timeout(TIMEOUT));
+        Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         Document document = connection.get();
         movie.setTitle(document.select(TITLE).first().text());
         movie.setOriginaltitle(document.select(ORIGINAL_NAME).first().text());
@@ -90,8 +89,7 @@ public class WebExploer {
      */
     public static Tvshow parseTvShow(String url) throws IOException {
         Tvshow tvshow = new Tvshow();
-        Connection connection = JSoupUtils.setHeader(SettingWebClient.toMap(), 
-                Jsoup.connect(url).timeout(TIMEOUT));
+        Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         Document document = connection.get();
         tvshow.setTitle(document.select(TITLE).first().text());
         String plot = document.getElementsByClass(PLOT).first().text();
@@ -123,8 +121,7 @@ public class WebExploer {
      */
     public static Episodedetails parseEpisodedetails(String url, String fileName) throws IOException {
         Episodedetails episodedetails = new Episodedetails();
-        Connection connection = JSoupUtils.setHeader(SettingWebClient.toMap(), 
-                Jsoup.connect(url).timeout(TIMEOUT));
+        Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         Document document = connection.get();
         episodedetails.setTitle(document.select(TITLE).first().text());
         String plot = document.getElementsByClass(PLOT).first().text();
@@ -181,8 +178,7 @@ public class WebExploer {
     private static List<Actor> getActorInfo(String urlFilm) throws IOException {
         //URL где хранится список актеров
         String url = urlFilm.replace("level/1/film", "level/" + ACTOR_INFO_LINK + "/film");
-        Connection connection = JSoupUtils.setHeader(SettingWebClient.toMap(), 
-                Jsoup.connect(url).timeout(TIMEOUT));
+        Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         //Получаем страницу
         Document document = connection.get();
         //block_left это список актеров, режесеров и т.д в одной куче.
@@ -216,8 +212,7 @@ public class WebExploer {
     
     private static List<Thumb> getThumb(String urlFilm) throws IOException {
         String url = urlFilm.replace("level/1/film", "level/" + POSTER_LINK + "/film");
-        Connection connection = JSoupUtils.setHeader(SettingWebClient.toMap(), 
-                Jsoup.connect(url).timeout(TIMEOUT));
+        Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         //Получаем страницу
         Document document = connection.get();
         List<Thumb> thumbList = new ArrayList<Thumb>();

@@ -54,7 +54,6 @@ public class ReflectUtils {
                         method.getParameterTypes(), new Object[]{});
                 Object actualObject = PrivateAccessor.invoke(actualDistribution, method.getName(), 
                         method.getParameterTypes(), new Object[]{});
-                System.out.println("expectedObject: " + expectedObject + " actualObject: " + actualObject);
                 equals(expectedObject, actualObject, method.getName());
             }
         } else {
@@ -70,6 +69,14 @@ public class ReflectUtils {
             assertEquals(name, (Long)expected, (Long)actual);
         } else if (expected instanceof Integer && actual instanceof Integer) {
             assertEquals(name, (Integer)expected, (Integer)actual);
+        } else if (expected instanceof Group && actual instanceof Group) {
+            Group gExpected = (Group) expected;
+            Group gActual = (Group) actual;
+            try {
+                equalsByGetMethod(gExpected, gActual);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         } else if (expected != null || actual != null) {
             StringBuilder builder = new StringBuilder("Ошибка: method=").append(name);
             builder.append(" expected=").append(expected)

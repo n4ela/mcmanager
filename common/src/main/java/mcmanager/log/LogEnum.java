@@ -1,0 +1,19 @@
+package mcmanager.log;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public enum LogEnum {
+    MONITOR_NEW("monitor-new"),
+    KINOPOISK("kinopoisk");
+    
+    private String logName;
+    
+    private LogEnum(String logName) {
+        this.logName = logName;
+    }
+    
+    public Log getLog() {
+        return LogFactory.getLog(logName);
+    }
+}

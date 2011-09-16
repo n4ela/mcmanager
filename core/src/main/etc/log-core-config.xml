@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<!-- Аппендери хибернейта -->
+	<appender name="hibernate" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Append" value="true" />
+		<param name="Threshold" value="TRACE" />
+		<param name="File" value="../logs/hibernate.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Аппендери спринга -->
+	<appender name="spring" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Append" value="true" />
+		<param name="Threshold" value="TRACE" />
+		<param name="File" value="../logs/spring.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Логгер хибернейта -->
+	<logger name="org.hibernate" additivity="false">
+		<level value="info" />
+		<appender-ref ref="hibernate" />
+	</logger>
+
+	<!-- Логгер спринга -->
+	<logger name="org.springframework" additivity="false">
+		<level value="info" />
+		<appender-ref ref="spring" />
+	</logger>
+
+</log4j:configuration>

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import mcmanager.exception.CoreException;
 import mcmanager.utils.CloseUtils;
-import mcmanager.utils.LogUtils;
 
 /**
  * Аналог класса проперти работающего через {@link LinkedHashMap}
@@ -35,7 +34,7 @@ public class NewProperties {
             while ((str = br.readLine()) != null) {
                 int endKey = str.indexOf("=");
                 if (endKey < 1) {
-                    LogUtils.getDefaultLog().warn("Строка " + str + " будет " +
+                    System.out.println("Строка " + str + " будет " +
                     		"пропущена при разборе файла настроек");
                     continue;
                 }

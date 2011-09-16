@@ -6,6 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import mcmanager.dao.DaoFactory;
@@ -57,8 +60,9 @@ public class Distribution implements ObjectDB, Serializable {
     /**
      * Ссылка на идентификатор группы
      */
-    @Column(name = "GROUPS", nullable = false)
-    private Long group;
+    @JoinColumn(name = "GROUPS", nullable = false)
+    @ManyToOne
+    private Group group;
 
     /**
      * Статут раздачи, возможные значения {@link StatusEnum}
@@ -181,7 +185,7 @@ public class Distribution implements ObjectDB, Serializable {
      * Получить значение {@link #group}.
      * @return значение {@link #group}
      */
-    public Long getGroup() {
+    public Group getGroup() {
         return group;
     }
 
@@ -189,7 +193,7 @@ public class Distribution implements ObjectDB, Serializable {
      * Установить параметр {@link #group}.
      * @param group новое значение {@link #group}
      */
-    public void setGroup(Long group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 

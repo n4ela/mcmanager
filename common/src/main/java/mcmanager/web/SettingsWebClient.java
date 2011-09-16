@@ -1,9 +1,9 @@
-package mcmanager.kinopoisk;
+package mcmanager.web;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum SettingWebClient {
+public enum SettingsWebClient {
     USER_AGENT("User-Agent", "Mozilla/5.0 (X11; U; Linux i686; ru; rv:1.9.2.9) Gecko/20100908 Firefox/3.6.9"),
     ACCEPT("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"),
     ACCEPT_LANGUAGE("Accept-Language", "ru,en-us;q=0.7,en;q=0.3"),
@@ -16,7 +16,7 @@ public enum SettingWebClient {
     private String key;
     private String value;
     
-    SettingWebClient(String key, String value) {
+    SettingsWebClient(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -30,8 +30,8 @@ public enum SettingWebClient {
     }
     
     public static Map<String, String> toMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        for (SettingWebClient settings : values()) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (SettingsWebClient settings : values()) {
             map.put(settings.key, settings.value);
         }
         return map;
