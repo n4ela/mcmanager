@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public enum LogEnum {
+    MONITOR("monitor"),
     MONITOR_NEW("monitor-new"),
     KINOPOISK("kinopoisk");
     

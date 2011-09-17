@@ -14,19 +14,20 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-public class NewDistributionMonitor extends QuartzJobBean {
+public class DistributionMonitor extends QuartzJobBean {
 
-    private static final Log log = LogEnum.MONITOR_NEW.getLog();
-
+    private static final Log log = LogEnum.MONITOR.getLog();
+    
     @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.info("Начало выполнения задачи отслеживания новых торрент файлов");
+    protected void executeInternal(JobExecutionContext context)
+            throws JobExecutionException {
+        log.info("Начало выполнения задачи отслеживания обновления раздачь");
         List<Distribution> distributions = 
-                DaoFactory.getInstance().getDistributionDao().getDistributionByStatus(StatusEnum.NEW);
-        log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.NEW.getDesc());
+                DaoFactory.getInstance().getDistributionDao().getDistributionByStatus(StatusEnum.TRACK_ON);
+        log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.TRACK_ON.getDesc());
         try {
             for (Distribution distribution : distributions) {
-                new TorrentHandler().executeDistribution(distribution);
+                new TorrentHandler().executeNewDistribution(distribution);
                 distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
                 DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
             }
@@ -35,4 +36,5 @@ public class NewDistributionMonitor extends QuartzJobBean {
             log.fatal("Ошибка при выполнение задачи отслеживания новых торрент файлов", e);
         }
     }
+
 }
