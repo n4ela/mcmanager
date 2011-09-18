@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <!-- Аппендер отправки на email -->
+    <appender name="email" class="org.apache.log4j.net.SMTPAppender">
+        <param name="BufferSize" value="1" />
+        <param name="To" value="ivanovdw@gmail.com" />
+        <param name="From" value="rutracker.manager@yandex.ru" />
+        <param name="Subject" value="RuTrackerBot" />
+        <param name="SMTPHost" value="smtp.yandex.ru" />
+        <param name="SMTPUsername" value="rutracker.manager@yandex.ru" />
+        <param name="SMTPPassword" value="z1x2c3v4" />
+        <param name="SMTPPort" value="587" />
+        <!--param name="SMTPDebug" value="true" / -->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss} %m%n" />
+        </layout>
+    </appender>
+
+    <!-- Логгер отправки на email -->
+    <logger name="email" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="email" />
+    </logger>
+
+</log4j:configuration>

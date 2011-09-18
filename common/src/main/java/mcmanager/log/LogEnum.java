@@ -6,7 +6,9 @@ import org.apache.commons.logging.LogFactory;
 public enum LogEnum {
     MONITOR("monitor"),
     MONITOR_NEW("monitor-new"),
-    KINOPOISK("kinopoisk");
+    KINOPOISK("kinopoisk"),
+    EMAIL("email"),
+    FILEMONITOR("file-monitor");
     
     private String logName;
     

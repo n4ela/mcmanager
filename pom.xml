@@ -18,15 +18,6 @@
         <module>monitor</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>Full</id>
-            <modules>
-                <module>jsoup</module>
-            </modules>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>

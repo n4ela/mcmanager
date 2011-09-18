@@ -28,9 +28,7 @@ public class NewDistributionMonitor extends QuartzJobBean {
         log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.NEW.getDesc());
         try {
             for (Distribution distribution : distributions) {
-                new TorrentHandler().executeDistribution(distribution);
-                distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
-                DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+                new TorrentHandler().executeNewDistribution(distribution);
             }
             log.info("Задача отслеживания новых торрент файлов успешно завершена");
         } catch (CoreException e) {

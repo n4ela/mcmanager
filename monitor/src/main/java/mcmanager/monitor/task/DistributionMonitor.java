@@ -28,9 +28,7 @@ public class DistributionMonitor extends QuartzJobBean {
         log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.TRACK_ON.getDesc());
         try {
             for (Distribution distribution : distributions) {
-                new TorrentHandler().executeNewDistribution(distribution);
-                distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
-                DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+                new TorrentHandler().executeDistribution(distribution);
             }
             log.info("Задача отслеживания обновления раздач завершена");
         } catch (CoreException e) {

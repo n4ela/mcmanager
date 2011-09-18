@@ -3,11 +3,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
+import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.log.LogEnum;
 import mcmanager.monitor.settings.MonitorSettings;
+import mcmanager.monitor.utils.MessageUtils;
 import mcmanager.utils.CloseUtils;
 import mcmanager.utils.FileUtils;
 import mcmanager.web.WebBrowser;
@@ -20,13 +28,22 @@ public class TorrentHandler {
 
     private static final Log logMonitorNew = LogEnum.MONITOR_NEW.getLog();
     private static final Log logMonitor = LogEnum.MONITOR.getLog();
-
+    //TODO вынести в енум
+    private static final int SEND_MAIL = 1;
+    
     public void executeDistribution(Distribution distribution) throws CoreException {
         WebBrowser webBrowser = new WebBrowser(logMonitor);
         webBrowser.goToUrl(distribution.getLinkRutracker());
-        if (!distribution.getTitle().equals(webBrowser.getTitle())) {
+        String newTitle = webBrowser.getTitle();
+        if (!distribution.getTitle().equals(newTitle)) {
             logMonitor.info("Раздача: " + distribution.getLinkRutracker() + " обновилась");
             downloadsTorrent(webBrowser, distribution, logMonitor);
+            
+            distribution.setTitle(newTitle);
+            distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+            DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+            
+            sendMessage(distribution);
         } else {
             logMonitor.debug("Заголовок раздачи " + distribution.getLinkRutracker() + " не изменился");
         }
@@ -36,6 +53,11 @@ public class TorrentHandler {
         WebBrowser webBrowser = new WebBrowser(logMonitorNew);
         webBrowser.goToUrl(distribution.getLinkRutracker());
         downloadsTorrent(webBrowser, distribution,logMonitorNew);
+        
+        distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+        DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+        
+        sendMessage(distribution);
     }
 
     private void downloadsTorrent(WebBrowser webBrowser, Distribution distribution, Log log) throws CoreException {
@@ -61,4 +83,13 @@ public class TorrentHandler {
             CloseUtils.softClose(os);
         }
     }
+    
+    private void sendMessage(Distribution distribution) {
+        if (MonitorSettings.getInstance().getSendMail() == SEND_MAIL) {
+            LogEnum.EMAIL.getLog().fatal(MessageUtils.createMessage(distribution.getTitle(), 
+                                                                    distribution.getMailRegexp(), 
+                                                                    distribution.getMailMessage()));
+        }
+    }
+    
 }

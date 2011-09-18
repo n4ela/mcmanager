@@ -28,6 +28,11 @@ public class MonitorSettings {
      */
     private int sendMail;
     
+    /**
+     * Папка в которую помещаются текстовые файлы с имена торрентов которые закончили закачку
+     */
+    private String dirEndDownloadTorrents;
+    
     public int getSleepAfterTorrentDelete() {
         return sleepAfterTorrentDelete;
     }
@@ -42,5 +47,13 @@ public class MonitorSettings {
 
     public void setSendMail(int sendMail) {
         this.sendMail = sendMail;
+    }
+
+    public String getDirEndDownloadTorrents() {
+        return dirEndDownloadTorrents;
+    }
+
+    public void setDirEndDownloadTorrents(String dirEndDownloadTorrents) {
+        this.dirEndDownloadTorrents = dirEndDownloadTorrents;
     }
 }

@@ -10,6 +10,7 @@
         <property name="logFiles">
             <list>
                 <value>log-monitor-config.xml</value>
+                <value>mail-sender.xml</value>
             </list>
         </property>
     </bean>
@@ -25,6 +26,7 @@
         factory-method="getInstance">
         <property name="sleepAfterTorrentDelete" value="${monit.sleep.after.torrent.delete}" />
         <property name="sendMail" value="${monitor.send.mail}" />
+        <property name="dirEndDownloadTorrents" value="${monitor.dir.end.download.torrents}" />
     </bean>
 
 </beans>

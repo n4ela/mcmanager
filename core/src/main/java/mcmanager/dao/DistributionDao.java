@@ -57,4 +57,11 @@ public class DistributionDao extends HibernateDaoSupport {
                 DetachedCriteria.forClass(Distribution.class).add(
                         Restrictions.eq("status", status.getStatus())));
     }
+    
+    //TODO UnitTest
+    public List<Distribution> getDistributionByTorrent(String torrentName) {
+        return (List<Distribution>) getHibernateTemplate().findByCriteria(
+                DetachedCriteria.forClass(Distribution.class).add(
+                        Restrictions.eq("torrent", torrentName)));
+    }
 }
