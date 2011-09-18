@@ -10,7 +10,7 @@
 
     <scm>
         <url>git://github.com/n4ela/mcmanager.git</url>
-        <connection>scm:git://github.com/n4ela/mcmanager.git</connection>
+        <connection>scm:git:git@github.com:n4ela/mcmanager.git</connection>
     </scm>
 
     <properties>
