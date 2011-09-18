@@ -10,13 +10,13 @@
     <context:annotation-config />
     <context:component-scan base-package="mcmanager" />
     
-<!--     <bean id="coreLog" class="mcmanager.utils.Initializing"> -->
-<!--         <property name="logFiles"> -->
-<!--             <list> -->
-<!--                 <value>log-core-config.xml</value> -->
-<!--             </list> -->
-<!--         </property> -->
-<!--     </bean> -->
+    <bean id="coreLog" class="mcmanager.utils.Initializing">
+        <property name="logFiles">
+            <list>
+                <value>log-core-config.xml</value>
+            </list>
+        </property>
+    </bean>
     
     <!-- Файл с настройками пользователя -->
     <bean id="propertyConfigurer"
@@ -34,8 +34,7 @@
     </bean>
 
     <!-- Настройки фабрики сессий Хибернейта -->
-    <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="annotatedClasses">
         <list>                                                                                                                       
@@ -53,20 +52,19 @@
             </props>
         </property>
     </bean>
-        <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
     <!-- Фактория через сингелтон -->
     <bean id="DaoFactory" class="mcmanager.dao.DaoFactory" factory-method="getInstance" />
 
-    <bean id="hibernateDistribution"
-        class="mcmanager.dao.DistributionDao">
+    <bean id="hibernateDistribution" class="mcmanager.dao.DistributionDao">
         <property name="hibernateTemplate" ref="hibernateTemplate" />
     </bean>
     
-    <bean id="hibernateGroup"
-        class="mcmanager.dao.GroupDao">
+    <bean id="hibernateGroup" class="mcmanager.dao.GroupDao">
         <property name="hibernateTemplate" ref="hibernateTemplate" />
     </bean>
     

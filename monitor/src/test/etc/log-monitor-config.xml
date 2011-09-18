@@ -10,9 +10,14 @@
         </layout>
     </appender>
 
-    <root>
+    <logger name="monitor-new" additivity="false">
         <level value="trace" />
         <appender-ref ref="console" />
-    </root>
+    </logger>
+
+    <logger name="monitor" additivity="false">
+        <level value="trace" />
+        <appender-ref ref="console" />
+    </logger>
 
 </log4j:configuration>

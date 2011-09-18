@@ -1,0 +1,23 @@
+<dataset>
+    <GROUPS ID="3" NAME="Test Serials" TORRENT_FOLDER="/tmp"
+        MEDIA_FOLDER="/serials/media" DOWNLOAD_FOLDER="/serials/downloads"
+        EMAIL_MESSAGE="Test Serial Message" EMAIL_REGEXP="(.*)" />
+
+    <GROUPS ID="4" NAME="Test Films" TORRENT_FOLDER="/tmp"
+        MEDIA_FOLDER="/films/media" DOWNLOAD_FOLDER="/films/downloads"
+        EMAIL_MESSAGE="Test Films Message" EMAIL_REGEXP="(.*)" />
+
+    <DISTRIBUTION ID="3"
+        LINK_RUTRACKER="http://rutracker.org/forum/viewtopic.php?t=524993"
+        TITLE="След (Серии 1-49) (Всеволод Аравин) [2007 г., Детектив, SATRip]"
+        MAIL_MESSAGE="След" MAIL_REGEXP="(.*)" GROUPS="3" STATUS="2"
+        TORRENT="[rutracker.org].t524993.torrent" LINK_KINOPOISK="http://www.kinopoisk.ru/level/1/film/411733/"
+        REGEXP_SERIAL_NUMBER="([0-9])" SEASON_NUMBER="1" TYPE="1" />
+
+    <DISTRIBUTION ID="4"
+        LINK_RUTRACKER="http://rutracker.org/forum/viewtopic.php?t=1931100"
+        TITLE="Верные друзья (Михаил Калатозов) [1953 г., Комедия, DVDRip]"
+        MAIL_MESSAGE="Борт" MAIL_REGEXP="(.*)" GROUPS="4" STATUS="1"
+        TORRENT="[rutracker.org].t1130196.torrent" LINK_KINOPOISK="http://www.kinopoisk.ru/level/1/film/16115/"
+        REGEXP_SERIAL_NUMBER="[null]" SEASON_NUMBER="[null]" TYPE="2" />
+</dataset>

@@ -43,6 +43,7 @@ public class DaoFactory {
      * @param distributionDao - объект раздачи
      */
     public static void setDistributionDao(DistributionDao distributionDao) {
+        System.out.println("setDistributionDao");
         DaoFactory.distributionDao = distributionDao;
     }
 

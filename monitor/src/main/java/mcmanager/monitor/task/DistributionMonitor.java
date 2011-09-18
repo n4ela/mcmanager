@@ -21,9 +21,10 @@ public class DistributionMonitor extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context)
             throws JobExecutionException {
-        log.info("Начало выполнения задачи отслеживания обновления раздачь");
+        log.info("Начало выполнения задачи отслеживания обновления раздач");
         List<Distribution> distributions = 
                 DaoFactory.getInstance().getDistributionDao().getDistributionByStatus(StatusEnum.TRACK_ON);
+        System.out.println("distributions: " + distributions);
         log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.TRACK_ON.getDesc());
         try {
             for (Distribution distribution : distributions) {
@@ -31,9 +32,9 @@ public class DistributionMonitor extends QuartzJobBean {
                 distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
                 DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
             }
-            log.info("Задача отслеживания новых торрент файлов успешно завершена");
+            log.info("Задача отслеживания обновления раздач завершена");
         } catch (CoreException e) {
-            log.fatal("Ошибка при выполнение задачи отслеживания новых торрент файлов", e);
+            log.fatal("Ошибка при выполнение задачи отслеживания обновления раздач", e);
         }
     }
 

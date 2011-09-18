@@ -2,21 +2,18 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
-	<!-- Аппендери хибернейта -->
-	<appender name="unitils" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="Append" value="true" />
-		<param name="Threshold" value="TRACE" />
-		<param name="File" value="../logs/org.unitils.core.ConfigurationLoader.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
-		</layout>
-	</appender>
-
-    <!-- Логгер Юинитилс -->
-    <logger name="org.unitils.core.ConfigurationLoader" additivity="false">
+    <appender name="root" class="org.apache.log4j.FileAppender">
+        <param name="File" value="../logs/root.log" />
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+        </layout>
+    </appender>
+    
+    <root>
         <level value="trace" />
-        <appender-ref ref="unitils" />
-    </logger>
+        <appender-ref ref="root" />
+    </root>
 
 </log4j:configuration>
