@@ -8,9 +8,15 @@
     <name>Media Center Manager</name>
     <url>http://redmine.ystanovka.ru/projects/rmanager</url>
 
+    <scm>
+        <url>git://github.com/n4ela/mcmanager.git</url>
+        <connection>scm:git://github.com/n4ela/mcmanager.git</connection>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
     <modules>
         <module>common</module>
         <module>core</module>
