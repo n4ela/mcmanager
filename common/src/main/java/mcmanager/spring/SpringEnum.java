@@ -1,9 +1,9 @@
 package mcmanager.spring;
 
 public enum SpringEnum {
-    CORE("core-config"),
-    MONITOR("monitor-config.xml"),
-    QUARTZ("quartz-config");
+    CORE("classpath:core-config.xml"),
+    MONITOR("classpath:monitor-config.xml"),
+    QUARTZ("classpath:quartz-config.xml");
     
     private final String config;
     

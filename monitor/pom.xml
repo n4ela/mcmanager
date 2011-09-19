@@ -7,29 +7,25 @@
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>
-        <version>HEAD-SNAPSHOT</version>
+        <version>${mcmanager.version}</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>common</artifactId>
-            <version>HEAD-SNAPSHOT</version>
         </dependency>
 
         <!-- Зависимость от ядра -->
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>core</artifactId>
-            <version>HEAD-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>core</artifactId>
-            <version>HEAD-SNAPSHOT</version>
             <type>test-jar</type>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -129,22 +125,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.beardedgeeks</groupId>
-                <artifactId>maven-merge-properties-plugin</artifactId>
-                <version>0.2</version>
-                <configuration>
-                    <merges>
-                        <merge>
-                            <targetFile>${build.outputDirectory}/settings.properties</targetFile>
-                            <propertiesFiles>
-                                <propertiesFile>../core/src/main/etc/settings.properties</propertiesFile>
-                                <propertiesFile>src/main/etc/settings.properties</propertiesFile>
-                            </propertiesFiles>
-                        </merge>
-                    </merges>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -154,7 +134,8 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>rutracker</finalName>
+                            <finalName>mcmanager-${mcmanager.version}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>src/main/assembly/zip.xml</descriptor>
                             </descriptors>
