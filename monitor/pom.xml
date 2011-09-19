@@ -23,7 +23,7 @@
             <artifactId>core</artifactId>
             <version>HEAD-SNAPSHOT</version>
         </dependency>
-        
+
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>core</artifactId>
@@ -36,7 +36,7 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup-fork</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>opensymphony</groupId>
             <artifactId>quartz</artifactId>
@@ -88,7 +88,7 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -125,25 +125,43 @@
         </dependency>
 
     </dependencies>
-    
-    <!-- <build> -->
-    <!-- <plugins> -->
-    <!-- <plugin> -->
-    <!-- <groupId>org.beardedgeeks</groupId> -->
-    <!-- <artifactId>maven-merge-properties-plugin</artifactId> -->
-    <!-- <version>0.2</version> -->
-    <!-- <configuration> -->
-    <!-- <merges> -->
-    <!-- <merge> -->
-    <!-- <targetFile>${build.outputDirectory}/settings.properties</targetFile> -->
-    <!-- <propertiesFiles> -->
-    <!-- <propertiesFile>../core/src/main/etc/settings.properties</propertiesFile> -->
-    <!-- <propertiesFile>src/main/etc/settings.properties</propertiesFile> -->
-    <!-- </propertiesFiles> -->
-    <!-- </merge> -->
-    <!-- </merges> -->
-    <!-- </configuration> -->
-    <!-- </plugin> -->
-    <!-- </plugins> -->
-    <!-- </build> -->
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.beardedgeeks</groupId>
+                <artifactId>maven-merge-properties-plugin</artifactId>
+                <version>0.2</version>
+                <configuration>
+                    <merges>
+                        <merge>
+                            <targetFile>${build.outputDirectory}/settings.properties</targetFile>
+                            <propertiesFiles>
+                                <propertiesFile>../core/src/main/etc/settings.properties</propertiesFile>
+                                <propertiesFile>src/main/etc/settings.properties</propertiesFile>
+                            </propertiesFiles>
+                        </merge>
+                    </merges>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>dist</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>rutracker</finalName>
+                            <descriptors>
+                                <descriptor>src/main/assembly/zip.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
