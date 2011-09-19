@@ -18,6 +18,7 @@ import org.unitils.spring.annotation.SpringApplicationContext;
 @DataSet("UTestNewDistributionMonitor.xml")
 public class UTestNewDistributionMonitor extends UnitilsJUnit4 {
     
+    //TODO tmp заменить на test folder
     @Test
     public void testExecuteInternal() throws Throwable {
         String expected = "bb71b0e6d873fbcfc202bf8c5c8666ef";

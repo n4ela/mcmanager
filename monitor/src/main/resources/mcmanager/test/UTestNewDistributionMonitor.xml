@@ -17,7 +17,7 @@
     <DISTRIBUTION ID="4"
         LINK_RUTRACKER="http://rutracker.org/forum/viewtopic.php?t=1130196"
         TITLE="За бортом / Overboard (Гарри Маршалл /Garry Marshall) [1987 г., Комедия, DVD9] Михалев"
-        MAIL_MESSAGE="Борт" MAIL_REGEXP="(.*)" GROUPS="4" STATUS="2"
+        MAIL_MESSAGE="Борт" MAIL_REGEXP="(.*)" GROUPS="4" STATUS="3"
         TORRENT="[rutracker.org].t1130196.torrent" LINK_KINOPOISK="http://www.kinopoisk.ru/level/1/film/16115/"
         REGEXP_SERIAL_NUMBER="[null]" SEASON_NUMBER="[null]" TYPE="2" />
 </dataset>
