@@ -7,7 +7,7 @@ import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.log.LogEnum;
-import mcmanager.monitor.handler.TorrentHandler;
+import mcmanager.monitor.task.handler.TorrentHandler;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;

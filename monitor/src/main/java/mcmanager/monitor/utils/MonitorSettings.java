@@ -1,4 +1,4 @@
-package mcmanager.monitor.settings;
+package mcmanager.monitor.utils;
 
 public class MonitorSettings {
     

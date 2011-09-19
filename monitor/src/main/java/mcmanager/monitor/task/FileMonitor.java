@@ -8,8 +8,8 @@ import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
 import mcmanager.data.TypeDistributionEnum;
 import mcmanager.log.LogEnum;
-import mcmanager.monitor.settings.MonitorSettings;
 import mcmanager.monitor.utils.MessageUtils;
+import mcmanager.monitor.utils.MonitorSettings;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;

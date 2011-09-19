@@ -22,7 +22,7 @@
             value="file://${catalina.home}/etc/settings.properties" />
     </bean>
 
-    <bean id="monitorSettings" class="mcmanager.monitor.settings.MonitorSettings"
+    <bean id="monitorSettings" class="mcmanager.monitor.utils.MonitorSettings"
         factory-method="getInstance">
         <property name="sleepAfterTorrentDelete" value="${monit.sleep.after.torrent.delete}" />
         <property name="sendMail" value="${monitor.send.mail}" />

@@ -1,21 +1,16 @@
-package mcmanager.monitor.handler;
+package mcmanager.monitor.task.handler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.log.LogEnum;
-import mcmanager.monitor.settings.MonitorSettings;
 import mcmanager.monitor.utils.MessageUtils;
+import mcmanager.monitor.utils.MonitorSettings;
 import mcmanager.utils.CloseUtils;
 import mcmanager.utils.FileUtils;
 import mcmanager.web.WebBrowser;
