@@ -30,6 +30,15 @@
                 value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
         </layout>
     </appender>
+    
+    <appender name="media-monitor" class="org.apache.log4j.FileAppender">
+        <param name="File" value="../logs/media-monitor.log" />
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+        </layout>
+    </appender>
 
     <!-- Логгер quartz -->
     <logger name="org.quartz" additivity="false">
@@ -46,4 +55,10 @@
         <level value="debug" />
         <appender-ref ref="monitor" />
     </logger>
+    
+    <logger name="media-monitor" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="media-monitor" />
+    </logger>
+    
 </log4j:configuration>

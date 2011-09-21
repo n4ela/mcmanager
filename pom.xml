@@ -85,6 +85,13 @@
                 <version>${mcmanager.version}</version>
                 <type>test-jar</type>
             </dependency>
+            
+            <dependency>
+                <groupId>mcmanager</groupId>
+                <artifactId>kinopoisk-api</artifactId>
+                <version>${mcmanager.version}</version>
+            </dependency>
+            
 
             <!-- Модуль для работы с торрент файлами -->
             <dependency>

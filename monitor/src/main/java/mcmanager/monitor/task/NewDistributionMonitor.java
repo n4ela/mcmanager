@@ -21,8 +21,6 @@ public class NewDistributionMonitor extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         log.info("Начало выполнения задачи отслеживания новых торрент файлов");
-        System.out.println(DaoFactory.getInstance());
-        System.out.println(DaoFactory.getInstance().getDistributionDao());
         List<Distribution> distributions = 
                 DaoFactory.getInstance().getDistributionDao().getDistributionByStatus(StatusEnum.NEW);
         log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.NEW.getDesc());

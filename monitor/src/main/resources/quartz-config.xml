@@ -27,12 +27,22 @@
         <property name="jobClass" value="mcmanager.monitor.task.DistributionMonitor" />
     </bean>
     
+    <bean id="fileMonitor" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="fileMonitorJob" />
+        <property name="cronExpression" value="${monitor.file.time}" />
+    </bean>
+    
+    <bean name="fileMonitorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="mcmanager.monitor.task.FileMonitor" />
+    </bean>
+    
     <!-- Задачи мониторинга -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref bean="newMonitor" />
                 <ref bean="monitor" />
+                <ref bean="fileMonitor" />
             </list>
         </property>
     </bean>

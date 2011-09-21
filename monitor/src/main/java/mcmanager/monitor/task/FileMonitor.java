@@ -35,9 +35,8 @@ public class FileMonitor extends QuartzJobBean {
                 for (Distribution distribution : distributions) {
                     if (distribution.getType() == TypeDistributionEnum.SHARED.getType())
                         distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
-                    else {
+                    else
                         distribution.setStatus(StatusEnum.PROCESSING.getStatus());
-                        }
                     DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
                     log.info("Закачка " + distribution.getLinkRutracker() + " завершена");
 
