@@ -36,6 +36,16 @@
         <property name="jobClass" value="mcmanager.monitor.task.FileMonitor" />
     </bean>
     
+    <bean id="mediaMonitor" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="fileMonitorJob" />
+        <property name="cronExpression" value="${monitor.media.time}" />
+    </bean>
+    
+    <bean name="mediaMonitorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="mcmanager.monitor.task.MediaMonitor" />
+    </bean>
+    
+    
     <!-- Задачи мониторинга -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
@@ -43,6 +53,7 @@
                 <ref bean="newMonitor" />
                 <ref bean="monitor" />
                 <ref bean="fileMonitor" />
+                <ref bean="mediaMonitor" />
             </list>
         </property>
     </bean>
