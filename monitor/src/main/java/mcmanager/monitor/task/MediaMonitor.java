@@ -15,6 +15,8 @@ import mcmanager.exception.CoreException;
 import mcmanager.kinopoisk.WebExploer;
 import mcmanager.kinopoisk.info.Movie;
 import mcmanager.log.LogEnum;
+import mcmanager.monitor.utils.FilmTypeEnum;
+import mcmanager.utils.TorrentInfo;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;
@@ -66,6 +68,7 @@ public class MediaMonitor extends QuartzJobBean  {
         log.debug("Обработка фильма");
         try {
             Movie movie = WebExploer.parseMovie(distribution.getLinkKinoposk());
+            //[1] Создаем каталог == название фильма
             File mediFolder = new File(distribution.getGroup().getMediaFolder());
             if (!mediFolder.exists() || !mediFolder.isDirectory())
                 throw new CoreException("Каталог " + mediFolder.getAbsolutePath() + " не найден");
@@ -80,7 +83,24 @@ public class MediaMonitor extends QuartzJobBean  {
                             + File.separator + movie.getTitle());
                 }
             }
-//            distribution.getGroup().getDownloadFolder()
+            //[1]
+            File torrentFile = new File(distribution.getGroup().getTorrentFolder() + 
+                    File.separator + distribution.getTorrent());
+            if (!torrentFile.exists())
+                throw new CoreException("Не найден торрент файл: " + torrentFile);
+            TorrentInfo torrentInfo = new TorrentInfo(torrentFile);
+            for (String filmFile : torrentInfo.getInfo()) {
+                if (FilmTypeEnum.matcher(filmFile)) {
+                    log.debug("Обработка файла: " + filmFile);
+                } else {
+                    log.debug("Файл пропущен при обработке: " + filmFile);
+                }
+                
+            }
+            //[2] Ищем в папке с фильмом файлы для которых необходимо создать simlink
+            //[2]
+
+            //            distribution.getGroup().getDownloadFolder()
         } catch (IOException e) {
             throw new CoreException(e);
         }
