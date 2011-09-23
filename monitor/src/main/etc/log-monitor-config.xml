@@ -8,7 +8,7 @@
         <param name="Threshold" value="DEBUG" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+                value="%d{dd.mm.yyyy HH:mm:ss} %t %p: %m%n" />
         </layout>
     </appender>
 
@@ -18,7 +18,7 @@
         <param name="Threshold" value="DEBUG" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+                value="%d{dd.mm.yyyy HH:mm:ss} [%-10.10t] %p: %m%n" />
         </layout>
     </appender>
     
@@ -27,7 +27,7 @@
         <param name="Threshold" value="DEBUG" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+                value="%d{dd.mm.yyyy HH:mm:ss} [%-10.10t] %p: %m%n" />
         </layout>
     </appender>
     
@@ -36,7 +36,16 @@
         <param name="Threshold" value="DEBUG" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                value="%d{dd.mm.yyyy HH:mm:ss} %t %c{10}:%M:%L%n%p: %m%n" />
+                value="%d{dd.mm.yyyy HH:mm:ss} [%-10.10t] %p: %m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="file-monitor" class="org.apache.log4j.FileAppender">
+        <param name="File" value="../logs/file-monitor.log" />
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{dd.mm.yyyy HH:mm:ss} [%-10.10t] %p: %m%n" />
         </layout>
     </appender>
 
@@ -59,6 +68,11 @@
     <logger name="media-monitor" additivity="false">
         <level value="debug" />
         <appender-ref ref="media-monitor" />
+    </logger>
+    
+    <logger name="file-monitor" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="file-monitor" />
     </logger>
     
 </log4j:configuration>

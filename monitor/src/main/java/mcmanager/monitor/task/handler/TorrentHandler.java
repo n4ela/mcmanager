@@ -32,10 +32,11 @@ public class TorrentHandler {
         String newTitle = webBrowser.getTitle();
         if (!distribution.getTitle().equals(newTitle)) {
             logMonitor.info("Раздача: " + distribution.getLinkRutracker() + " обновилась");
-            downloadsTorrent(webBrowser, distribution, logMonitor);
+            String torrentFileName = downloadsTorrent(webBrowser, distribution, logMonitor);
             
             distribution.setTitle(newTitle);
             distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+            distribution.setTorrent(torrentFileName);
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
             
             sendMessage(distribution);
@@ -47,15 +48,16 @@ public class TorrentHandler {
     public void executeNewDistribution(Distribution distribution) throws CoreException {
         WebBrowser webBrowser = new WebBrowser(logMonitorNew);
         webBrowser.goToUrl(distribution.getLinkRutracker());
-        downloadsTorrent(webBrowser, distribution,logMonitorNew);
+        String torrentFileName = downloadsTorrent(webBrowser, distribution,logMonitorNew);
         
+        distribution.setTorrent(torrentFileName);
         distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
         DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
         
         sendMessage(distribution);
     }
 
-    private void downloadsTorrent(WebBrowser webBrowser, Distribution distribution, Log log) throws CoreException {
+    private String downloadsTorrent(WebBrowser webBrowser, Distribution distribution, Log log) throws CoreException {
         String torrentUrl = webBrowser.getTorrentUrl();
         log.debug("Получена ссылка на торрент файл: " + torrentUrl);
         TorrentFile torrentFile = 
@@ -70,6 +72,7 @@ public class TorrentHandler {
             os.write(torrentFile.getContent());
             log.info("Файл " + pathToTorrent + File.separator 
                     + torrentFile.getName() + " сохранен");
+            return torrentFile.getName();
         } catch (FileNotFoundException e) {
             throw new CoreException("Не удалось сохранить файл: " + pathToTorrent);
         } catch (Exception e) {

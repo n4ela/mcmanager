@@ -37,7 +37,7 @@
     </bean>
     
     <bean id="mediaMonitor" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="fileMonitorJob" />
+        <property name="jobDetail" ref="mediaMonitorJob" />
         <property name="cronExpression" value="${monitor.media.time}" />
     </bean>
     

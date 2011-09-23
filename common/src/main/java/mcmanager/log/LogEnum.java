@@ -9,7 +9,8 @@ public enum LogEnum {
     KINOPOISK("kinopoisk"),
     EMAIL("email"),
     FILEMONITOR("file-monitor"),
-    MEDIA_MONITOR("media-monitor");
+    MEDIA_MONITOR("media-monitor"),
+    OTHER("other");
     
     private String logName;
     

@@ -13,6 +13,17 @@
             <outputDirectory>/lib/</outputDirectory>
         </dependencySet>
     </dependencySets>
+
+    <files>
+        <file>
+            <source>${project.basedir}/../core/src/main/etc/log-core-config.xml</source>
+            <outputDirectory>/etc/</outputDirectory>
+        </file>
+        <file>
+            <source>${project.basedir}/../kinopoisk-api/src/main/etc/log-kinopoisk-config.xml</source>
+            <outputDirectory>/etc/</outputDirectory>
+        </file>
+    </files>    
     
     <fileSets>
         <fileSet>

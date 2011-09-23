@@ -7,9 +7,11 @@ import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
 import mcmanager.data.TypeDistributionEnum;
+import mcmanager.exception.CoreException;
 import mcmanager.log.LogEnum;
 import mcmanager.monitor.utils.MessageUtils;
 import mcmanager.monitor.utils.MonitorSettings;
+import mcmanager.utils.FileUtils;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;
@@ -37,9 +39,18 @@ public class FileMonitor extends QuartzJobBean {
                         distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
                     else
                         distribution.setStatus(StatusEnum.PROCESSING.getStatus());
+                    
+                    //Полный путь к файлу торрента
+                    try {
+                        FileUtils.removeFile(endDownlods.getAbsolutePath() + File.separator + file);
+                    } catch (CoreException e) {
+                        log.error(e);
+                        return;
+                    }
+                    
                     DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
                     log.info("Закачка " + distribution.getLinkRutracker() + " завершена");
-
+                    
                     sendMessage(distribution);
                 }
             }
