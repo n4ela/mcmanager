@@ -4,6 +4,7 @@
     <artifactId>monitor</artifactId>
     <packaging>jar</packaging>
     <name>Media Center Monitor</name>
+    <groupId>mcmanager</groupId>
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>
@@ -27,7 +28,7 @@
             <artifactId>core</artifactId>
             <type>test-jar</type>
         </dependency>
-        
+
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>kinopoisk-api</artifactId>
@@ -124,6 +125,13 @@
             <artifactId>dbunit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

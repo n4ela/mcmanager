@@ -112,8 +112,7 @@ public class WebBrowser {
         } else {
             throw new CoreException("Ошибка при перемещениям по страницам cookieStatus: " + cookieStatus);
         }
-        //TODO РАССКОМЕНТИРОВАТЬ
-        //        log.trace("Страница: " + page);
+
     }
 
     public String getTitle() throws CoreException {

@@ -5,7 +5,8 @@
     <!-- Аппендер отправки на email -->
     <appender name="email" class="org.apache.log4j.net.SMTPAppender">
         <param name="BufferSize" value="1" />
-        <param name="To" value="ivanovdw@gmail.com" />
+        <!-- Если нужен полноценный тест на отправку надо заменить на реальный адрес -->
+        <param name="To" value="rutracker.manager@yandex.ru" />
         <param name="From" value="rutracker.manager@yandex.ru" />
         <param name="Subject" value="RuTrackerBot" />
         <param name="SMTPHost" value="smtp.yandex.ru" />

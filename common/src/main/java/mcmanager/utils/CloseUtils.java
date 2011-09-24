@@ -1,9 +1,12 @@
 package mcmanager.utils;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.nio.channels.FileChannel;
 
 /**
  * Утилитный метод для закрытия потоков, коннекшенов к БД и.т.д
@@ -23,7 +26,7 @@ public class CloseUtils {
         } catch (IOException e) {
         }
     }
-    
+
     /**
      * Закрытие {@link OutputStream} с проглатыванием исключения
      * @param os - поток
@@ -35,7 +38,7 @@ public class CloseUtils {
         } catch (IOException e) {
         }
     }
-    
+
     /**
      * Закрытие {@link BufferedReader} с проглатыванием исключения
      * @param br - буффер
@@ -44,6 +47,30 @@ public class CloseUtils {
         try {
             if (br != null)
                 br.close();
+        } catch (IOException e) {
+        }
+    }
+
+    public static void softClose(FileWriter fw) {
+        try {
+            if (fw != null)
+                fw.close();
+        } catch (IOException e) {
+        }
+    }
+
+    public static void softClose(FileChannel fc) {
+        try {
+            if (fc != null)
+                fc.close();
+        } catch (IOException e) {
+        }
+    }
+
+    public static void softClose(Reader reader) {
+        try {
+            if (reader != null)
+                reader.close();
         } catch (IOException e) {
         }
     }

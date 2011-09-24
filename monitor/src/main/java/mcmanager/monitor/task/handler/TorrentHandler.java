@@ -36,6 +36,7 @@ public class TorrentHandler {
             
             distribution.setTitle(newTitle);
             distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+            logMonitor.debug("Смена статуса на: " + distribution.getStatus());
             distribution.setTorrent(torrentFileName);
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
             
@@ -52,6 +53,7 @@ public class TorrentHandler {
         
         distribution.setTorrent(torrentFileName);
         distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+        logMonitor.debug("Смена статуса на: " + distribution.getStatus());
         DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
         
         sendMessage(distribution);
@@ -70,8 +72,7 @@ public class TorrentHandler {
             Thread.sleep(MonitorSettings.getInstance().getSleepAfterTorrentDelete());
             os = new FileOutputStream(pathToTorrent);
             os.write(torrentFile.getContent());
-            log.info("Файл " + pathToTorrent + File.separator 
-                    + torrentFile.getName() + " сохранен");
+            log.info("Файл " + pathToTorrent + " сохранен");
             return torrentFile.getName();
         } catch (FileNotFoundException e) {
             throw new CoreException("Не удалось сохранить файл: " + pathToTorrent);

@@ -1,0 +1,23 @@
+<movie>
+    <title>Крылья, ноги и хвосты</title>
+    <originaltitle></originaltitle>
+    <rating>8.179</rating>
+    <year>1986</year>
+    <votes>4 811</votes>
+    <outline>Мультфильм о том, как гриф учил страуса летать.</outline>
+    <plot>Мультфильм о том, как гриф учил страуса летать.</plot>
+    <tagline></tagline>
+    <genre>мультфильм / короткометражка / комедия /</genre>
+    <credits>Александр Татарский / Игорь Ковалев / Альберт Иванов</credits>
+    <director>Александр Татарский / Игорь Ковалев</director>
+    <actor>
+        <name>Александр Филиппенко</name>
+        <role>озвучка</role>
+        <thumb>http://st.kinopoisk.ru/images/actor/122791.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Алексей Птицын</name>
+        <role>озвучка</role>
+        <thumb>http://st.kinopoisk.ru/images/no-poster.gif</thumb>
+    </actor>
+</movie>

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import junitx.util.PrivateAccessor;
+import mcmanager.dao.DaoFactory;
 import mcmanager.monitor.task.DistributionMonitor;
 import mcmanager.utils.MD5Checksum;
 

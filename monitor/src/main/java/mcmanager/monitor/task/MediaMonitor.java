@@ -7,15 +7,23 @@ import static mcmanager.data.TypeDistributionEnum.SERIALS;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.bind.JAXBException;
 
 import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.kinopoisk.WebExploer;
+import mcmanager.kinopoisk.info.Episodedetails;
 import mcmanager.kinopoisk.info.Movie;
+import mcmanager.kinopoisk.info.Tvshow;
+import mcmanager.kinopoisk.utils.JaxbUtils;
 import mcmanager.log.LogEnum;
 import mcmanager.monitor.utils.FilmTypeEnum;
+import mcmanager.monitor.utils.SymbolicLinkUtils;
 import mcmanager.utils.TorrentInfo;
 
 import org.apache.commons.logging.Log;
@@ -33,7 +41,7 @@ public class MediaMonitor extends QuartzJobBean  {
         log.info("Начало выполнения задачи обработка медиатеки");
         List<Distribution> distributions = DaoFactory.getInstance().getDistributionDao()
                 .getDistributionByStatus(StatusEnum.PROCESSING);
-        log.debug("Найдено " + distributions.size() + " для обоаботки");
+        log.debug("Найдено " + distributions.size() + " для обработки");
         for (Distribution distribution : distributions) {
             int type = distribution.getType();
             try {
@@ -59,8 +67,108 @@ public class MediaMonitor extends QuartzJobBean  {
 
     }
 
-    private void executeSerials(Distribution distribution) {
-        // TODO Auto-generated method stub
+    private void executeSerials(Distribution distribution) throws CoreException {
+        log.debug("Обработка сериала");
+        try {
+            //Получаем информацию о сериале с сайта кинопоиск
+            Tvshow tvshow = WebExploer.parseTvShow(distribution.getLinkKinoposk());
+
+            //Сам torrent файл который был скачен с рутрекера
+            File torrentFile = new File(distribution.getGroup().getTorrentFolder() + 
+                    File.separator + distribution.getTorrent());
+            //Если его нету кидаем ошибку
+            if (!torrentFile.exists())
+                throw new CoreException("Не найден торрент файл: " + torrentFile);
+
+            //Директория xbmc в которой будут хранится символические ссылки на фильм
+            //Директория имеет вид "каталог_указанный_в_группе_к_фильму/полное_название_фильм"
+            File dirMovie = 
+                    createFilmFolder(distribution.getGroup().getMediaFolder(), tvshow.getTitle());
+
+            //Получаем список файлов из *.torrent
+            TorrentInfo torrentInfo = new TorrentInfo(torrentFile);
+            for (String filmFile : torrentInfo.getInfo()) {
+                if (FilmTypeEnum.matcher(filmFile)) {
+                    log.debug("Обработка файла: " + filmFile);
+
+                    File source = new File(distribution.getGroup().getDownloadFolder(), filmFile);
+                    if (!source.exists()) {
+                        log.error("Не найден файл: " + source);
+                        continue;
+                    }
+                    
+                    //Получаем расширение файла
+                    int dotPos = filmFile.lastIndexOf(".");
+                    if (dotPos == -1) {
+                        log.warn("Не удалось определить расширение файла " + filmFile);
+                        continue;
+                    }
+                    String fileExtension = filmFile.substring(dotPos);
+                    log.debug("У файла: " + filmFile + " получено расширение: " + fileExtension);
+
+
+                    //Получаем номер эпизода по названию файла в торренте
+                    String episode = parseEpisode(filmFile, distribution.getRegexpSerialNumber());
+                    log.info("Из файла " + filmFile + " получен номер серии " + episode);
+                    
+                    //Генерируем номер сериала согласно xbmc формату (.s01e01)
+                    String serialNumber = ".s" + prepareNumber(String.valueOf(distribution.getSeasonNumber())) + "e" + episode;
+                    
+                    //Создаем символическую ссылку на серию/субтитры и.т.д
+                    File link = new File(dirMovie, tvshow.getTitle() + serialNumber  + fileExtension);
+                    if (!link.exists())
+                        SymbolicLinkUtils.createSymbolicLink(link, source.getAbsoluteFile());
+                    log.info("Создана символическая ссылка: " + link);
+
+                    //Если файл является видео файлом то создаем еще и nfo файл для серии
+                    if (filmFile.endsWith(FilmTypeEnum.AVI.getType()) || filmFile.endsWith(FilmTypeEnum.MKV.getType())) {
+                        Episodedetails episodedetails = WebExploer.parseEpisodedetails(distribution.getLinkKinoposk(), link.getName());
+                        File nfoFile = new File(dirMovie, tvshow.getTitle() + serialNumber  + ".nfo");
+                        JaxbUtils.saveToFile(episodedetails, nfoFile);
+                        log.info("Сохранение информации о серии в файл: " + nfoFile + " прошло успешно");
+                    }
+                } else {
+                    log.debug("Файл пропущен при обработке: " + filmFile);
+                }
+            }
+
+            //Создаем корневой файл с информацией о сериале
+            File fileInfo = new File(dirMovie, "tvshow.nfo");
+            if (!fileInfo.exists()) {
+                JaxbUtils.saveToFile(tvshow, fileInfo);
+                log.info("Сохранение информации о сериале в файл: " + fileInfo + " прошло успешно");
+            }
+            //[2]
+            
+            log.info("Смена статуса на: " + StatusEnum.TRACK_ON.getStatus());
+            distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
+            DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+            
+        } catch (IOException e) {
+            throw new CoreException(e);
+        } catch (JAXBException e) {
+            throw new CoreException(e);
+        }
+    }
+
+    /**
+     * Если число содержит одну цифру то подставляет 0 в начало строки
+     * @param str
+     * @return
+     */
+    private String prepareNumber(String str) {
+        return str.length() == 1 ? "0" + str : str;
+
+    }
+
+    private String parseEpisode(String filmFile, String regexp) throws CoreException {
+        Pattern pattern = Pattern.compile(regexp);
+        Matcher matcher = pattern.matcher(filmFile);
+        if (matcher.find()) {
+            return prepareNumber(matcher.group());  
+        } 
+        throw new CoreException("Ошибка при разборе номера серии по regexp: " 
+                + regexp + " файл: " + filmFile);
 
     }
 
@@ -69,42 +177,91 @@ public class MediaMonitor extends QuartzJobBean  {
         try {
             Movie movie = WebExploer.parseMovie(distribution.getLinkKinoposk());
             //[1] Создаем каталог == название фильма
-            File mediFolder = new File(distribution.getGroup().getMediaFolder());
-            if (!mediFolder.exists() || !mediFolder.isDirectory())
-                throw new CoreException("Каталог " + mediFolder.getAbsolutePath() + " не найден");
-            File dirMovie = new File(mediFolder, movie.getTitle()); 
-            if (dirMovie.exists()) {
-                log.debug("Каталог: " + dirMovie + " уже существует"); 
-            } else {
-                if (dirMovie.mkdir()) {
-                    log.debug("Каталог " + dirMovie + " создан");
-                } else {
-                    throw new CoreException("Не удалось создать каталог " + mediFolder.getAbsolutePath() 
-                            + File.separator + movie.getTitle());
-                }
-            }
+            File dirMovie = 
+                    createFilmFolder(distribution.getGroup().getMediaFolder(), movie.getTitle());
             //[1]
+
+            //[2] Создание символических ссылок
+            //Сам torrent файл
             File torrentFile = new File(distribution.getGroup().getTorrentFolder() + 
                     File.separator + distribution.getTorrent());
             if (!torrentFile.exists())
                 throw new CoreException("Не найден торрент файл: " + torrentFile);
+            //Получаем список файлов из *.torrent
             TorrentInfo torrentInfo = new TorrentInfo(torrentFile);
             for (String filmFile : torrentInfo.getInfo()) {
                 if (FilmTypeEnum.matcher(filmFile)) {
                     log.debug("Обработка файла: " + filmFile);
+
+                    File source = new File(distribution.getGroup().getDownloadFolder(), filmFile);
+                    if (!source.exists()) {
+                        log.error("Не найден файл: " + source);
+                        continue;
+                    }
+                    
+                    int dotPos = filmFile.lastIndexOf(".");
+                    if (dotPos == -1) {
+                        log.warn("Не удалось определить расширение файла " + filmFile);
+                        continue;
+                    }
+
+                    String fileExtension = filmFile.substring(dotPos);
+                    log.debug("У файла: " + filmFile + " получено расширение: " + fileExtension);
+
+                    //Создаем символическую ссылку
+                    
+                    
+                    File link = new File(dirMovie, movie.getTitle() + fileExtension);
+                    if (!link.exists())
+                        SymbolicLinkUtils.createSymbolicLink(link, source.getAbsoluteFile());
+                    log.info("Создана символическая ссылка: " + link);
                 } else {
                     log.debug("Файл пропущен при обработке: " + filmFile);
                 }
-                
             }
-            //[2] Ищем в папке с фильмом файлы для которых необходимо создать simlink
             //[2]
 
-            //            distribution.getGroup().getDownloadFolder()
+            //[3] Сохранение информации о фильме в nfo файл
+            File fileInfo = new File(dirMovie, movie.getTitle() + ".nfo");
+            if (!fileInfo.exists()) {
+                JaxbUtils.saveToFile(movie, fileInfo);
+                log.info("Сохранение информации о фильме в файл: " + fileInfo + " прошло успешно");
+            }
+            //[3]
+
+            log.info("Смена статуса на: " + StatusEnum.OFF.getStatus());
+            distribution.setStatus(StatusEnum.OFF.getStatus());
+            DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
         } catch (IOException e) {
+            throw new CoreException(e);
+        } catch (JAXBException e) {
             throw new CoreException(e);
         }
 
+    }
+
+
+    private File createFilmFolder(String mediaFolder, String filmName) throws CoreException {
+        //Каталог в котором будет лежать информация о фильмах данной категории(группы)
+        File mediFolder = new File(mediaFolder);
+        //Пропуем создать каталог если его еще не существует
+        if (!mediFolder.exists() || !mediFolder.isDirectory())
+            throw new CoreException("Каталог \"" + mediFolder.getAbsolutePath() + "\" не найден");
+
+        //Каталог для конкретного фильма
+        File dirMovie = new File(mediFolder, filmName); 
+        if (dirMovie.exists()) {
+            log.debug("Каталог: \"" + dirMovie + "\" уже существует"); 
+        } else {
+            if (dirMovie.mkdir()) {
+                log.debug("Каталог \"" + dirMovie + "\" создан");
+            } else {
+                throw new CoreException("Не удалось создать каталог \"" + mediFolder.getAbsolutePath() 
+                        + File.separator + filmName + "\"");
+            }
+        }
+
+        return dirMovie;
     }
 
 }

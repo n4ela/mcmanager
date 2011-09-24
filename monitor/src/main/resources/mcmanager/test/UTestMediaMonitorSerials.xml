@@ -1,0 +1,14 @@
+<dataset>
+
+    <GROUPS ID="4" NAME="Test Serials" TORRENT_FOLDER="src/test/xbmc/torrentsFolder"
+        MEDIA_FOLDER="src/test/xbmc/mediaFolder" DOWNLOAD_FOLDER="src/test/xbmc/downloadsFolder"
+        EMAIL_MESSAGE="Test Serial Message" EMAIL_REGEXP="(.*)" />
+
+    <DISTRIBUTION ID="4"
+        LINK_RUTRACKER="http://rutracker.org/forum/viewtopic.php?t=3706661"
+        TITLE="Дело было на Кубани / Серии: 1-8 из 8 (Сергей Щербин) [2011, Мелодрама, SATRip]"
+        MAIL_MESSAGE="Дело было на Кубани скачен" MAIL_REGEXP="(.*)" GROUPS="4" STATUS="4"
+        TORRENT="[rutracker.org].t3706661.torrent" LINK_KINOPOISK="http://www.kinopoisk.ru/level/1/film/573603/"
+        REGEXP_SERIAL_NUMBER="E([0-9]+)" SEASON_NUMBER="1" TYPE="1" />
+
+</dataset>

@@ -51,14 +51,17 @@ public class DistributionDao extends HibernateDaoSupport {
         return getHibernateTemplate().get(Distribution.class, id);
     }
     
-    //TODO UnitTest
+    /**
+     * Получить список раздач по статусу
+     * @param status
+     * @return
+     */
     public List<Distribution> getDistributionByStatus(StatusEnum status) {
         return (List<Distribution>) getHibernateTemplate().findByCriteria(
                 DetachedCriteria.forClass(Distribution.class).add(
                         Restrictions.eq("status", status.getStatus())));
     }
     
-    //TODO UnitTest
     public List<Distribution> getDistributionByTorrent(String torrentName) {
         return (List<Distribution>) getHibernateTemplate().findByCriteria(
                 DetachedCriteria.forClass(Distribution.class).add(

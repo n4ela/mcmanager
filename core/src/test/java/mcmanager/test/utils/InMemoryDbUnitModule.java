@@ -34,13 +34,6 @@ public class InMemoryDbUnitModule extends DbUnitModule {
 
             DbUnitDatabaseConnection connection = getDbUnitDatabaseConnection(schemaName);
             Statement statement = connection.getConnection().createStatement();
-            System.out.println("HELLO");
-//            for (String tableString : getTableStatements())
-//            {
-//                System.out.println(tableString);
-//                statement.executeUpdate(tableString);
-//                System.out.println("VSTAVIL");
-//            }
             connection.close();
             isInitialized = true;
         } catch (SQLException sqle) {

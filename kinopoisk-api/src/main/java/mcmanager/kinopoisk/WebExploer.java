@@ -42,6 +42,7 @@ public class WebExploer {
     private static final String TITLE = "title";
     private static final String PLOT = "brand_words";
     private static final String ORIGINAL_NAME = "div.movie tbody tbody tbody tbody tbody td";
+    private static final String SMALL_POSTER = "div.movie tbody tbody tr";
     
     private static final char NBSP = (int)160;
     private static final String SPECIAL_DEF = "\u0097";
@@ -77,7 +78,7 @@ public class WebExploer {
             movie.setVotes(arrayRating[1]);
         }
         movie.getActor().addAll(getActorInfo(url));
-        movie.getThumb().addAll(getThumb(url));
+        movie.getThumb().addAll(getThumb(url, document));
         return movie;
     }
 
@@ -96,7 +97,7 @@ public class WebExploer {
         tvshow.setPlot(plot.replace(SPECIAL_DEF, "-"));
         tvshow.setOutline(plot.replace(SPECIAL_DEF, "-"));
         tvshow.getActor().addAll(getActorInfo(url));
-        tvshow.getThumb().addAll(getThumb(url));
+        tvshow.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
         tvshow.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
         tvshow.setGenre(infoMap.get(FilmKey.GENRE.getValue()));
@@ -127,7 +128,7 @@ public class WebExploer {
         String plot = document.getElementsByClass(PLOT).first().text();
         episodedetails.setPlot(plot.replace(SPECIAL_DEF, "-"));
         episodedetails.getActor().addAll(getActorInfo(url));
-        episodedetails.getThumb().addAll(getThumb(url));
+        episodedetails.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
         episodedetails.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
         episodedetails.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
@@ -210,7 +211,7 @@ public class WebExploer {
         return actorList.size() > ACTOR_SIZE ? actorList.subList(0, ACTOR_SIZE) : actorList;
     }
     
-    private static List<Thumb> getThumb(String urlFilm) throws IOException {
+    private static List<Thumb> getThumb(String urlFilm, Document oldDocument) throws IOException {
         String url = urlFilm.replace("level/1/film", "level/" + POSTER_LINK + "/film");
         Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         //Получаем страницу
@@ -225,6 +226,15 @@ public class WebExploer {
                 thumbList.add(thumb);    
             }
         }
+        
+        //Если ни одной картинки получить не удалось(не было в хорошем качестве)
+        //То пробуем получить милипиздричную
+        //Deprecated если картинки в нормальном разрешении нету пробуем получить ее с rutracker
+//        if (thumbList.isEmpty()) {
+//            Thumb thumb = new Thumb();
+//            thumb.setValue(oldDocument.select(SMALL_POSTER).get(6).select("img").attr("src"));
+//            thumbList.add(thumb);
+//        }
         return thumbList;
     }
     
@@ -248,4 +258,5 @@ public class WebExploer {
         }
         return false;
     }
+    
 }

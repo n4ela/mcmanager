@@ -24,7 +24,6 @@ public class DistributionMonitor extends QuartzJobBean {
         log.info("Начало выполнения задачи отслеживания обновления раздач");
         List<Distribution> distributions = 
                 DaoFactory.getInstance().getDistributionDao().getDistributionByStatus(StatusEnum.TRACK_ON);
-        System.out.println("distributions: " + distributions);
         log.debug("Найдено " + distributions.size() + " раздач со статусом " + StatusEnum.TRACK_ON.getDesc());
         try {
             for (Distribution distribution : distributions) {
