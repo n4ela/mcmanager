@@ -143,7 +143,6 @@ public class MediaMonitor extends QuartzJobBean  {
             log.info("Смена статуса на: " + StatusEnum.TRACK_ON.getStatus());
             distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
-            
         } catch (IOException e) {
             throw new CoreException(e);
         } catch (JAXBException e) {

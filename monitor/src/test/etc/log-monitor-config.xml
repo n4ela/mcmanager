@@ -10,6 +10,16 @@
         </layout>
     </appender>
 
+    <logger name="media-monitor" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="media-monitor" />
+    </logger>
+    
+    <logger name="file-monitor" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="file-monitor" />
+    </logger>
+    
     <logger name="monitor-new" additivity="false">
         <level value="trace" />
         <appender-ref ref="console" />
