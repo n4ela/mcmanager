@@ -1,7 +1,10 @@
 package mcmanager.dao;
 
+import java.util.List;
+
 import mcmanager.data.Group;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -17,6 +20,10 @@ public class GroupDao extends HibernateDaoSupport {
      */
     public void addGroup(Group group) {
         getHibernateTemplate().save(group);
+    }
+    
+    public void updateGroup(Group group) {
+        getHibernateTemplate().update(group);
     }
     
     /**
@@ -36,6 +43,10 @@ public class GroupDao extends HibernateDaoSupport {
      */
     public Group getGroup(long id) {
         return getHibernateTemplate().get(Group.class, id);
+    }
+    
+    public List<Group> getAllGroup() {
+        return getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(Group.class));
     }
     
 }

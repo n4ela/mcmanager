@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <h:outputStylesheet name="style.css" library="css" />
+    <link rel="stylesheet" type="text/css"
+        href="resources/css/smoothness/jquery-ui.css" />
+    <h:outputScript name="jquery.js" library="script" target="head" />
+    <h:outputScript name="jquery-ui.js" library="script" target="head" />
+    <title>Media Center Manager Controller</title>
+</h:head>
+<h:body>
+    <h:form prependId="false" id="FORM">
+        <div class="container">
+            <h:panelGrid styleClass="menu" columns="2">
+                <h:panelGrid columns="2">                
+                    <h:graphicImage name="group.png" library="img" style="cursor: pointer;" onclick="changeTable()" />
+                    <h:graphicImage name="add.png" library="img" style="cursor: pointer;" onclick="showDialogEditor(false);" >
+                        <f:ajax event="click" listener="#{indexBean.clearGroup}" render="groupDialog" />
+                    </h:graphicImage>
+                </h:panelGrid>
+                <br />
+                
+                <h:outputText id="labelGroup" value="Группы:" />
+                <h:selectOneMenu id="selectGroup" value="#{indexBean.selectGroupData}">
+                    <f:selectItem itemLabel="Все" />
+                    <f:selectItems value="#{indexBean.groupItem}" />
+                </h:selectOneMenu>
+            </h:panelGrid>
+            
+            <h:dataTable styleClass="table" id="groupTable" value="#{indexBean.groupModel}" var="group">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{group.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{group.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Torrent Folder</f:facet>
+                    #{group.torrentFolder}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Media Folder</f:facet>
+                    #{group.mediaFolder}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Download Folder</f:facet>
+                    #{group.downloadFolder}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Message</f:facet>
+                    #{group.emailMessage}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">RegExp</f:facet>
+                    #{group.emailRegexp}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <h:graphicImage name="delete.png" library="img" style="cursor: pointer;">
+                        <f:ajax event="click" listener="#{indexBean.deleteGroup}" render="groupTable" />
+                    </h:graphicImage>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <h:graphicImage name="edit.png" library="img" style="cursor: pointer;" onclick="showDialogEditor(true)">
+                        <f:ajax event="click" listener="#{indexBean.editGroup}" render="FORM:groupDialog"/>
+                    </h:graphicImage>
+                </h:column>
+            </h:dataTable>
+        </div>
+        
+        <div id="dialogGroupEditor" title="Диалог" style="display: none">
+            <h:panelGrid id="groupDialog" styleClass="groupSelect" columns="2" cellpadding="0" cellspacing="0" width="100%" columnClasses="sidebar, content">
+                <h:outputText value="Id:" rendered="#{indexBean.groupEdit.id != null}"/>
+                <h:panelGrid columns="1" rendered="#{indexBean.groupEdit.id != null}" styleClass="content" >
+                    <h:inputText id="groupId" value="#{indexBean.groupEdit.id}" disabled="true" styleClass="content"/>
+                    <h:message id="messageGroupId" for="groupId" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Name: " />
+                <h:panelGrid columns="1" styleClass="content">
+                    <h:inputText id="groupName" value="#{indexBean.groupEdit.name}" styleClass="content" />
+                    <h:message id="messageGroupName" for="groupName" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="#{indexBean.groupEdit.torrentFolder}" />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="groupTorrentFolder" value="#{indexBean.groupEdit.torrentFolder}" styleClass="content"/>
+                    <h:message id="messageGroupTorrentFolder" for="groupTorrentFolder" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Media Folder: " />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="groupMediaFolder" value="#{indexBean.groupEdit.mediaFolder}" styleClass="content"/>
+                    <h:message id="messageGroupMediaFolder" for="groupMediaFolder" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Download Folder: " />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="groupDownloadFolder" value="#{indexBean.groupEdit.downloadFolder}" styleClass="content"/>
+                    <h:message id="messageGroupDownloadFolder" for="groupDownloadFolder" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Email Message: " />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="groupEmailMessage" value="#{indexBean.groupEdit.emailMessage}" styleClass="content" validator="#{indexBean.validateGroupMessage}"/>
+                    <h:message id="messageGroupEmailMessage" for="groupEmailMessage" styleClass="content"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Email Regexp: " />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="groupEmailRegexp" value="#{indexBean.groupEdit.emailRegexp}" styleClass="content"  validator="#{indexBean.validateGroupRegexp}"/>
+                    <h:message id="messageGroupEmailRegexp" for="groupEmailRegexp" styleClass="content"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>    
+        
+        <h:panelGrid id="updateGroup">
+            <f:ajax event="click" execute="groupDialog" listener="#{indexBean.updateGroup}" render="groupTable messageGroupId messageGroupName messageGroupTorrentFolder messageGroupMediaFolder messageGroupDownloadFolder messageGroupEmailMessage messageGroupEmailRegexp" onevent="closeGroupDialog"/>
+        </h:panelGrid>
+        
+        <h:panelGrid id="saveGroup">
+            <f:ajax event="click" execute="groupDialog" listener="#{indexBean.saveGroup}" render="groupTable messageGroupName messageGroupTorrentFolder messageGroupMediaFolder messageGroupDownloadFolder messageGroupEmailMessage messageGroupEmailRegexp" onevent="closeGroupDialog"/>
+        </h:panelGrid>
+        
+        <script type="text/javascript">
+        /* <![CDATA[ */
+            $('#groupTable').hide();         
+                     
+            function showDialogEditor(edit) {
+            	if (document.getElementById("labelGroup").style.display != "none") {
+            		dialogFilm(edit);
+            	} else {
+            		dialogGroup(edit);            		
+            	}
+            }         
+        
+            function dialogGroup(edit) {
+            	var title = edit ? "Редактирование группы" : "Добавление группы";
+            	$("#dialogGroupEditor").dialog({
+                    title: title,
+                    modal: true,
+                    width: 550,
+                    height: 350,
+                    buttons: {
+                        "Сохранить" : function() {
+                            if (edit)
+                                document.getElementById("updateGroup").onclick();
+                            else 
+                                document.getElementById("saveGroup").onclick();
+                        },
+                        "Отменить" : function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $("#dialogGroupEditor").parent().appendTo($("FORM"));
+            }
+        
+            function dialogFilm(edit) {
+                var title = edit ? "Редактирование" : "Добавление";
+                $("#dialog").dialog({
+                    title: title,
+                    modal: true,
+                    width: 400,
+                    
+                    buttons: {
+                        "Пример сообщения" : function() {
+                            document.getElementById("testMessage").onclick();
+                        },
+                        "Сохранить" : function() {
+                            if (edit)
+                                document.getElementById("updateFilm").onclick();
+                            else 
+                                document.getElementById("saveFilm").onclick();
+                        },
+                        "Отменить" : function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $("#dialog").parent().appendTo($("FORM"));
+            }
+        
+            function changeTable() {
+                $('#filmTable').toggle();
+                $('#groupTable').toggle();
+                $('#labelGroup').toggle();
+                $('#selectGroup').toggle();
+            }
+            
+            function closeGroupDialog(data) {
+                if (data.status == "success" &&
+                	    (document.getElementById("messageGroupId") == null || document.getElementById("messageGroupId").textContent == "") && 
+           				(document.getElementById("messageGroupName") == null || document.getElementById("messageGroupName").textContent == "") && 
+                		(document.getElementById("messageGroupTorrentFolder") == null || document.getElementById("messageGroupTorrentFolder").textContent == "") && 
+                		(document.getElementById("messageGroupMediaFolder") == null || document.getElementById("messageGroupMediaFolder").textContent == "") && 
+                		(document.getElementById("messageGroupDownloadFolder") == null || document.getElementById("messageGroupDownloadFolder").textContent == "") && 
+                		(document.getElementById("messageGroupEmailMessage") == null || document.getElementById("messageGroupEmailMessage").textContent == "") && 
+                		(document.getElementById("messageGroupEmailRegexp") == null || document.getElementById("messageGroupEmailRegexp").textContent == "")
+                	) 
+                {
+                    $("#dialogGroupEditor").dialog("close");
+                }        
+            } 
+        /* ]]> */
+        </script>
+    </h:form>
+</h:body>
+</html>

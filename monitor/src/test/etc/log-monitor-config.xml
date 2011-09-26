@@ -12,12 +12,12 @@
 
     <logger name="media-monitor" additivity="false">
         <level value="debug" />
-        <appender-ref ref="media-monitor" />
+        <appender-ref ref="console" />
     </logger>
     
     <logger name="file-monitor" additivity="false">
         <level value="debug" />
-        <appender-ref ref="file-monitor" />
+        <appender-ref ref="console" />
     </logger>
     
     <logger name="monitor-new" additivity="false">

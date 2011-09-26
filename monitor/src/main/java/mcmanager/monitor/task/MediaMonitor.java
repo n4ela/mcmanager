@@ -19,12 +19,14 @@ import mcmanager.exception.CoreException;
 import mcmanager.kinopoisk.WebExploer;
 import mcmanager.kinopoisk.info.Episodedetails;
 import mcmanager.kinopoisk.info.Movie;
+import mcmanager.kinopoisk.info.Thumb;
 import mcmanager.kinopoisk.info.Tvshow;
 import mcmanager.kinopoisk.utils.JaxbUtils;
 import mcmanager.log.LogEnum;
 import mcmanager.monitor.utils.FilmTypeEnum;
 import mcmanager.monitor.utils.SymbolicLinkUtils;
 import mcmanager.utils.TorrentInfo;
+import mcmanager.web.WebBrowser;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;
@@ -72,6 +74,16 @@ public class MediaMonitor extends QuartzJobBean  {
         try {
             //Получаем информацию о сериале с сайта кинопоиск
             Tvshow tvshow = WebExploer.parseTvShow(distribution.getLinkKinoposk());
+            if (tvshow.getThumb() == null || tvshow.getThumb().size() == 0) {
+                WebBrowser webBrowser = new WebBrowser(log);
+                webBrowser.goToUrl(distribution.getLinkRutracker());
+                String thumbStr = webBrowser.getThumb();
+                if (!thumbStr.isEmpty()) {
+                    Thumb thumb = new Thumb();
+                    thumb.setValue(thumbStr);
+                    tvshow.getThumb().add(thumb);
+                }
+            }
 
             //Сам torrent файл который был скачен с рутрекера
             File torrentFile = new File(distribution.getGroup().getTorrentFolder() + 
@@ -175,6 +187,16 @@ public class MediaMonitor extends QuartzJobBean  {
         log.debug("Обработка фильма");
         try {
             Movie movie = WebExploer.parseMovie(distribution.getLinkKinoposk());
+            if (movie.getThumb() == null || movie.getThumb().size() == 0) {
+                WebBrowser webBrowser = new WebBrowser(log);
+                webBrowser.goToUrl(distribution.getLinkRutracker());
+                String thumbStr = webBrowser.getThumb();
+                if (!thumbStr.isEmpty()) {
+                    Thumb thumb = new Thumb();
+                    thumb.setValue(thumbStr);
+                    movie.getThumb().add(thumb);
+                }
+            }
             //[1] Создаем каталог == название фильма
             File dirMovie = 
                     createFilmFolder(distribution.getGroup().getMediaFolder(), movie.getTitle());

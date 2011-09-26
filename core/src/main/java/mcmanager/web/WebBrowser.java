@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mcmanager.exception.CoreException;
+import mcmanager.utils.RuTrackerSettings;
 
 import org.apache.commons.logging.Log;
 import org.jsoup.Connection;
@@ -24,8 +25,6 @@ public class WebBrowser {
     private final static String MAIN_PAGE = "http://rutracker.org/forum/index.php";
     private static final int TIMEOUT = 15000;
 
-    private final String LOGIN = "rutracker-manager";
-    private final String PASSWORD = "z1x2c3v4";
     private final String SECRET_KEY = "Вход";
 
     private Document page;
@@ -40,11 +39,13 @@ public class WebBrowser {
         JSoupUtils.goToUrl(MAIN_PAGE).get();
         //Логин и получение куки
         log.debug("Производится идентификация пользователя");
-        log.debug("Логин: " + LOGIN + " пароль: " + PASSWORD + 
+        String login = RuTrackerSettings.getInstance().getLogin();
+        String password = RuTrackerSettings.getInstance().getPassword();
+        log.debug("Логин: " + login + " пароль: " + password + 
                 " дополнительный параметр: " + SECRET_KEY);
         Connection connection = JSoupUtils.goToUrl(LOGIN_SERVER).timeout(TIMEOUT);
         Connection.Response responce = connection.method(Method.POST)
-                .data("login_username", LOGIN, "login_password", PASSWORD,
+                .data("login_username", login, "login_password", password,
                         "login", SECRET_KEY).execute();
         cookies = responce.cookies();
         log.debug("cookie получены: " + cookies);
@@ -129,6 +130,13 @@ public class WebBrowser {
                 return url;
             else 
                 throw new CoreException("Не удалось найти ссылку на торрент файл");
+        } else 
+            throw new CoreException("Страница не была получена (page==null)");
+    }
+    
+    public String getThumb() throws CoreException {
+        if (page != null) {
+            return page.getElementsByClass("postImgAligned").attr("title");
         } else 
             throw new CoreException("Страница не была получена (page==null)");
     }

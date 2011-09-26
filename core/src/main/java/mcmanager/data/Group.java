@@ -119,6 +119,28 @@ public class Group implements ObjectDB, Serializable {
     public void setEmailRegexp(String emailRegexp) {
         this.emailRegexp = emailRegexp;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null && this != null)
+            return false;
+        Group group = (Group)o;
+        if ((this.id == null && group.id != null) || !this.id.equals(group.id))
+            return false;
+        if ((this.name == null && group.name != null) || !this.name.equals(group.name))
+            return false;
+        if ((this.mediaFolder == null && group.mediaFolder != null) || !this.mediaFolder.equals(group.mediaFolder))
+            return false;
+        if ((this.torrentFolder == null && group.torrentFolder != null) || !this.torrentFolder.equals(group.torrentFolder))
+            return false;
+        if ((this.downloadFolder == null && group.downloadFolder != null) || !this.downloadFolder.equals(group.downloadFolder))
+            return false;
+        if ((this.emailMessage == null && group.emailMessage != null) || !this.emailMessage.equals(group.emailMessage))
+            return false;
+        if ((this.emailRegexp == null && group.emailRegexp != null) || !this.emailRegexp.equals(group.emailRegexp))
+            return false;
+        return true;
+    }
 
     @Override
     public String toString() {

@@ -23,6 +23,7 @@ public class UTestDistributionMonitor extends UnitilsJUnit4 {
     @Test
     public void testExecuteInternal() throws Throwable {
         String expected = "1d11f537b6f5c8bf80e9fd00dc65da2e";
+        System.out.println(DaoFactory.getInstance().getGroupDao().getAllGroup());
         DistributionMonitor monitor = new DistributionMonitor();
         PrivateAccessor.invoke(monitor, "executeInternal", 
                 new Class[] {JobExecutionContext.class}, new Object[]{null});

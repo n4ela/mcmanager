@@ -6,17 +6,6 @@ package mcmanager.dao;
  * Date: 28.08.2011
  */
 public class DaoFactory {
-    
-    /**
-     * Сущность "Раздача"
-     */
-    private static DistributionDao distributionDao;                                                                                                                            
-
-    /**
-     * Сущность "Фильм"
-     */
-    private static GroupDao groupDao;                                                                                                                     
-
 
     private static class DaoFactoryHolder {                                                                                                              
         private static DaoFactory instance = new DaoFactory();                                                                                             
@@ -30,6 +19,16 @@ public class DaoFactory {
         return DaoFactoryHolder.instance;                                                                                                                
     }                             
     
+    /**
+     * Сущность "Раздача"
+     */
+    private static DistributionDao distributionDao;                                                                                                                            
+    
+    /**
+     * Сущность "Фильм"
+     */
+    private static GroupDao groupDao;                                                                                                                     
+
     /**
      * Получить ДАО объект раздачи
      * @return ДАО объект раздачи

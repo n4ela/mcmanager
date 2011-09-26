@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>web-control</artifactId>
+    <packaging>war</packaging>
+    <name>Media Center Web Control</name>
+    <groupId>mcmanager</groupId>
+    <parent>
+        <groupId>mcmanager</groupId>
+        <artifactId>mcmanager</artifactId>
+        <version>${mcmanager.version}</version>
+    </parent>
+
+    <properties>
+        <jsf-myfaces.version>2.0.4</jsf-myfaces.version>
+        <jsf-mojarra.version>2.0.4-b02</jsf-mojarra.version>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>mcmanager</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <!-- Зависимость от ядра -->
+        <dependency>
+            <groupId>mcmanager</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>${jsf-myfaces.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>${jsf-myfaces.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>rutracker</groupId>
+            <artifactId>rutracker</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>3.0.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator</groupId>
+            <artifactId>myfaces-extval-core</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+            <artifactId>myfaces-extval-property-validation</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+    </dependencies>
+
+</project>

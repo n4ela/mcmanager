@@ -24,6 +24,12 @@
         <property name="location" value="file://${catalina.home}/etc/settings.properties" />
     </bean>
     
+    <bean id="ruTrackerSettings" class="mcmanager.utils.RuTrackerSettings" factory-method="getInstance">
+        <property name="login" value="${rutracker.login}" />
+        <property name="password" value="${rutracker.password}" />
+    </bean>
+    
+    
     <!-- Настройка подключения к БД -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
