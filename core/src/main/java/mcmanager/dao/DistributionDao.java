@@ -1,8 +1,10 @@
 package mcmanager.dao;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import mcmanager.data.Distribution;
+import mcmanager.data.Group;
 import mcmanager.data.StatusEnum;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -67,4 +69,9 @@ public class DistributionDao extends HibernateDaoSupport {
                 DetachedCriteria.forClass(Distribution.class).add(
                         Restrictions.eq("torrent", torrentName)));
     }
+    
+    public List<Distribution> getAllDistribution() {
+        return getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(Distribution.class));
+    }
+    
 }

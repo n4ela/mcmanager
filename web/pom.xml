@@ -8,7 +8,7 @@
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>
-        <version>${mcmanager.version}</version>
+        <version>0.1</version>
     </parent>
 
     <properties>
@@ -26,6 +26,11 @@
         <dependency>
             <groupId>mcmanager</groupId>
             <artifactId>core</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>beencode</groupId>
+            <artifactId>beencode</artifactId>
         </dependency>
 
         <dependency>

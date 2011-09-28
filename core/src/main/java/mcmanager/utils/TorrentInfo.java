@@ -18,26 +18,28 @@ public class TorrentInfo {
 
     private Set<String> fileList;
 
-    private File file;
+    private InputStream is;
 
-    public TorrentInfo(File file) {
-        this.file = file;
+    public TorrentInfo(File file) throws CoreException {
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new CoreException("Файл: " + file + " не найден.", e);
+        }
     }
 
+    public TorrentInfo(InputStream is) throws CoreException {
+        this.is = is;
+    }
+    
     private Set<String> parse() throws CoreException {
-        InputStream is = null;
         try {
-            try {
-                is = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                throw new CoreException("Файл: " + file + " не найден.", e);
-            }
-            BencodingInputStream bis = new BencodingInputStream(is);
+        BencodingInputStream bis = new BencodingInputStream(is);
             TreeMap map = null;
             try {
                 map = (TreeMap) bis.readObject();
             } catch (IOException e) {
-                throw new CoreException("Ошибка при разборе torrent файла: " + file, e);
+                throw new CoreException("Ошибка при разборе torrent файла: ", e);
             }
             return parseFileList((TreeMap)map.get("info"));
 

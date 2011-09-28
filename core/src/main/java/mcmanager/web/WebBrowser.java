@@ -1,6 +1,8 @@
 package mcmanager.web;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class WebBrowser {
     public WebBrowser(Log log) {
         this.log = log;
     }
-    
+
     private void loginInRutracker() throws IOException {
         //Заход на главную страницу
         log.debug("Заход на главную страницу трекера: " + MAIN_PAGE);
@@ -75,12 +77,13 @@ public class WebBrowser {
         Connection.Response response;
         CookieStatus cookieStatus;
         synchronized (cookies) {
+            validateUrl(url);
             log.debug("Заход на страницу " + url + cookies);
             try {
                 response = JSoupUtils.goToUrl(url).timeout(TIMEOUT)
                         .cookies(cookies).method(Method.GET).execute();
                 cookieStatus = checkCookie(response.cookies());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new CoreException(e);
             }
         }
@@ -116,11 +119,28 @@ public class WebBrowser {
 
     }
 
+    //TODO ПОДУМАТЬ
+    public void validateUrl(String url) throws CoreException {
+        try {
+            URI uri = new URI(url);
+            System.out.println("HOST: " + uri.getHost());
+            if (uri.getHost() == null || !uri.getHost().equals("rutracker.org"))
+                throw new CoreException("Ссылка на " + url + " не является ссылкой на rutracker.org");
+        } catch (URISyntaxException e) {
+            throw new CoreException("Ссылка на " + url + " не является ссылкой на rutracker.org");
+        }
+    }
+
     public String getTitle() throws CoreException {
-        if (page != null)
-            return page.getElementsByClass("maintitle").select("a[href]").first().text();
-        else 
-            throw new CoreException("Страница не была получена (page==null)");
+        //TODO Избавится от проверки на исключие место него разобраться когда select.firest == null
+        try {
+            if (page != null)
+                return page.getElementsByClass("maintitle").select("a[href]").first().text();
+            else 
+                throw new CoreException("Страница не была получена (page==null)");
+        } catch (NullPointerException e) {
+            throw new CoreException("Не удалось получить заголовок раздачи");
+        }
     }
 
     public String getTorrentUrl() throws CoreException {
@@ -133,7 +153,7 @@ public class WebBrowser {
         } else 
             throw new CoreException("Страница не была получена (page==null)");
     }
-    
+
     public String getThumb() throws CoreException {
         if (page != null) {
             return page.getElementsByClass("postImgAligned").attr("title");

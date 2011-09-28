@@ -141,6 +141,18 @@ public class Group implements ObjectDB, Serializable {
             return false;
         return true;
     }
+    
+    
+    @Override
+    public int hashCode() {
+        return id.hashCode() * 3 +
+               name.hashCode() * 7 + 
+               mediaFolder.hashCode() * 3+ 
+               torrentFolder.hashCode() * 3 + 
+               downloadFolder.hashCode() * 7 +
+               emailMessage.hashCode() * 3+ 
+               emailRegexp.hashCode() * 7;
+    }
 
     @Override
     public String toString() {

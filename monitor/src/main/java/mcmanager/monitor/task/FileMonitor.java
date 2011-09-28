@@ -9,9 +9,10 @@ import mcmanager.data.StatusEnum;
 import mcmanager.data.TypeDistributionEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.log.LogEnum;
-import mcmanager.monitor.utils.MessageUtils;
 import mcmanager.monitor.utils.MonitorSettings;
 import mcmanager.utils.FileUtils;
+import mcmanager.utils.MessageUtils;
+import mcmanager.utils.StringUtils;
 
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;
@@ -28,44 +29,49 @@ public class FileMonitor extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context)
             throws JobExecutionException {
-        log.info("Начало выполнения задачи отслеживания завершения закачки");
-        File endDownlods = new File(MonitorSettings.getInstance().getDirEndDownloadTorrents());
-        if (endDownlods.exists() && endDownlods.isDirectory()) {
-            for (String file : endDownlods.list()) {
-                List<Distribution> distributions = 
-                        DaoFactory.getInstance().getDistributionDao().getDistributionByTorrent(file);
-                for (Distribution distribution : distributions) {
-                    if (distribution.getType() == TypeDistributionEnum.SHARED.getType())
-                        distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
-                    else
-                        distribution.setStatus(StatusEnum.PROCESSING.getStatus());
-                    
-                    //Полный путь к файлу торрента
-                    try {
-                        FileUtils.removeFile(endDownlods.getAbsolutePath() + File.separator + file);
-                    } catch (CoreException e) {
-                        log.error(e);
-                        return;
+        synchronized (log) {
+            log.info("Начало выполнения задачи отслеживания завершения закачки");
+            File endDownlods = new File(MonitorSettings.getInstance().getDirEndDownloadTorrents());
+            if (endDownlods.exists() && endDownlods.isDirectory()) {
+                for (String file : endDownlods.list()) {
+                    List<Distribution> distributions = 
+                            DaoFactory.getInstance().getDistributionDao().getDistributionByTorrent(file);
+                    for (Distribution distribution : distributions) {
+                        if (distribution.getType() == TypeDistributionEnum.SHARED.getType())
+                            distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
+                        else
+                            distribution.setStatus(StatusEnum.PROCESSING.getStatus());
+
+                        //Полный путь к файлу торрента
+                        try {
+                            FileUtils.removeFile(endDownlods.getAbsolutePath() + File.separator + file);
+                        } catch (CoreException e) {
+                            log.error(e);
+                            return;
+                        }
+
+                        DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
+                        log.info("Закачка " + distribution.getLinkRutracker() + " завершена");
+
+                        sendMessage(distribution);
                     }
-                    
-                    DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
-                    log.info("Закачка " + distribution.getLinkRutracker() + " завершена");
-                    
-                    sendMessage(distribution);
                 }
+            } else {
+                log.error("Директория " + endDownlods.getAbsolutePath() + " не найдена");
             }
-        } else {
-            log.error("Директория " + endDownlods.getAbsolutePath() + " не найдена");
+            log.info("Завершение выполнения задачи отслеживания завершения закачки");
         }
-        log.info("Завершение выполнения задачи отслеживания завершения закачки");
     }
 
     private void sendMessage(Distribution distribution) {
-        if (MonitorSettings.getInstance().getSendMail() == SEND_MAIL) {
-            LogEnum.EMAIL.getLog().fatal(MessageUtils.createMessage(distribution.getTitle(), 
-                    distribution.getMailRegexp(), 
-                    distribution.getMailMessage()));
-        }
+        if (MonitorSettings.getInstance().getSendMail() == SEND_MAIL)
+            if (!StringUtils.isEmpty(distribution.getMailMessage())) {
+                LogEnum.EMAIL.getLog().fatal(MessageUtils.createMessage(distribution.getTitle(), 
+                        distribution.getMailRegexp(), 
+                        distribution.getMailMessage()));
+            } else {
+                log.error("Не задано сообщения для отправки на email для раздачи " + distribution.toLineString());
+            }
     }
 
 }

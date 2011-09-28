@@ -14,6 +14,7 @@ import mcmanager.kinopoisk.info.Movie;
 import mcmanager.kinopoisk.info.Thumb;
 import mcmanager.kinopoisk.info.Tvshow;
 import mcmanager.log.LogEnum;
+import mcmanager.utils.StringUtils;
 import mcmanager.web.JSoupUtils;
 
 import org.apache.commons.logging.Log;
@@ -46,6 +47,7 @@ public class WebExploer {
     
     private static final char NBSP = (int)160;
     private static final String SPECIAL_DEF = "\u0097";
+    private static final String SPECIAL_DOT = "\u0085";
 
     //TODO Потенциально в infoMap могут возникнуть nullpointer, 
     //в качестве решения можно предложить сетить значения по умолчанию
@@ -65,13 +67,13 @@ public class WebExploer {
         movie.setDirector(infoMap.get(FilmKey.DIRECTOR.getValue()));
         movie.setTagline(infoMap.get(FilmKey.TAGLINE.getValue()).replaceAll("«|»|-", ""));
         movie.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
-        movie.setGenre(infoMap.get(FilmKey.GENRE.getValue()));
+        movie.setGenre(removeEndSepperator(infoMap.get(FilmKey.GENRE.getValue())));
         movie.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
         movie.setYear(infoMap.get(FilmKey.YEAR.getValue()));
-        String plot = document.getElementsByClass(PLOT).first().text();
-        movie.setPlot(plot.replace(SPECIAL_DEF, "-"));
-        movie.setOutline(plot.replace(SPECIAL_DEF, "-"));
-        String rating = document.getElementsByClass("continue").first().text().replace(NBSP, ' ');
+        String plot = removeSpecialChar(document.getElementsByClass(PLOT).first().text());
+        movie.setPlot(plot);
+        movie.setOutline(plot);
+        String rating = removeSpecialChar(document.getElementsByClass("continue").first().text());
         String[] arrayRating = rating.split("  ");
         if (arrayRating.length == 2) {
             movie.setRating(arrayRating[0]);
@@ -93,18 +95,18 @@ public class WebExploer {
         Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         Document document = connection.get();
         tvshow.setTitle(document.select(TITLE).first().text());
-        String plot = document.getElementsByClass(PLOT).first().text();
-        tvshow.setPlot(plot.replace(SPECIAL_DEF, "-"));
-        tvshow.setOutline(plot.replace(SPECIAL_DEF, "-"));
+        String plot = removeSpecialChar(document.getElementsByClass(PLOT).first().text());
+        tvshow.setPlot(plot);
+        tvshow.setOutline(plot);
         tvshow.getActor().addAll(getActorInfo(url));
         tvshow.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
         tvshow.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
-        tvshow.setGenre(infoMap.get(FilmKey.GENRE.getValue()));
+        tvshow.setGenre(removeEndSepperator(infoMap.get(FilmKey.GENRE.getValue())));
         tvshow.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
         tvshow.setTagline(infoMap.get(FilmKey.TAGLINE.getValue()).replaceAll("«|»|-", ""));
         tvshow.setYear(infoMap.get(FilmKey.YEAR.getValue()));
-        String rating = document.getElementsByClass("continue").first().text().replace(NBSP, ' ');
+        String rating = removeSpecialChar(document.getElementsByClass("continue").first().text());
         String[] arrayRating = rating.split("  ");
         if (arrayRating.length == 2) {
             tvshow.setRating(arrayRating[0]);
@@ -125,8 +127,8 @@ public class WebExploer {
         Connection connection = JSoupUtils.goToUrl(url).timeout(TIMEOUT);
         Document document = connection.get();
         episodedetails.setTitle(document.select(TITLE).first().text());
-        String plot = document.getElementsByClass(PLOT).first().text();
-        episodedetails.setPlot(plot.replace(SPECIAL_DEF, "-"));
+        String plot = removeSpecialChar(document.getElementsByClass(PLOT).first().text());
+        episodedetails.setPlot(plot);
         episodedetails.getActor().addAll(getActorInfo(url));
         episodedetails.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
@@ -199,8 +201,8 @@ public class WebExploer {
                 String src = actorElement.getElementsByClass("photo").select("img").attr("src");
                 String title = actorElement.getElementsByClass("photo").select("img").attr("title");
                 String thumb = src.replace("/images/spacer.gif", title.replace("sm_", ""));
-                actor.setName(name.replace(NBSP, ' ').trim());
-                actor.setRole(role.replace(NBSP, ' ').trim());
+                actor.setName(removeSpecialChar(name));
+                actor.setRole(removeSpecialChar(role));
                 actor.setThumb(thumb);
                 actorList.add(actor);
                 continue;
@@ -241,7 +243,7 @@ public class WebExploer {
     private static boolean markActorStart(Elements elements) {
         boolean actorStart = false;
         for (Element td : elements)
-            if (td.text().replace(NBSP, ' ').trim().equals("Актеры"))
+            if (removeSpecialChar(td.text()).equals("Актеры"))
                 actorStart = true;
         return actorStart;
     }
@@ -259,4 +261,13 @@ public class WebExploer {
         return false;
     }
     
+    private static String removeEndSepperator(String str) {
+        return str.replaceAll(" /$|/$", "");
+    }
+    
+    private static String removeSpecialChar(String str) {
+        return !StringUtils.isEmpty(str) ? 
+                    str.replace(SPECIAL_DEF, "-").replace(SPECIAL_DOT, ".")
+                        .replace(NBSP, ' ').trim() : "";
+    }
 }

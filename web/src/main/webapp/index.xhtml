@@ -19,7 +19,7 @@
                 <h:panelGrid columns="2">                
                     <h:graphicImage name="group.png" library="img" style="cursor: pointer;" onclick="changeTable()" />
                     <h:graphicImage name="add.png" library="img" style="cursor: pointer;" onclick="showDialogEditor(false);" >
-                        <f:ajax event="click" listener="#{indexBean.clearGroup}" render="groupDialog" />
+                        <f:ajax event="click" listener="#{indexBean.clear}" render="groupDialog filmDialog" />
                     </h:graphicImage>
                 </h:panelGrid>
                 <br />
@@ -73,6 +73,65 @@
                     </h:graphicImage>
                 </h:column>
             </h:dataTable>
+            
+            <h:dataTable styleClass="table" id="filmTable" value="#{indexBean.filmModel}" var="film">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{film.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    <h:outputLink value="#{film.linkRutracker}">#{film.title}</h:outputLink>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Kinopoisk</f:facet>
+                    <h:outputLink value="#{film.linkKinoposk}">kinopoisk.ru</h:outputLink>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Mail Message</f:facet>
+                    #{film.mailMessage}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Mail Regexp</f:facet>
+                    #{film.mailRegexp}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Group</f:facet>
+                    #{film.group.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    #{film.status}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Type</f:facet>
+                    #{film.type}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Torrent</f:facet>
+                    #{film.torrent}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Regexp Serial Number</f:facet>
+                    #{film.regexpSerialNumber}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Season Number</f:facet>
+                    #{film.seasonNumber}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <h:graphicImage name="delete.png" library="img" style="cursor: pointer;">
+                        <f:ajax event="click" listener="#{indexBean.deleteFilm}" render="filmTable" />
+                    </h:graphicImage>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <h:graphicImage name="edit.png" library="img" style="cursor: pointer;" onclick="showDialogEditor(true)">
+                        <f:ajax event="click" listener="#{indexBean.editFilm}" render="FORM:filmDialog"/>
+                    </h:graphicImage>
+                </h:column>
+        </h:dataTable>
         </div>
         
         <div id="dialogGroupEditor" title="Диалог" style="display: none">
@@ -80,47 +139,130 @@
                 <h:outputText value="Id:" rendered="#{indexBean.groupEdit.id != null}"/>
                 <h:panelGrid columns="1" rendered="#{indexBean.groupEdit.id != null}" styleClass="content" >
                     <h:inputText id="groupId" value="#{indexBean.groupEdit.id}" disabled="true" styleClass="content"/>
-                    <h:message id="messageGroupId" for="groupId" styleClass="content"/>
+                    <h:message id="messageGroupId" for="groupId" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="Name: " />
                 <h:panelGrid columns="1" styleClass="content">
                     <h:inputText id="groupName" value="#{indexBean.groupEdit.name}" styleClass="content" />
-                    <h:message id="messageGroupName" for="groupName" styleClass="content"/>
+                    <h:message id="messageGroupName" for="groupName" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="#{indexBean.groupEdit.torrentFolder}" />
                 <h:panelGrid columns="1" styleClass="content" >
                     <h:inputText id="groupTorrentFolder" value="#{indexBean.groupEdit.torrentFolder}" styleClass="content"/>
-                    <h:message id="messageGroupTorrentFolder" for="groupTorrentFolder" styleClass="content"/>
+                    <h:message id="messageGroupTorrentFolder" for="groupTorrentFolder" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="Media Folder: " />
                 <h:panelGrid columns="1" styleClass="content" >
                     <h:inputText id="groupMediaFolder" value="#{indexBean.groupEdit.mediaFolder}" styleClass="content"/>
-                    <h:message id="messageGroupMediaFolder" for="groupMediaFolder" styleClass="content"/>
+                    <h:message id="messageGroupMediaFolder" for="groupMediaFolder" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="Download Folder: " />
                 <h:panelGrid columns="1" styleClass="content" >
                     <h:inputText id="groupDownloadFolder" value="#{indexBean.groupEdit.downloadFolder}" styleClass="content"/>
-                    <h:message id="messageGroupDownloadFolder" for="groupDownloadFolder" styleClass="content"/>
+                    <h:message id="messageGroupDownloadFolder" for="groupDownloadFolder" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="Email Message: " />
                 <h:panelGrid columns="1" styleClass="content" >
                     <h:inputText id="groupEmailMessage" value="#{indexBean.groupEdit.emailMessage}" styleClass="content" validator="#{indexBean.validateGroupMessage}"/>
-                    <h:message id="messageGroupEmailMessage" for="groupEmailMessage" styleClass="content"/>
+                    <h:message id="messageGroupEmailMessage" for="groupEmailMessage" styleClass="error"/>
                 </h:panelGrid>
                 
                 <h:outputText value="Email Regexp: " />
                 <h:panelGrid columns="1" styleClass="content" >
                     <h:inputText id="groupEmailRegexp" value="#{indexBean.groupEdit.emailRegexp}" styleClass="content"  validator="#{indexBean.validateGroupRegexp}"/>
-                    <h:message id="messageGroupEmailRegexp" for="groupEmailRegexp" styleClass="content"/>
+                    <h:message id="messageGroupEmailRegexp" for="groupEmailRegexp" styleClass="error"/>
                 </h:panelGrid>
             </h:panelGrid>
         </div>    
         
+        <div id="dialogFilmEditor" title="Диалог" style="display: none">
+            <h:panelGrid id="filmDialog" styleClass="groupSelect" columns="2" cellpadding="0" cellspacing="0" width="100%" columnClasses="sidebar, content">
+                <h:outputText value="Id: " rendered="#{indexBean.filmEdit.id != null}"/>
+                <h:panelGrid columns="1" rendered="#{indexBean.filmEdit.id != null}" styleClass="content" >
+                    <h:inputText id="filmId" value="#{indexBean.filmEdit.id}" disabled="true" styleClass="content"/>
+                    <h:message id="messageFilmId" for="filmId" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Title: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmTitle" value="#{indexBean.filmEdit.title}" disabled="true" styleClass="content"/>
+                    <h:message id="messageFilmTitle" for="filmTitle" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Link Rutracker: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmLinkRutracker" value="#{indexBean.filmEdit.linkRutracker}" validator="#{filmValidate.validateRutrackerLink}" styleClass="content"/>
+                    <h:message id="messageFilmLinkRutracker" for="filmLinkRutracker" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Link Kinoposk: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmLinkKinoposk" value="#{indexBean.filmEdit.linkKinoposk}" styleClass="content"/>
+                    <h:message id="messageFilmLinkKinoposk" for="filmLinkKinoposk" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Group: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:selectOneMenu id="filmGroup" value="#{indexBean.filmEdit.group}">
+                        <f:selectItems value="#{indexBean.groupItem}" />
+                    </h:selectOneMenu>
+                    <h:message id="messageFilmGroup" for="filmGroup" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Type: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:selectOneMenu id="filmType" value="#{indexBean.filmEdit.type}">
+                        <f:selectItems value="#{indexBean.filmType}" />
+                    </h:selectOneMenu>
+                    <h:message id="messageFilmType" for="filmType" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Season Number: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmSeasonNumber" value="#{indexBean.filmEdit.seasonNumber}" styleClass="content"/>
+                    <h:message id="messageFilmSeasonNumber" for="filmSeasonNumber" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Regexp Serial Number: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmRegexpSerialNumber" value="#{indexBean.filmEdit.regexpSerialNumber}" styleClass="content"/>
+                    <h:message id="messageFilmRegexpSerialNumber" for="filmRegexpSerialNumber" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Status: " rendered="#{indexBean.filmEdit.status != null}"/>
+                <h:panelGrid columns="1" styleClass="content" rendered="#{indexBean.filmEdit.status != null}" >
+                    <h:inputText id="filmStatus" value="#{indexBean.filmEdit.status}" rendered="#{indexBean.filmEdit.status != null}" styleClass="content"/>
+                    <h:message id="messageFilmStatus" for="filmStatus" rendered="#{indexBean.filmEdit.status != null}" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Mail Message: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmMailMessage" value="#{indexBean.filmEdit.mailMessage}" styleClass="content"/>
+                    <h:message id="messageFilmMailMessage" for="filmMailMessage" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Mail Regexp: "/>
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmMailRegexp" value="#{indexBean.filmEdit.mailRegexp}" styleClass="content"/>
+                    <h:message id="messageFilmMailRegexp" for="filmMailRegexp" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:outputText value="Torrent: " />
+                <h:panelGrid columns="1" styleClass="content" >
+                    <h:inputText id="filmTorrent" value="#{indexBean.filmEdit.torrent}" disabled="true" styleClass="content"/>
+                    <h:message id="messageFilmTorrent" for="filmTorrent" styleClass="error"/>
+                </h:panelGrid>
+                
+                <h:inputHidden id="otherMessageHidden" />
+                <h:message id="otherMessage" for="otherMessageHidden" styleClass="message"/>
+            </h:panelGrid>
+        </div>
+                
         <h:panelGrid id="updateGroup">
             <f:ajax event="click" execute="groupDialog" listener="#{indexBean.updateGroup}" render="groupTable messageGroupId messageGroupName messageGroupTorrentFolder messageGroupMediaFolder messageGroupDownloadFolder messageGroupEmailMessage messageGroupEmailRegexp" onevent="closeGroupDialog"/>
         </h:panelGrid>
@@ -129,9 +271,26 @@
             <f:ajax event="click" execute="groupDialog" listener="#{indexBean.saveGroup}" render="groupTable messageGroupName messageGroupTorrentFolder messageGroupMediaFolder messageGroupDownloadFolder messageGroupEmailMessage messageGroupEmailRegexp" onevent="closeGroupDialog"/>
         </h:panelGrid>
         
+        <h:panelGrid id="updateFilm">
+            <f:ajax event="click" execute="filmDialog" listener="#{indexBean.updateFilm}" render="filmTable messageFilmId messageFilmTitle messageFilmLinkRutracker messageFilmLinkKinoposk messageFilmGroup messageFilmType messageFilmSeasonNumber messageFilmRegexpSerialNumber messageFilmStatus messageFilmMailMessage messageFilmMailRegexp messageFilmTorrent" onevent="closeFilmDialog"/>
+        </h:panelGrid>
+        
+        <h:panelGrid id="saveFilm">
+            <f:ajax event="click" execute="filmDialog" listener="#{indexBean.saveFilm}" render="filmTable messageFilmTitle messageFilmLinkRutracker messageFilmLinkKinoposk messageFilmGroup messageFilmType messageFilmSeasonNumber messageFilmRegexpSerialNumber messageFilmStatus messageFilmMailMessage messageFilmMailRegexp messageFilmTorrent" onevent="closeFilmDialog"/>
+        </h:panelGrid>
+        
+        <h:panelGrid id="testMessage">
+            <f:ajax event="click" execute="filmDialog" listener="#{indexBean.testMessage}" render="otherMessage messageFilmTitle messageFilmLinkRutracker messageFilmLinkKinoposk messageFilmGroup messageFilmType messageFilmSeasonNumber messageFilmRegexpSerialNumber messageFilmStatus messageFilmMailMessage messageFilmMailRegexp messageFilmTorrent"/>
+        </h:panelGrid>
+        
+        <h:panelGrid id="testTorrent">
+            <f:ajax event="click" execute="filmDialog" listener="#{indexBean.testTorrent}" render="otherMessage messageFilmTitle messageFilmLinkRutracker messageFilmLinkKinoposk messageFilmGroup messageFilmType messageFilmSeasonNumber messageFilmRegexpSerialNumber messageFilmStatus messageFilmMailMessage messageFilmMailRegexp messageFilmTorrent"/>
+        </h:panelGrid>
+        
         <script type="text/javascript">
         /* <![CDATA[ */
-            $('#groupTable').hide();         
+            $('#groupTable').hide();
+            $('#filmTable').show();
                      
             function showDialogEditor(edit) {
             	if (document.getElementById("labelGroup").style.display != "none") {
@@ -164,13 +323,16 @@
             }
         
             function dialogFilm(edit) {
-                var title = edit ? "Редактирование" : "Добавление";
-                $("#dialog").dialog({
+                var title = edit ? "Редактирование раздачи" : "Добавление раздачи";
+                $("#dialogFilmEditor").dialog({
                     title: title,
                     modal: true,
-                    width: 400,
-                    
+                    width: 550,
+                    height: 500,
                     buttons: {
+                    	"Torrent" : function() {
+                    		document.getElementById("testTorrent").onclick();
+                    	},
                         "Пример сообщения" : function() {
                             document.getElementById("testMessage").onclick();
                         },
@@ -185,7 +347,7 @@
                         }
                     }
                 });
-                $("#dialog").parent().appendTo($("FORM"));
+                $("#dialogFilmEditor").parent().appendTo($("FORM"));
             }
         
             function changeTable() {
@@ -209,6 +371,26 @@
                     $("#dialogGroupEditor").dialog("close");
                 }        
             } 
+            
+            function closeFilmDialog(data) {
+                if (data.status == "success" &&
+                        (document.getElementById("messageFilmId") == null || document.getElementById("messageFilmId").textContent == "") && 
+                        (document.getElementById("messageFilmTitle") == null || document.getElementById("messageFilmTitle").textContent == "") && 
+                        (document.getElementById("messageFilmLinkRutracker") == null || document.getElementById("messageFilmLinkRutracker").textContent == "") && 
+                        (document.getElementById("messageFilmLinkKinoposk") == null || document.getElementById("messageFilmLinkKinoposk").textContent == "") && 
+                        (document.getElementById("messageFilmGroup") == null || document.getElementById("messageFilmGroup").textContent == "") && 
+                        (document.getElementById("messageFilmType") == null || document.getElementById("messageFilmType").textContent == "") && 
+                        (document.getElementById("messageFilmSeasonNumber") == null || document.getElementById("messageFilmSeasonNumber").textContent == "") &&
+                        (document.getElementById("messageFilmRegexpSerialNumber") == null || document.getElementById("messageFilmRegexpSerialNumber").textContent == "") &&
+                        (document.getElementById("messageFilmStatus") == null || document.getElementById("messageFilmStatus").textContent == "") &&
+                        (document.getElementById("messageFilmMailMessage") == null || document.getElementById("messageFilmMailMessage").textContent == "") &&
+                        (document.getElementById("messageFilmMailRegexp") == null || document.getElementById("messageFilmMailRegexp").textContent == "") &&
+                        (document.getElementById("messageFilmTorrent") == null || document.getElementById("messageFilmTorrent").textContent == "")
+                    ) 
+                {
+                    $("#dialogFilmEditor").dialog("close");
+                }        
+            }
         /* ]]> */
         </script>
     </h:form>

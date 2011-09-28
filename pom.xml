@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mcmanager</groupId>
     <artifactId>mcmanager</artifactId>
-    <version>${mcmanager.version}</version>
+    <version>0.1</version>
     <packaging>pom</packaging>
     <name>Media Center Manager</name>
     <url>http://redmine.ystanovka.ru/projects/rmanager</url>
@@ -13,11 +13,19 @@
         <connection>scm:git:git@github.com:n4ela/mcmanager.git</connection>
     </scm>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mcmanager.version>HEAD-SNAPSHOT</mcmanager.version>
+        <main.basedir>${project.basedir}</main.basedir>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>localRepository</id>
+            <url>file://${main.basedir}/lib</url>
+        </repository>
+    </repositories>
+    
     <modules>
         <module>common</module>
         <module>core</module>
@@ -49,7 +57,7 @@
                         <additionalClasspathElement>${basedir}/src/test/java</additionalClasspathElement>
                     </additionalClasspathElements>
                     <includes>
-<!--                         <include>**/UTest*.java</include> -->
+                        <include>**/UTest*.java</include>
                     </includes>
                 </configuration>
             </plugin>
@@ -70,27 +78,27 @@
             <dependency>
                 <groupId>mcmanager</groupId>
                 <artifactId>common</artifactId>
-                <version>${mcmanager.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- Зависимость от ядра -->
             <dependency>
                 <groupId>mcmanager</groupId>
                 <artifactId>core</artifactId>
-                <version>${mcmanager.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>mcmanager</groupId>
                 <artifactId>core</artifactId>
-                <version>${mcmanager.version}</version>
+                <version>${project.version}</version>
                 <type>test-jar</type>
             </dependency>
             
             <dependency>
                 <groupId>mcmanager</groupId>
                 <artifactId>kinopoisk-api</artifactId>
-                <version>${mcmanager.version}</version>
+                <version>${project.version}</version>
             </dependency>
             
 
@@ -99,8 +107,6 @@
                 <groupId>beencode</groupId>
                 <artifactId>beencode</artifactId>
                 <version>0.2</version>
-                <scope>system</scope>
-                <systemPath>${basedir}/../lib/bee-encode-0.2.jar</systemPath>
             </dependency>
 
             <!-- Форк jsoup библиотеки для парсинга html -->
@@ -119,9 +125,9 @@
 
             <!-- Аналог cron -->
             <dependency>
-                <groupId>opensymphony</groupId>
+                <groupId>quartz</groupId>
                 <artifactId>quartz</artifactId>
-                <version>1.6.3</version>
+                <version>1.5.2</version>
             </dependency>
 
             <!-- Спринг компонент для работы с hibernate -->

@@ -25,6 +25,7 @@ import mcmanager.kinopoisk.utils.JaxbUtils;
 import mcmanager.log.LogEnum;
 import mcmanager.monitor.utils.FilmTypeEnum;
 import mcmanager.monitor.utils.SymbolicLinkUtils;
+import mcmanager.utils.MessageUtils;
 import mcmanager.utils.TorrentInfo;
 import mcmanager.web.WebBrowser;
 
@@ -40,28 +41,29 @@ public class MediaMonitor extends QuartzJobBean  {
     @Override
     protected void executeInternal(JobExecutionContext context)
             throws JobExecutionException {
-        log.info("Начало выполнения задачи обработка медиатеки");
-        List<Distribution> distributions = DaoFactory.getInstance().getDistributionDao()
-                .getDistributionByStatus(StatusEnum.PROCESSING);
-        log.debug("Найдено " + distributions.size() + " для обработки");
-        for (Distribution distribution : distributions) {
-            int type = distribution.getType();
-            try {
-                if (type == FILMS.getType()) {
-                    executeFilms(distribution);
-                } else if (type == SERIALS.getType()) {
-                    executeSerials(distribution);
-                } else if (type == DVD.getType()) {
-                    executeDvd(distribution);
-                } else {
-                    log.error("Не известный тип для обработки: "+ type);
-                } 
-            } catch (CoreException e) {
-                log.error("Ошибка при обработки медиатеки", e);
+        synchronized (log) {
+            log.info("Начало выполнения задачи обработка медиатеки");
+            List<Distribution> distributions = DaoFactory.getInstance().getDistributionDao()
+                    .getDistributionByStatus(StatusEnum.PROCESSING);
+            log.debug("Найдено " + distributions.size() + " для обработки");
+            for (Distribution distribution : distributions) {
+                int type = distribution.getType();
+                try {
+                    if (type == FILMS.getType()) {
+                        executeFilms(distribution);
+                    } else if (type == SERIALS.getType()) {
+                        executeSerials(distribution);
+                    } else if (type == DVD.getType()) {
+                        executeDvd(distribution);
+                    } else {
+                        log.error("Не известный тип для обработки: "+ type);
+                    } 
+                } catch (CoreException e) {
+                    log.error("Ошибка при обработки медиатеки", e);
+                }
             }
+            log.info("Задача по обработки медиатеки успешно завершена");
         }
-        log.info("Задача по обработки медиатеки успешно завершена");
-
     }
 
     private void executeDvd(Distribution distribution) {
@@ -108,7 +110,7 @@ public class MediaMonitor extends QuartzJobBean  {
                         log.error("Не найден файл: " + source);
                         continue;
                     }
-                    
+
                     //Получаем расширение файла
                     int dotPos = filmFile.lastIndexOf(".");
                     if (dotPos == -1) {
@@ -120,12 +122,12 @@ public class MediaMonitor extends QuartzJobBean  {
 
 
                     //Получаем номер эпизода по названию файла в торренте
-                    String episode = parseEpisode(filmFile, distribution.getRegexpSerialNumber());
+                    String episode = MessageUtils.parseEpisode(filmFile, distribution.getRegexpSerialNumber());
                     log.info("Из файла " + filmFile + " получен номер серии " + episode);
-                    
+
                     //Генерируем номер сериала согласно xbmc формату (.s01e01)
-                    String serialNumber = ".s" + prepareNumber(String.valueOf(distribution.getSeasonNumber())) + "e" + episode;
-                    
+                    String serialNumber = ".s" + MessageUtils.prepareNumber(String.valueOf(distribution.getSeasonNumber())) + "e" + episode;
+
                     //Создаем символическую ссылку на серию/субтитры и.т.д
                     File link = new File(dirMovie, tvshow.getTitle() + serialNumber  + fileExtension);
                     if (!link.exists())
@@ -151,7 +153,7 @@ public class MediaMonitor extends QuartzJobBean  {
                 log.info("Сохранение информации о сериале в файл: " + fileInfo + " прошло успешно");
             }
             //[2]
-            
+
             log.info("Смена статуса на: " + StatusEnum.TRACK_ON.getStatus());
             distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
@@ -160,27 +162,6 @@ public class MediaMonitor extends QuartzJobBean  {
         } catch (JAXBException e) {
             throw new CoreException(e);
         }
-    }
-
-    /**
-     * Если число содержит одну цифру то подставляет 0 в начало строки
-     * @param str
-     * @return
-     */
-    private String prepareNumber(String str) {
-        return str.length() == 1 ? "0" + str : str;
-
-    }
-
-    private String parseEpisode(String filmFile, String regexp) throws CoreException {
-        Pattern pattern = Pattern.compile(regexp);
-        Matcher matcher = pattern.matcher(filmFile);
-        if (matcher.find()) {
-            return prepareNumber(matcher.group());  
-        } 
-        throw new CoreException("Ошибка при разборе номера серии по regexp: " 
-                + regexp + " файл: " + filmFile);
-
     }
 
     private void executeFilms(Distribution distribution) throws CoreException {
@@ -219,7 +200,7 @@ public class MediaMonitor extends QuartzJobBean  {
                         log.error("Не найден файл: " + source);
                         continue;
                     }
-                    
+
                     int dotPos = filmFile.lastIndexOf(".");
                     if (dotPos == -1) {
                         log.warn("Не удалось определить расширение файла " + filmFile);
@@ -230,8 +211,8 @@ public class MediaMonitor extends QuartzJobBean  {
                     log.debug("У файла: " + filmFile + " получено расширение: " + fileExtension);
 
                     //Создаем символическую ссылку
-                    
-                    
+
+
                     File link = new File(dirMovie, movie.getTitle() + fileExtension);
                     if (!link.exists())
                         SymbolicLinkUtils.createSymbolicLink(link, source.getAbsoluteFile());

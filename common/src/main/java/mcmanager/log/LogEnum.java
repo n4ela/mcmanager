@@ -10,7 +10,8 @@ public enum LogEnum {
     EMAIL("email"),
     FILEMONITOR("file-monitor"),
     MEDIA_MONITOR("media-monitor"),
-    OTHER("other");
+    OTHER("other"),
+    WEB("web");
     
     private String logName;
     

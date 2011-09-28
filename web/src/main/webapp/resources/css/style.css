@@ -34,9 +34,14 @@ body {
     padding: 3px;
 }
 
-.errors {
+.error {
     color: red;
 }
+
+.message {
+     color: green;
+}
+
 
 
 /* h1 { */

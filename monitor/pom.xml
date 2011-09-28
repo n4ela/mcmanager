@@ -8,7 +8,7 @@
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>
-        <version>${mcmanager.version}</version>
+        <version>0.1</version>
     </parent>
 
     <dependencies>
@@ -40,7 +40,7 @@
         </dependency>
 
         <dependency>
-            <groupId>opensymphony</groupId>
+            <groupId>quartz</groupId>
             <artifactId>quartz</artifactId>
         </dependency>
 
@@ -147,7 +147,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>mcmanager-${mcmanager.version}</finalName>
+                            <finalName>mcmanager-${project.version}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>src/main/assembly/zip.xml</descriptor>
