@@ -102,7 +102,6 @@ public class IndexBean {
     }
     
     public void editGroup(AjaxBehaviorEvent event) {
-        System.out.println("editGroup");
         groupEdit = groupModel.getRowData();
     }
     
@@ -122,7 +121,6 @@ public class IndexBean {
     }
     
     public void saveGroup(AjaxBehaviorEvent event) {
-        System.out.println("SAVE");
         DaoFactory.getInstance().getGroupDao().addGroup(groupEdit);
         getAllGroup();
     }

@@ -123,7 +123,6 @@ public class WebBrowser {
     public void validateUrl(String url) throws CoreException {
         try {
             URI uri = new URI(url);
-            System.out.println("HOST: " + uri.getHost());
             if (uri.getHost() == null || !uri.getHost().equals("rutracker.org"))
                 throw new CoreException("Ссылка на " + url + " не является ссылкой на rutracker.org");
         } catch (URISyntaxException e) {

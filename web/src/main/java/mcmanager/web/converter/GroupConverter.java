@@ -18,8 +18,6 @@ public class GroupConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) throws ConverterException {
-        System.out.println("VALUE: " + value);
-        System.out.println("!StringUtils.isEmpty(value): " + StringUtils.isEmpty(value));
         if (!StringUtils.isEmpty(value)) {
             List<Group> groups = DaoFactory.getInstance().getGroupDao().getGroupByName(value);
             if (groups != null && groups.size() == 1)
