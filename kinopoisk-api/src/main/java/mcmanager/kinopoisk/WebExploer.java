@@ -43,7 +43,7 @@ public class WebExploer {
     private static final String TITLE = "title";
     private static final String PLOT = "brand_words";
     private static final String ORIGINAL_NAME = "div.movie tbody tbody tbody tbody tbody td";
-    private static final String SMALL_POSTER = "div.movie tbody tbody tr";
+//    private static final String SMALL_POSTER = "div.movie tbody tbody tr";
     
     private static final char NBSP = (int)160;
     private static final String SPECIAL_DEF = "\u0097";
@@ -105,7 +105,10 @@ public class WebExploer {
         tvshow.setGenre(removeEndSepperator(infoMap.get(FilmKey.GENRE.getValue())));
         tvshow.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
         tvshow.setTagline(infoMap.get(FilmKey.TAGLINE.getValue()).replaceAll("«|»|-", ""));
+        //Тег year для tvshow не используется но пусть будет
         tvshow.setYear(infoMap.get(FilmKey.YEAR.getValue()));
+        //Место него используется тег premiered
+        tvshow.setPremiered(infoMap.get(FilmKey.YEAR.getValue()) + "-01-01");
         String rating = removeSpecialChar(document.getElementsByClass("continue").first().text());
         String[] arrayRating = rating.split("  ");
         if (arrayRating.length == 2) {
@@ -134,6 +137,7 @@ public class WebExploer {
         Map<String, String> infoMap = getInfoMap(document, url);
         episodedetails.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
         episodedetails.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
+        episodedetails.setPremiered(infoMap.get(FilmKey.YEAR.getValue()) + "-01-01");
         
         Pattern seasonRegexp = Pattern.compile("\\.[sS]([0-9]*)[eE]([0-9]*)");
         Matcher matcher = seasonRegexp.matcher(fileName);
@@ -159,6 +163,14 @@ public class WebExploer {
                 String value = elementValue.text().replace(",", " /").replace("...", "").trim();
                 if (keyOrValueIsEmpty(key, value, url))
                     continue;
+                
+                //Исключительная ситуация для тега ГОД, т.к. в нем еще может придти номер сезона для сериала
+                //например 2005 (7 сезонов) 
+                if (key.equalsIgnoreCase(FilmKey.YEAR.getValue())) {
+                    Matcher matcher = Pattern.compile("([0-9]+)").matcher(value);
+                    value = matcher.find() && matcher.groupCount() > 0 ? matcher.group(1) : value;
+                }
+                
                 String oldValue = null;
                 if ((oldValue = infoMap.get(elementKey.text())) != null) {
                     log.trace("При парсинге страницы: " + url + 

@@ -60,6 +60,7 @@
                 <xs:element name="credits" type="xs:string" />
                 <!-- Режесер -->
                 <xs:element name="director" type="xs:string" />
+                <!-- Дата премьеры (первый показ первой серии) -->
                 <xs:element name="premiered" type="xs:string" />
                 <xs:element name="status" type="xs:string" />
                 <xs:element name="code" type="xs:string" />
@@ -145,6 +146,7 @@
                 <xs:element name="credits" type="xs:string" />
                 <xs:element name="director" type="xs:string" />
                 <xs:element name="aired" type="xs:string" />
+                <!-- Дата премьеры (первый показ первой серии) -->
                 <xs:element name="premiered" type="xs:string" />
                 <xs:element name="studio" type="xs:string" />
                 <xs:element name="mpaa" type="xs:string" />
