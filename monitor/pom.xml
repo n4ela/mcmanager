@@ -131,6 +131,11 @@
             <artifactId>xmlunit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>mcmanager</groupId>
+            <artifactId>kinopoisk-api</artifactId>
+            <version>0.1</version>
+        </dependency>
 
 
     </dependencies>
