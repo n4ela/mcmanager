@@ -1,26 +1,5 @@
 package mcmanager.web;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.model.ArrayDataModel;
-import javax.faces.model.DataModel;
-import javax.faces.model.SelectItem;
-import javax.faces.validator.ValidatorException;
-
 import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
 import mcmanager.data.Group;
@@ -33,6 +12,24 @@ import mcmanager.utils.StringUtils;
 import mcmanager.utils.TorrentInfo;
 import mcmanager.web.WebBrowser.TorrentFile;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
+import javax.faces.validator.ValidatorException;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 @SessionScoped
 @ManagedBean(name = "indexBean")
 public class IndexBean {
@@ -44,44 +41,113 @@ public class IndexBean {
     private List<SelectItem> groupItem;
     
     private List<SelectItem> filmType;
+
+    private List<SelectItem> filmStatus;
+
+    private String findFilmParam = "";
+
+    private StatusEnum actualStatus;
     
     /**
      * Выбраная группа
      * Это группа с который мы сейчас работаем(активная группа)
      */
-    private String selectGroupData;
+    private Group selectGroupData;
     
     private Group groupEdit = new Group();
-    /**
-     * Таблица групп
-     */
-    private DataModel<Group> groupModel;
     
     private Distribution filmEdit = new Distribution();
     
+    private List<Group> groupList;
+    
+    private DataModel<Group> groupModel;
+    
+    private List<Distribution> filmList;
+    
+    private List<Distribution> allFilmList;
+    
     private DataModel<Distribution> filmModel;
     
+    private boolean activeFilm = true;
+
+    private boolean sortByDate = false;
+
     @PostConstruct
     public void init() {
         getAllGroup();
         getAllFilm();
         loadFilmType();
+        loadFilmStatus();
+        getFilmByFilter(null);
     }
     
-    private void getAllGroup() {
+    public void refreshTable(AjaxBehaviorEvent event) {
+        getAllFilm();
+        getAllGroup();
+        getFilmByFilter(null);
+        groupModel = new ListDataModel<Group>(groupList);
+    }
+    
+    public void changeActivePanel(AjaxBehaviorEvent event) {
+        activeFilm = !activeFilm;
+    }
+    
+    private void fillGroupItem() {
         groupItem = new ArrayList<SelectItem>();
-        List<Group> groupList = DaoFactory.getInstance().getGroupDao().getAllGroup();
         for (Group group : groupList) {
             groupItem.add(new SelectItem(group, group.getName()));
         }
-        groupModel = new ArrayDataModel<Group>(groupList.toArray(new Group[groupList.size()]));
+    }
+    
+    private void getAllGroup() {
+        groupList = DaoFactory.getInstance().getGroupDao().getAllGroup();
+        fillGroupItem();
     }
     
     private void getAllFilm() {
-        List<Distribution> distributionList = DaoFactory.getInstance().getDistributionDao().getAllDistribution();
-        filmModel = new ArrayDataModel<Distribution>(distributionList.toArray(new Distribution[distributionList.size()]));
+        filmList = DaoFactory.getInstance().getDistributionDao().getAllDistribution();
+        allFilmList = new ArrayList<Distribution>(filmList);
+    }
+
+    public void getFilmByFilter(AjaxBehaviorEvent event) {
+        filmList = prepareFilmList();
+        filmModel = new ListDataModel<Distribution>(filmList);
+    }
+
+    public void sortById(AjaxBehaviorEvent event) {
+        sortByDate = !sortByDate;
+        getFilmByFilter(null);
+    }
+
+    private List<Distribution> prepareFilmList() {
+        List<Distribution> filmList = null;
+        filmList = new ArrayList<Distribution>();
+        Collections.sort(allFilmList, new Comparator<Distribution>() {
+            @Override
+            public int compare(Distribution o1, Distribution o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+        if (!sortByDate)
+            Collections.reverse(allFilmList);
+
+        for (Distribution film : allFilmList) {
+            if ((selectGroupData == null || film.getGroup().equals(selectGroupData)) &&
+                    (film.getStatus() == actualStatus || actualStatus == null) &&
+                        film.getTitle().toLowerCase().contains(findFilmParam.toLowerCase())) {
+                filmList.add(film);
+            }
+        }
+        return filmList;
     }
     
+    public void dialogChangeGroup(AjaxBehaviorEvent event) {
+        if (filmEdit != null && filmEdit.getGroup() != null) {
+            filmEdit.setMailMessage(filmEdit.getGroup().getEmailMessage());
+            filmEdit.setMailRegexp(filmEdit.getGroup().getEmailRegexp());
+        }
+    }
+
     private void loadFilmType() {
         filmType = new ArrayList<SelectItem>();
         for (TypeDistributionEnum type : TypeDistributionEnum.values()) {
@@ -89,45 +155,88 @@ public class IndexBean {
         }
     }
 
+    private void loadFilmStatus() {
+        filmStatus = new ArrayList<SelectItem>();
+        for (StatusEnum status : StatusEnum.values()) {
+            filmStatus.add(new SelectItem(status, status.getDesc()));
+        }
+    }
+
     public void deleteGroup(AjaxBehaviorEvent event) {
         Group group = groupModel.getRowData();
         DaoFactory.getInstance().getGroupDao().deleteGroup(group.getId());
-        getAllGroup();
+        groupList.remove(group);
+        fillGroupItem();
+        //        getAllGroup();
     }
     
     public void deleteFilm(AjaxBehaviorEvent event) {
         Distribution distribution = filmModel.getRowData();
         DaoFactory.getInstance().getDistributionDao().removeDistribution(distribution.getId());
-        getAllFilm();
+        filmList.remove(distribution);
+//        getAllFilm();
     }
     
     public void editGroup(AjaxBehaviorEvent event) {
+        clearSubmittedValues(event.getComponent().getParent().getParent().getParent(), "groupDialog");
         groupEdit = groupModel.getRowData();
     }
     
     public void editFilm(AjaxBehaviorEvent event) {
+        clearSubmittedValues(event.getComponent().getParent().getParent().getParent(), "filmDialog");
         filmEdit = filmModel.getRowData();
     }
     
     public void clear(AjaxBehaviorEvent event) {
         groupEdit = new Group();
         filmEdit = new Distribution();
-        filmEdit.setStatus(StatusEnum.NEW.getStatus());
+        filmEdit.setStatus(StatusEnum.NEW);
+        clearSubmittedValues(event.getComponent(), "groupDialog");
+        clearSubmittedValues(event.getComponent(), "filmDialog");
+        if (!groupItem.isEmpty()) {
+            filmEdit.setGroup((Group) groupItem.get(0).getValue());
+        }
+        dialogChangeGroup(null);
     }
+
+    public static void clearSubmittedValues(UIComponent component, String componentName) {
+        UIComponent uiComponent = component.findComponent(componentName);
+        clearSubmittedValues(uiComponent);
+    }
+
+    public static void clearSubmittedValues(UIComponent uiComponent) {
+        if (uiComponent == null) {
+            return;
+        }
+
+        Iterator<UIComponent> children = (uiComponent).getFacetsAndChildren();
+        while (children.hasNext()) {
+            clearSubmittedValues(children.next());
+        }
+        if (uiComponent instanceof UIInput) {
+            ((UIInput) uiComponent).setSubmittedValue(null);
+            ((UIInput) uiComponent).setValue(null);
+            ((UIInput) uiComponent).setLocalValueSet(false);
+            ((UIInput) uiComponent).resetValue();
+        }
+    }
+
     
     public void updateGroup(AjaxBehaviorEvent event) {
         DaoFactory.getInstance().getGroupDao().updateGroup(groupEdit);
-        getAllGroup();
     }
     
     public void saveGroup(AjaxBehaviorEvent event) {
         DaoFactory.getInstance().getGroupDao().addGroup(groupEdit);
-        getAllGroup();
+        groupList.add(groupEdit);
+        fillGroupItem();
     }
     
     public void updateFilm(AjaxBehaviorEvent event) {
+        System.out.println("PRE UPDATE");
+        System.out.println(filmEdit);
         DaoFactory.getInstance().getDistributionDao().updateDistribution(filmEdit);
-        getAllFilm();
+        System.out.println("POST UPDATE");
     }
     
     public void saveFilm(AjaxBehaviorEvent event) {
@@ -143,8 +252,14 @@ public class IndexBean {
             throw new ValidatorException(error);
         }
         
+        if (filmEdit.getType() != TypeDistributionEnum.SERIALS.getType()) {
+            filmEdit.setRegexpSerialNumber(null);
+            filmEdit.setSeasonNumber(null);
+        }
         DaoFactory.getInstance().getDistributionDao().addDistribution(filmEdit);
-        getAllFilm();
+        if (filmList.size() > 0)
+            filmList.add(0, filmEdit);
+        filmList.add(filmEdit);
     }
     
     
@@ -186,6 +301,7 @@ public class IndexBean {
         try {
             webBrowser.goToUrl(url);
             String title = webBrowser.getTitle();
+            filmEdit.setTitle(title);
             String regexp = (String) ((UIInput)component.findComponent("filmMailRegexp")).getValue();
             String mailMessage = (String) ((UIInput)component.findComponent("filmMailMessage")).getValue();
             message.setSummary(MessageUtils.createMessage(title, regexp, mailMessage));
@@ -211,6 +327,7 @@ public class IndexBean {
         FacesMessage message = new FacesMessage();
         try {
             webBrowser.goToUrl(url);
+            filmEdit.setTitle(webBrowser.getTitle());
             TorrentFile torrent = webBrowser.downloadTorrentFile(webBrowser.getTorrentUrl());
             ByteArrayInputStream bais = new ByteArrayInputStream(torrent.getContent());
             TorrentInfo info = new TorrentInfo(new BufferedInputStream(bais));
@@ -229,11 +346,11 @@ public class IndexBean {
         
     }
     
-    public String getSelectGroupData() {
+    public Group getSelectGroupData() {
         return selectGroupData;
     }
 
-    public void setSelectGroupData(String selectGroupData) {
+    public void setSelectGroupData(Group selectGroupData) {
         this.selectGroupData = selectGroupData;
     }
 
@@ -246,6 +363,8 @@ public class IndexBean {
     }
     
     public DataModel<Group> getGroupModel() {
+        if (groupModel == null)
+            groupModel = new ListDataModel<Group>(groupList);
         return groupModel;
     }
 
@@ -270,6 +389,8 @@ public class IndexBean {
     }
 
     public DataModel<Distribution> getFilmModel() {
+        if (filmModel == null)
+            filmModel = new ListDataModel<Distribution>(filmList);
         return filmModel;
     }
 
@@ -284,5 +405,36 @@ public class IndexBean {
     public void setFilmType(List<SelectItem> filmType) {
         this.filmType = filmType;
     }
-    
+
+    public List<SelectItem> getFilmStatus() {
+        return filmStatus;
+    }
+
+    public void setFilmStatus(List<SelectItem> filmStatus) {
+        this.filmStatus = filmStatus;
+    }
+
+    public boolean isActiveFilm() {
+        return activeFilm;
+    }
+
+    public void setActiveFilm(boolean activeFilm) {
+        this.activeFilm = activeFilm;
+    }
+
+    public String getFindFilmParam() {
+        return findFilmParam;
+    }
+
+    public void setFindFilmParam(String findFilmParam) {
+        this.findFilmParam = findFilmParam;
+    }
+
+    public StatusEnum getActualStatus() {
+        return actualStatus;
+    }
+
+    public void setActualStatus(StatusEnum actualStatus) {
+        this.actualStatus = actualStatus;
+    }
 }

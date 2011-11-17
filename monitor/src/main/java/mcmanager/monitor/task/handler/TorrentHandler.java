@@ -36,7 +36,7 @@ public class TorrentHandler {
             String torrentFileName = downloadsTorrent(webBrowser, distribution, logMonitor);
 
             distribution.setTitle(newTitle);
-            distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+            distribution.setStatus(StatusEnum.DOWNLOAD);
             logMonitor.debug("Смена статуса на: " + distribution.getStatus());
             distribution.setTorrent(torrentFileName);
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
@@ -53,7 +53,7 @@ public class TorrentHandler {
         String torrentFileName = downloadsTorrent(webBrowser, distribution,logMonitorNew);
 
         distribution.setTorrent(torrentFileName);
-        distribution.setStatus(StatusEnum.DOWNLOAD.getStatus());
+        distribution.setStatus(StatusEnum.DOWNLOAD);
         logMonitor.debug("Смена статуса на: " + distribution.getStatus());
         DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
 

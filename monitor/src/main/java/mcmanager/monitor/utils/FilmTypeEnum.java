@@ -3,7 +3,8 @@ package mcmanager.monitor.utils;
 public enum FilmTypeEnum {
     AVI(".avi"),
     MKV(".mkv"),
-    SRT(".srt");
+    SRT(".srt"),
+    MPG(".mpg");
     
     private String type;
     

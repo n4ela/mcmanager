@@ -2,15 +2,22 @@
     padding-right: 10px;
 }
 
-.table td, th {                                                                                                                   
+.tableStyle td, th {
     border: 1px solid black;                                                                                                          
     border-collapse: collapse;                                                                                                        
 }                                                                                                                                     
                                                                                                                                       
-.table {                                                                                                                          
-    border: 1px solid black;                                                                                                          
+.tableStyle {
     border-collapse: collapse;   
     width: 100%;                                                                                                     
+}
+
+.show{                                                                                                                                
+    display: inline;                                                                                                                  
+}                                                                                                                                     
+                                                                                                                                      
+.hide {                                                                                                                               
+    display: none;                                                                                                                    
 }
 
 .sidebar {                                                                                                                            

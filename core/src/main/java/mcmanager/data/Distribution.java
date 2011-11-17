@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -68,7 +70,8 @@ public class Distribution implements ObjectDB, Serializable {
      * Статут раздачи, возможные значения {@link StatusEnum}
      */
     @Column(name = "STATUS", nullable = false)
-    private Integer status;
+    @Enumerated(EnumType.ORDINAL)
+    private StatusEnum status;
 
     /**
      * Имя торрент файла
@@ -201,7 +204,7 @@ public class Distribution implements ObjectDB, Serializable {
      * Получить значение {@link #status}.
      * @return значение {@link #status}
      */
-    public Integer getStatus() {
+    public StatusEnum getStatus() {
         return status;
     }
 
@@ -209,7 +212,7 @@ public class Distribution implements ObjectDB, Serializable {
      * Установить параметр {@link #status}.
      * @param status новое значение {@link #status}
      */
-    public void setStatus(Integer status) {
+    public void setStatus(StatusEnum status) {
         this.status = status;
     }
 

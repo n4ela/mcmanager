@@ -1,16 +1,15 @@
 package mcmanager.web.converter;
 
-import java.util.List;
+import mcmanager.dao.DaoFactory;
+import mcmanager.data.Group;
+import mcmanager.utils.StringUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
-
-import mcmanager.dao.DaoFactory;
-import mcmanager.data.Group;
-import mcmanager.utils.StringUtils;
+import java.util.List;
 
 @FacesConverter(forClass=Group.class)
 public class GroupConverter implements Converter {
@@ -25,8 +24,9 @@ public class GroupConverter implements Converter {
             else 
                 throw new ConverterException("Не удалось получить группу. " + groups + 
                         (groups != null ? "group.size: " + groups.size() : ""));
-        } else 
-            throw new ConverterException("Не указана группа для поиска");
+        } else {
+            return null;
+        }
     }
 
     @Override

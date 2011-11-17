@@ -1,5 +1,7 @@
 package mcmanager.data;
 
+import javax.persistence.Enumerated;
+
 /**
  * ENUM возможных статусов раздачи
  * @author Ivanov Dmitrij (ivanovdw@gmail.com)
@@ -36,6 +38,8 @@ public enum StatusEnum {
      */
     private String desc;
     
+    private String image;
+    
     /**
      * Констурктор енума
      * @param status - статус в цифровом виде
@@ -44,6 +48,7 @@ public enum StatusEnum {
     StatusEnum(int status, String desc) {
         this.status = status;
         this.desc = desc;
+        this.image = name().toLowerCase() + ".png";
     }
     
     /**
@@ -61,5 +66,25 @@ public enum StatusEnum {
     public String getDesc() {
         return desc;
     }
-   
+
+    public String getImage() {
+        return image;
+    }
+    
+    public static StatusEnum matcherByStatus(int status) {
+        for (StatusEnum statusEnum : values()) {
+            if (statusEnum.getStatus() == status) 
+                return statusEnum;
+        }
+        return null;
+    }
+    
+    public static StatusEnum matcherByDesc(String desc) {
+        for (StatusEnum statusEnum : values()) {
+            if (statusEnum.getDesc().equalsIgnoreCase(desc)) {
+                return statusEnum;
+            }
+        }
+        return null;
+    }
 }

@@ -38,9 +38,9 @@ public class FileMonitor extends QuartzJobBean {
                             DaoFactory.getInstance().getDistributionDao().getDistributionByTorrent(file);
                     for (Distribution distribution : distributions) {
                         if (distribution.getType() == TypeDistributionEnum.SHARED.getType())
-                            distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
+                            distribution.setStatus(StatusEnum.TRACK_ON);
                         else
-                            distribution.setStatus(StatusEnum.PROCESSING.getStatus());
+                            distribution.setStatus(StatusEnum.PROCESSING);
 
                         //Полный путь к файлу торрента
                         try {

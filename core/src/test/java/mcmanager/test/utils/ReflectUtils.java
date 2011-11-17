@@ -9,6 +9,7 @@ import java.util.Set;
 import junitx.util.PrivateAccessor;
 import mcmanager.data.Distribution;
 import mcmanager.data.Group;
+import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 /**
  * Вспомогательные класс рефликсии
@@ -77,6 +78,8 @@ public class ReflectUtils {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+        } else if (expected instanceof StatusEnum && actual instanceof StatusEnum) {
+            assertEquals(name, (StatusEnum)expected, (StatusEnum)actual);
         } else if (expected != null || actual != null) {
             StringBuilder builder = new StringBuilder("Ошибка: method=").append(name);
             builder.append(" expected=").append(expected)

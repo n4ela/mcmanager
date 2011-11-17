@@ -1,17 +1,5 @@
 package mcmanager.monitor.task;
 
-import static mcmanager.data.TypeDistributionEnum.DVD;
-import static mcmanager.data.TypeDistributionEnum.FILMS;
-import static mcmanager.data.TypeDistributionEnum.SERIALS;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.bind.JAXBException;
-
 import mcmanager.dao.DaoFactory;
 import mcmanager.data.Distribution;
 import mcmanager.data.StatusEnum;
@@ -28,11 +16,17 @@ import mcmanager.monitor.utils.SymbolicLinkUtils;
 import mcmanager.utils.MessageUtils;
 import mcmanager.utils.TorrentInfo;
 import mcmanager.web.WebBrowser;
-
 import org.apache.commons.logging.Log;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import static mcmanager.data.TypeDistributionEnum.*;
 
 public class MediaMonitor extends QuartzJobBean  {
 
@@ -122,8 +116,14 @@ public class MediaMonitor extends QuartzJobBean  {
 
 
                     //Получаем номер эпизода по названию файла в торренте
-                    String episode = MessageUtils.parseEpisode(filmFile, distribution.getRegexpSerialNumber());
-                    log.info("Из файла " + filmFile + " получен номер серии " + episode);
+                    String episode = null;
+                    try {
+                        episode = MessageUtils.parseEpisode(filmFile, distribution.getRegexpSerialNumber());
+                        log.info("Из файла " + filmFile + " получен номер серии " + episode);
+                    } catch (CoreException e) {
+                        //TODO Удалить
+                        e.printStackTrace();
+                    }
 
                     //Генерируем номер сериала согласно xbmc формату (.s01e01)
                     String serialNumber = ".s" + MessageUtils.prepareNumber(String.valueOf(distribution.getSeasonNumber())) + "e" + episode;
@@ -135,7 +135,9 @@ public class MediaMonitor extends QuartzJobBean  {
                     log.info("Создана символическая ссылка: " + link);
 
                     //Если файл является видео файлом то создаем еще и nfo файл для серии
-                    if (filmFile.endsWith(FilmTypeEnum.AVI.getType()) || filmFile.endsWith(FilmTypeEnum.MKV.getType())) {
+                    if (filmFile.endsWith(FilmTypeEnum.AVI.getType()) ||
+                            filmFile.endsWith(FilmTypeEnum.MKV.getType()) ||
+                                filmFile.endsWith(FilmTypeEnum.MPG.getType())) {
                         Episodedetails episodedetails = WebExploer.parseEpisodedetails(distribution.getLinkKinoposk(), link.getName());
                         File nfoFile = new File(dirMovie, tvshow.getTitle() + serialNumber  + ".nfo");
                         JaxbUtils.saveToFile(episodedetails, nfoFile);
@@ -155,7 +157,7 @@ public class MediaMonitor extends QuartzJobBean  {
             //[2]
 
             log.info("Смена статуса на: " + StatusEnum.TRACK_ON.getStatus());
-            distribution.setStatus(StatusEnum.TRACK_ON.getStatus());
+            distribution.setStatus(StatusEnum.TRACK_ON);
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
         } catch (IOException e) {
             throw new CoreException(e);
@@ -232,7 +234,7 @@ public class MediaMonitor extends QuartzJobBean  {
             //[3]
 
             log.info("Смена статуса на: " + StatusEnum.OFF.getStatus());
-            distribution.setStatus(StatusEnum.OFF.getStatus());
+            distribution.setStatus(StatusEnum.OFF);
             DaoFactory.getInstance().getDistributionDao().updateDistribution(distribution);
         } catch (IOException e) {
             throw new CoreException(e);

@@ -43,10 +43,10 @@ public class UTestFileMonitor extends UnitilsJUnit4 {
                 new Class[] {JobExecutionContext.class}, new Object[]{null});
         
         assertEquals(StatusEnum.PROCESSING.getStatus(),
-                (int)DaoFactory.getInstance().getDistributionDao().getDistribution(4).getStatus());
+                (int)DaoFactory.getInstance().getDistributionDao().getDistribution(4).getStatus().getStatus());
         
         assertEquals(StatusEnum.TRACK_ON.getStatus(),
-                (int)DaoFactory.getInstance().getDistributionDao().getDistribution(3).getStatus());
+                (int)DaoFactory.getInstance().getDistributionDao().getDistribution(3).getStatus().getStatus());
         
         assertEquals(true, testDir.delete());
     }

@@ -11,6 +11,7 @@ import java.util.Map;
 import junitx.util.PrivateAccessor;
 import mcmanager.data.Group;
 import mcmanager.data.ObjectDB;
+import mcmanager.data.StatusEnum;
 import mcmanager.exception.CoreException;
 import mcmanager.utils.CloseUtils;
 import mcmanager.utils.StringUtils;
@@ -79,8 +80,12 @@ public class MockObjectDb {
             Integer intValue = Integer.valueOf(value);
             PrivateAccessor.invoke(object, method.getName(), 
                     new Class[] {clazz}, new Object[] {intValue});
+        } else if (clazz.getName().equals("mcmanager.data.StatusEnum")) {
+            StatusEnum statusEnum = StatusEnum.matcherByStatus(Integer.valueOf(value));
+            PrivateAccessor.invoke(object, method.getName(), 
+                    new Class[] {clazz}, new Object[] {statusEnum});
         } else {
-            throw new CoreException("Не известный тип: " +  clazz.getName());
+            throw new CoreException("Не известный тип: " +  clazz.getName() + " value: " + value);
         }
 
     }

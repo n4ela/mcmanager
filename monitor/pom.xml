@@ -11,6 +11,10 @@
         <version>0.1</version>
     </parent>
 
+    <properties>
+        <main.basedir>${project.basedir}/..</main.basedir>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>mcmanager</groupId>

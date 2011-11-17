@@ -34,7 +34,7 @@ public enum TypeDistributionEnum {
     
     /**
      * Констурктор енума
-     * @param status - статус в цифровом виде
+     * @param type - статус в цифровом виде
      * @param desc   - описание статуса
      */
     TypeDistributionEnum(int type, String desc) {
@@ -57,6 +57,21 @@ public enum TypeDistributionEnum {
     public String getDesc() {
         return desc;
     }
-   
+    
+    public static TypeDistributionEnum matcherByType(int type) {
+        for (TypeDistributionEnum typeEnum : TypeDistributionEnum.values()) {
+            if (typeEnum.getType() == type)
+                return typeEnum;
+        }
+        return SHARED;
+    }
+    
+    public static TypeDistributionEnum matcherByDesc(String desc) {
+        for (TypeDistributionEnum typeEnum : TypeDistributionEnum.values()) {
+            if (typeEnum.getDesc().equals(desc))
+                return typeEnum;
+        }
+        return SHARED;
+    }
 
 }

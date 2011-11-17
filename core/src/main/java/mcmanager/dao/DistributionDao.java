@@ -20,6 +20,7 @@ public class DistributionDao extends HibernateDaoSupport {
 
     /**
      * Добавить раздачу в таблицу
+     * TODO допилить exception
      * @param distribution - раздача 
      */
     public void addDistribution(Distribution distribution) {
@@ -61,7 +62,7 @@ public class DistributionDao extends HibernateDaoSupport {
     public List<Distribution> getDistributionByStatus(StatusEnum status) {
         return (List<Distribution>) getHibernateTemplate().findByCriteria(
                 DetachedCriteria.forClass(Distribution.class).add(
-                        Restrictions.eq("status", status.getStatus())));
+                        Restrictions.eq("status", status)));
     }
     
     public List<Distribution> getDistributionByTorrent(String torrentName) {
