@@ -32,7 +32,6 @@
         <module>kinopoisk-api</module>
         <module>monitor</module>
         <module>web</module>
-        <module>android-center</module>
     </modules>
 
     <profiles>

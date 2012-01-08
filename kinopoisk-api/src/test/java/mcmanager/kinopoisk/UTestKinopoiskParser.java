@@ -54,6 +54,7 @@ public class UTestKinopoiskParser extends XMLTestCase {
             tvshow.setRating("8.360");
             tvshow.setVotes("13 915");
             actual = new StringReader(JaxbUtils.jaxbMarshalToString(tvshow));
+            
             assertXMLEqual(expected, actual);
         } finally {
             if (expected != null)
