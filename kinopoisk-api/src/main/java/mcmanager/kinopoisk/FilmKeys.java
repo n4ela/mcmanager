@@ -5,7 +5,7 @@ package mcmanager.kinopoisk;
  * @author Ivanov Dmitrij (ivanovdw@gmail.com)
  * Date: 04.09.2011
  */
-public enum FilmKey {
+public enum FilmKeys {
     DIRECTOR("режиссер"),
     RUNTIME("время"),
     COUNTRY("страна"),
@@ -15,7 +15,7 @@ public enum FilmKey {
     MPAA("рейтинг MPAA"),
     YEAR("год");
     
-    FilmKey(String value) {
+    FilmKeys(String value) {
         this.value = value;
     }
     
