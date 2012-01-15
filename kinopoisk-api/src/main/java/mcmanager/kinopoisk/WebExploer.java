@@ -64,12 +64,12 @@ public class WebExploer {
         movie.setTitle(document.select(TITLE).first().text());
         movie.setOriginaltitle(document.select(ORIGINAL_NAME).first().text());
         Map<String, String> infoMap = getInfoMap(document, url);
-        movie.setDirector(infoMap.get(FilmKeys.DIRECTOR.getValue()));
-        movie.setTagline(infoMap.get(FilmKeys.TAGLINE.getValue()).replaceAll("«|»|-", ""));
-        movie.setCredits(infoMap.get(FilmKeys.CREDITDS.getValue()));
-        movie.setGenre(removeEndSepperator(infoMap.get(FilmKeys.GENRE.getValue())));
-        movie.setMpaa(infoMap.get(FilmKeys.MPAA.getValue()));
-        movie.setYear(infoMap.get(FilmKeys.YEAR.getValue()));
+        movie.setDirector(infoMap.get(FilmKey.DIRECTOR.getValue()));
+        movie.setTagline(infoMap.get(FilmKey.TAGLINE.getValue()).replaceAll("«|»|-", ""));
+        movie.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
+        movie.setGenre(removeEndSepperator(infoMap.get(FilmKey.GENRE.getValue())));
+        movie.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
+        movie.setYear(infoMap.get(FilmKey.YEAR.getValue()));
         String plot = removeSpecialChar(document.getElementsByClass(PLOT).first().text());
         movie.setPlot(plot);
         movie.setOutline(plot);
@@ -101,14 +101,14 @@ public class WebExploer {
         tvshow.getActor().addAll(getActorInfo(url));
         tvshow.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
-        tvshow.setCredits(infoMap.get(FilmKeys.CREDITDS.getValue()));
-        tvshow.setGenre(removeEndSepperator(infoMap.get(FilmKeys.GENRE.getValue())));
-        tvshow.setMpaa(infoMap.get(FilmKeys.MPAA.getValue()));
-        tvshow.setTagline(infoMap.get(FilmKeys.TAGLINE.getValue()).replaceAll("«|»|-", ""));
+        tvshow.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
+        tvshow.setGenre(removeEndSepperator(infoMap.get(FilmKey.GENRE.getValue())));
+        tvshow.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
+        tvshow.setTagline(infoMap.get(FilmKey.TAGLINE.getValue()).replaceAll("«|»|-", ""));
         //Тег year для tvshow не используется но пусть будет
-        tvshow.setYear(infoMap.get(FilmKeys.YEAR.getValue()));
+        tvshow.setYear(infoMap.get(FilmKey.YEAR.getValue()));
         //Место него используется тег premiered
-        tvshow.setPremiered(infoMap.get(FilmKeys.YEAR.getValue()) + "-01-01");
+        tvshow.setPremiered(infoMap.get(FilmKey.YEAR.getValue()) + "-01-01");
         String rating = removeSpecialChar(document.getElementsByClass("continue").first().text());
         String[] arrayRating = rating.split("  ");
         if (arrayRating.length == 2) {
@@ -135,9 +135,9 @@ public class WebExploer {
         episodedetails.getActor().addAll(getActorInfo(url));
         episodedetails.getThumb().addAll(getThumb(url, document));
         Map<String, String> infoMap = getInfoMap(document, url);
-        episodedetails.setCredits(infoMap.get(FilmKeys.CREDITDS.getValue()));
-        episodedetails.setMpaa(infoMap.get(FilmKeys.MPAA.getValue()));
-        episodedetails.setPremiered(infoMap.get(FilmKeys.YEAR.getValue()) + "-01-01");
+        episodedetails.setCredits(infoMap.get(FilmKey.CREDITDS.getValue()));
+        episodedetails.setMpaa(infoMap.get(FilmKey.MPAA.getValue()));
+        episodedetails.setPremiered(infoMap.get(FilmKey.YEAR.getValue()) + "-01-01");
         
         Pattern seasonRegexp = Pattern.compile("\\.[sS]([0-9]*)[eE]([0-9]*)");
         Matcher matcher = seasonRegexp.matcher(fileName);
@@ -166,7 +166,7 @@ public class WebExploer {
                 
                 //Исключительная ситуация для тега ГОД, т.к. в нем еще может придти номер сезона для сериала
                 //например 2005 (7 сезонов) 
-                if (key.equalsIgnoreCase(FilmKeys.YEAR.getValue())) {
+                if (key.equalsIgnoreCase(FilmKey.YEAR.getValue())) {
                     Matcher matcher = Pattern.compile("([0-9]+)").matcher(value);
                     value = matcher.find() && matcher.groupCount() > 0 ? matcher.group(1) : value;
                 }
