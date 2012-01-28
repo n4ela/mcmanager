@@ -4,7 +4,6 @@
     <artifactId>web-control</artifactId>
     <packaging>war</packaging>
     <name>Media Center Web Control</name>
-    <groupId>mcmanager</groupId>
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>

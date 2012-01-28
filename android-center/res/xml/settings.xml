@@ -2,5 +2,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="Общие">
         <EditTextPreference android:positiveButtonText="Ок" android:negativeButtonText="Отмена" android:title="Путь к каталогу с фильмами" android:key="filmPath"/>
-    </PreferenceCategory>
+    </PreferenceCategory>        
 </PreferenceScreen>

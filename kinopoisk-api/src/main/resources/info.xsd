@@ -214,7 +214,7 @@
     <xs:complexType name="thumb">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="type" type="info:thumb-type"/>
+                <xs:attribute name="type" type="xs:string"/>
                 <xs:attribute name="season" type="xs:string" />
 
                 <xs:attribute name="dim" type="xs:string" />
@@ -223,12 +223,6 @@
             </xs:extension>
        </xs:simpleContent>
     </xs:complexType>
-
-    <xs:simpleType name="thumb-type">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="season" />
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:complexType name="fanart">
         <xs:sequence>

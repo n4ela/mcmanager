@@ -15,7 +15,6 @@ import mcmanager.kinopoisk.info.Movie;
 import mcmanager.kinopoisk.info.Streamdetails;
 import mcmanager.kinopoisk.info.Subtitle;
 import mcmanager.kinopoisk.info.Thumb;
-import mcmanager.kinopoisk.info.ThumbType;
 import mcmanager.kinopoisk.info.Tvshow;
 import mcmanager.kinopoisk.info.Tvshow.Episodeguide;
 import mcmanager.kinopoisk.info.Url;
@@ -24,6 +23,8 @@ import mcmanager.kinopoisk.utils.JaxbUtils;
 
 import org.custommonkey.xmlunit.XMLTestCase;
 import org.junit.Test;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 public class UTestJaxb extends XMLTestCase {
 
@@ -143,22 +144,22 @@ public class UTestJaxb extends XMLTestCase {
 
         Thumb thumb3 = new Thumb();
         thumb3.setValue("http://thetvdb.com/banners/seasons/73388-1.jpg");
-        thumb3.setType(ThumbType.SEASON);
+        thumb3.setType("season");
         thumb3.setSeason("1");
 
         Thumb thumb4 = new Thumb();
         thumb4.setValue("http://thetvdb.com/banners/seasons/73388-0.jpg");
-        thumb4.setType(ThumbType.SEASON);
+        thumb4.setType("season");
         thumb4.setSeason("0");
 
         Thumb thumb5 = new Thumb();
         thumb5.setValue("http://thetvdb.com/banners/seasons/73388-2.jpg");
-        thumb5.setType(ThumbType.SEASON);
+        thumb5.setType("season");
         thumb5.setSeason("2");
 
         Thumb thumb6 = new Thumb();
         thumb6.setValue("http://thetvdb.com/banners/posters/73388-1.jpg");
-        thumb6.setType(ThumbType.SEASON);
+        thumb6.setType("season");
         thumb6.setSeason("-1");
         tvshow.getThumb().addAll(Arrays.asList(thumb1, thumb2, thumb3, thumb4, thumb5, thumb6));
         
@@ -268,5 +269,20 @@ public class UTestJaxb extends XMLTestCase {
             expected.close();
             actual.close();
         }
+    }
+    
+    @Test 
+    public void testEpisodedetails2() throws Exception {
+        File tvshowFile = new File(System.getProperty("catalina.home") + File.separator + "data" + File.separator + "tvshow.dat");
+        Serializer serializer = new Persister();
+        mcmanager.kinopoisk.info2.Tvshow example = serializer.read(mcmanager.kinopoisk.info2.Tvshow.class, tvshowFile);
+        System.out.println(example.getPlot());
+        for (mcmanager.kinopoisk.info2.Thumb thumb : example.getFanart().getThumb()) {
+            System.out.println(thumb.getColors());
+        }
+        for (mcmanager.kinopoisk.info2.Actor actor : example.getActor()) {
+            System.out.println(actor.getName());
+        }
+        
     }
 }

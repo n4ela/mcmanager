@@ -4,7 +4,6 @@
     <artifactId>monitor</artifactId>
     <packaging>jar</packaging>
     <name>Media Center Monitor</name>
-    <groupId>mcmanager</groupId>
     <parent>
         <groupId>mcmanager</groupId>
         <artifactId>mcmanager</artifactId>

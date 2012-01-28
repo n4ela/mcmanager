@@ -1,6 +1,6 @@
-package android.mcmanager.settings;
+package mcmanager.android.settings;
 
-import android.mcmanager.R;
+import mcmanager.android.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
