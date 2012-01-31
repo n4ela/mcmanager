@@ -1,17 +1,29 @@
 package mcmanager.android.dao;
 
-import java.util.List;
+import static mcmanager.android.utils.LogDb.log;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import mcmanager.android.dao.WhereQuery.Type;
+import mcmanager.android.utils.CloseUtils;
 import mcmanager.kinopoisk.info.Thumb;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Вспомогательный класс для работы с информацие о постреах
+ * @author Ivanov Dmitrij (ivanovdw@gmail.com)
+ *
+ * Date: 29.01.2012
+ */
 public class ThumbHelper {
     private final static String TABLE_NAME = "thumb";
     
-    public final static String CREATE_TABLE = "CREATE TABLE " + 
-            "(value TEXT, " +
+    public final static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+            " (value TEXT, " +
             "colors TEXT, " +
             "dim TEXT, " +
             "preview TEXT, " +
@@ -20,29 +32,75 @@ public class ThumbHelper {
             "id_film INTEGER," +
             "PRIMARY KEY(value, id_film))";
     
-    private static final String SELECT_THUMB = 
-            "SELECT * FROM " + TABLE_NAME + " WHERE ";
-    
-    public synchronized static void save(List<Thumb> thumbs, long filmId, SQLiteDatabase db) {
+    /**
+     * Сохранить или обновить информацию о постере к фильму
+     * @param thumbs - список постеров к фильму
+     * @param filmId - ид фильма
+     * @param db     - база
+     */
+    public synchronized static void saveOrUpdate(List<Thumb> thumbs, long filmId, SQLiteDatabase db) {
+        log.trace("Начало сохранение/обновление информации о постерах к фильму id: " + filmId);
         for (Thumb thumb : thumbs) {
-            save(thumb, filmId, db);    
+            saveOrUpdate(thumb, filmId, db);    
         }
+        log.trace("Сохранение/обновление информации о постерах к фильму id: " + filmId + " прошло успешно");
     }
     
-    private static void save(Thumb thumb, long filmId, SQLiteDatabase db) {
+    public synchronized static Set<Thumb> load(long filmId, SQLiteDatabase db) {
         Cursor cursor = null;
+        log.trace("Начало получения постеров по id фильма: " + filmId);
         try {
-            cursor = db.rawQuery(SELECT_THUMB + SqlCommonHelper.createWhere(createContentValue(thumb, filmId)), null);
-            if (cursor.getCount() == 0) {
-                db.insert(TABLE_NAME, null, createContentValue(thumb, filmId));
+            ContentValues content = new ContentValues();
+            content.put("id_film", filmId);
+            WhereQuery where = new WhereQuery(content, Type.AND);
+            cursor = db.query(TABLE_NAME, null, where.getWhere(), where.getArgs(), null, null, null);
+            Set<Thumb> thumbs = new LinkedHashSet<Thumb>();
+            while (cursor.moveToNext()) {
+                Thumb thumb = new Thumb();
+                thumb.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                thumb.setColors(cursor.getString(cursor.getColumnIndex("colors")));
+                thumb.setDim(cursor.getString(cursor.getColumnIndex("dim")));
+                thumb.setPreview(cursor.getString(cursor.getColumnIndex("preview")));
+                thumb.setSeason(cursor.getString(cursor.getColumnIndex("season")));
+                thumb.setType(cursor.getString(cursor.getColumnIndex("type")));
+                thumbs.add(thumb);
             }
+            log.trace("Получение постеров по id фильма: " + filmId + 
+                      " завершенно, найдено постеров: " + thumbs.size());
+            return thumbs;
         } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+            CloseUtils.close(cursor);
+        }
+        
+    }
+    
+    /**
+     * Сохранить или обновить информацию о постере к фильму
+     * @param thumb  - постер к фильму
+     * @param filmId - ид фильма
+     * @param db     - база
+     */    
+    private static void saveOrUpdate(Thumb thumb, long filmId, SQLiteDatabase db) {
+        ContentValues content = new ContentValues();
+        content.put("value", thumb.getValue());
+        content.put("id_film", filmId);
+        WhereQuery where = new WhereQuery(content, Type.AND);
+        log.trace("Начало сохранение/обновление о информации постере: " + content + " к фильму id: " + filmId);
+        long result = db.update(TABLE_NAME, createContentValue(thumb, filmId), where.getWhere(), where.getArgs());
+        if (result == 0) {
+            log.trace("Сохранение информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
+            db.insert(TABLE_NAME, null, createContentValue(thumb, filmId));
+        } else {
+            log.trace("Обновление информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
         }
     }
     
+    /**
+     * Построить контент для сохранения в бд
+     * @param thumb  - сущность обложки фильма
+     * @param filmId - ид фильма
+     * @return контент для сохранения в бд
+     */
     private static ContentValues createContentValue(Thumb thumb, long filmId) {
         ContentValues content = new ContentValues();
         content.put("value", thumb.getValue());
