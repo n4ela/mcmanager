@@ -30,10 +30,10 @@
             android:text="Large Text" />
 
         <ScrollView
-            android:id="@+id/SCROLLER_ID"
+            android:id="@+id/infoScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
+            android:fillViewport="false"
             android:layout_weight="1"
             android:scrollbars="vertical" >
 

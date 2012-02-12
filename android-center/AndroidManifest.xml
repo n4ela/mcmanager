@@ -6,10 +6,11 @@
 
     <supports-screens android:requiresSmallestWidthDp="720" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" 
+        android:largeHeap="false"
+        >
         <activity android:name=".AndroidMediaCenter" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -27,7 +27,7 @@
             <artifactId>simple-xml</artifactId>
             <version>2.6.2</version>
             <exclusions>
-                <!-- StAX is not available on Android -->
+<!--                 StAX is not available on Android -->
                 <exclusion>
                     <artifactId>stax</artifactId>
                     <groupId>stax</groupId>
@@ -36,7 +36,7 @@
                     <artifactId>stax-api</artifactId>
                     <groupId>stax</groupId>
                 </exclusion>
-                <!-- Provided by Android -->
+<!--                 Provided by Android -->
                 <exclusion>
                     <artifactId>xpp3</artifactId>
                     <groupId>xpp3</groupId>
@@ -55,6 +55,13 @@
             <artifactId>android-logging-log4j</artifactId>
             <version>1.0.2</version>
         </dependency>
+        
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.8.2</version>
+            </dependency>
+
 
     </dependencies>
 
@@ -117,6 +124,9 @@
                     <sdk>
                         <platform>13</platform>
                     </sdk>
+                    <jvmArguments>
+                        <argument>-Xmx1500m</argument>
+                    </jvmArguments>
                     <deleteConflictingFiles>true</deleteConflictingFiles>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>

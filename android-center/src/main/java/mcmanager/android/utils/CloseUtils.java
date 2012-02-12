@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import mcmanager.android.dao.MovieHelper;
+
 import android.database.Cursor;
 
 public class CloseUtils {

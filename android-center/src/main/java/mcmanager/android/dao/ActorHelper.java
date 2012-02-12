@@ -13,6 +13,7 @@ import mcmanager.android.utils.CloseUtils;
 import mcmanager.android.utils.FileUtils;
 import mcmanager.android.utils.ImageUtils;
 import mcmanager.android.utils.StringUtils;
+import mcmanager.android.utils.ImageUtils.ImageType;
 import mcmanager.kinopoisk.info.Actor;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -35,8 +36,18 @@ public class ActorHelper {
                                               "name TEXT, " +
                                               "role TEXT, " +
                                               "thumb TEXT, " +
-                                              "thumb_cache TEXT, " +
+                                              "cache_thumb TEXT, " +
                                               "PRIMARY KEY(name, role, thumb))";
+    
+    private final long filmId;
+    private final SQLiteDatabase db;
+    private Set<Long> actorIds;
+    
+    public ActorHelper(long filmId, SQLiteDatabase db) {
+        this.filmId = filmId;
+        this.db = db;
+    }
+    
     /**
      * Сохранить или обновить информаци об актерах
      * @param actorList - список актеров фильма
@@ -44,7 +55,7 @@ public class ActorHelper {
      * @param db        - база
      * @throws CoreException
      */
-    public static synchronized void saveOrUpdate(List<Actor> actorList, long filmId, SQLiteDatabase db) throws CoreException {
+    public synchronized void saveOrUpdate(List<Actor> actorList) throws CoreException {
         log.trace("Начало сохранение/обновление информации об актерах в фильме id: " + filmId);
         for (Actor actor : actorList) {
             saveOrUpdate(actor, filmId, db);
@@ -59,10 +70,9 @@ public class ActorHelper {
      * @param db     - база
      * @throws CoreException
      */
-    private static void saveOrUpdate(Actor actor, long filmId, SQLiteDatabase db) throws CoreException {
-        Set<Long> actorIds = ActorToMovieHelper.load(filmId, db);
-        if (!update(actor, filmId, actorIds, db)) {
-            save(actor, filmId, db);
+    private void saveOrUpdate(Actor actor, long filmId, SQLiteDatabase db) throws CoreException {
+        if (!update(actor)) {
+            save(actor);
         }
     }
     
@@ -75,7 +85,7 @@ public class ActorHelper {
      * @return true - если обновление прошло, false - если обновление не прошло и требуется сохранение
      * @throws CoreException
      */
-    private static boolean update(Actor actor, long filmId, Set<Long> actorIds, SQLiteDatabase db) throws CoreException {
+    private boolean update(Actor actor) throws CoreException {
         log.trace("Начало обновления информация об актере: " + actor.getName() + " в фильме: " + filmId);
         ContentValues content = new ContentValues();
         content.put("name", actor.getName());
@@ -84,21 +94,24 @@ public class ActorHelper {
         boolean updateOk = false;
         try {
              cursor = db.query(TABLE_NAME, null, whereQuery.getWhere(), whereQuery.getArgs(), null, null, null);
+             if (actorIds == null) { 
+                 actorIds = ActorToMovieHelper.load(filmId, db); 
+             }
              while (cursor.moveToNext()) {
                  long actorId = cursor.getLong(cursor.getColumnIndex("_id"));
-                 String thumbCache = cursor.getString(cursor.getColumnIndex("thumb_cache"));
+                 String thumbCache = cursor.getString(cursor.getColumnIndex("cache_thumb"));
                  if (actorIds.contains(actorId)) {
                      content = new ContentValues();
                      content.put("_id", actorId);
                      whereQuery = new WhereQuery(content, Type.AND);
                      ContentValues updateContent = createContentValue(actor);
                      if (!new File(thumbCache).exists()) {
-                         content.put("thumb_cache", ImageUtils.loadImage(actor.getThumb()));
+                         content.put("cache_thumb", ImageUtils.loadImage(actor.getThumb(), ImageType.ACTOR, true));
                      } else {
-                         content.put("thumb_cache", thumbCache);
+                         content.put("cache_thumb", thumbCache);
                      }
                      db.update(TABLE_NAME, updateContent, whereQuery.getWhere(), whereQuery.getArgs());
-                     actorIds.remove(actorId);
+//                     actorIds.remove(actorId);
                      ActorToMovieHelper.save(actorId, filmId, db);
                      log.trace("Обновлена информация об актере: " + actor.getName() + " в фильме: " + filmId);
                      updateOk = true;
@@ -120,10 +133,10 @@ public class ActorHelper {
      * @param db     - база
      * @throws CoreException
      */
-    private static void save(Actor actor, long filmId, SQLiteDatabase db) throws CoreException {
+    private void save(Actor actor) throws CoreException {
         log.trace("Начало сохранение информация об актере: " + actor.getName() + " в фильме: " + filmId);
         ContentValues content = createContentValue(actor);
-        content.put("thumb_cache", ImageUtils.loadImage(actor.getThumb()));
+        content.put("cache_thumb", ImageUtils.loadImage(actor.getThumb(), ImageType.ACTOR, true));
         content.put("_id", SqlCommonHelper.getId(TABLE_NAME, db));
         long actorId = db.insert(TABLE_NAME, null, content);
         ActorToMovieHelper.save(actorId, filmId, db);
@@ -136,9 +149,11 @@ public class ActorHelper {
      * @param db      - база
      * @return список актеров
      */
-    public synchronized static Set<Actor> load(long filmdId, SQLiteDatabase db) {
-        log.trace("Начало получени информации об актерах по id фильма: " + filmdId);
-        Set<Long> actorIds = ActorToMovieHelper.load(filmdId, db);
+    public synchronized Set<Actor> load() {
+        log.trace("Начало получени информации об актерах по id фильма: " + filmId);
+        if (actorIds == null) {
+            actorIds = ActorToMovieHelper.load(filmId, db);
+        }
         Set<Pair<String, Long>> argQuery = new LinkedHashSet<Pair<String, Long>>();
         for (Long actorId : actorIds) {
             argQuery.add(Pair.create("_id", actorId));
@@ -153,11 +168,11 @@ public class ActorHelper {
                 Actor actor = new Actor();
                 actor.setName(cursor.getString(cursor.getColumnIndex("name")));
                 actor.setRole(cursor.getString(cursor.getColumnIndex("role")));
-                String thumbCache = cursor.getString(cursor.getColumnIndex("thumb_cache"));
+                String thumbCache = cursor.getString(cursor.getColumnIndex("cache_thumb"));
                 actor.setThumb(thumbCache);
                 actors.add(actor);
             }
-            log.trace("Получени информации об актерах по id фильма: " + filmdId + 
+            log.trace("Получени информации об актерах по id фильма: " + filmId + 
                       " успешно завершенно, полученно " +  actors.size() + " записей");
             return actors;
         } finally {
@@ -170,7 +185,7 @@ public class ActorHelper {
      * @param actor - информация об актере
      * @return контент для заполнениея бд
      */
-    private static ContentValues createContentValue(Actor actor) {
+    private ContentValues createContentValue(Actor actor) {
         ContentValues content = new ContentValues();
         content.put("name", actor.getName());
         content.put("role", actor.getRole());

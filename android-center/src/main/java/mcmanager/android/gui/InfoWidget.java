@@ -1,20 +1,22 @@
 package mcmanager.android.gui;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import mcmanager.android.R;
+import mcmanager.android.bobj.MovieAndroid;
 import mcmanager.android.utils.LogDb;
-import mcmanager.kinopoisk.info.Movie;
+import mcmanager.android.utils.StringUtils;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class InfoWidget extends LinearLayout {
@@ -22,7 +24,7 @@ public class InfoWidget extends LinearLayout {
     private final int width;
     private final int height;
 
-    public InfoWidget(Movie movie, int width, int height, Context context) {
+    public InfoWidget(final MovieAndroid movie, final int width, final int height, final Activity context) {
         super(context);
         this.width = width;
         this.height = height;
@@ -32,19 +34,56 @@ public class InfoWidget extends LinearLayout {
 
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
         textViewName.setText(movie.getTitle());
+
         TextView textViewDescription = (TextView) findViewById(R.id.textViewDescription);
         textViewDescription.setText(movie.getPlot());
-        ImageView image = (ImageView) findViewById(R.id.imageViewPoster);
-//        try {
-            if (!movie.getThumb().isEmpty()) {
-                Log.e("IMAGE: ", movie.getThumb().get(0).getValue());
-                Bitmap bitmap = new BitmapFactory().decodeFile(movie.getThumb().get(0).getValue());
-                image.setImageBitmap(bitmap);
+        ScrollView childScroll = (ScrollView)findViewById(R.id.infoScroll);
+        childScroll.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
             }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            LogDb.log.error("Ошибка при загрузки изображения: ", e);
-//        }
+        });
+        
+        final ImageView image = (ImageView) findViewById(R.id.imageViewPoster);
+        try {
+            if (!StringUtils.isEmpty(movie.getActiveThumb())) {
+                Log.e("IMAGE", movie.getActiveThumb());
+                Bitmap bitmap = Bitmap.createScaledBitmap(
+                        BitmapFactory.decodeFile(movie.getActiveThumb()), 
+                        width / 2, 
+                        height, 
+                        true);
+                image.setImageBitmap(bitmap);
+                image.setOnLongClickListener(new OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View paramView) {
+                        Log.e("LONG", "LONG");
+                        ThumbDialog dialog = 
+                                new ThumbDialog(width, height * 2, context, movie);
+                        dialog.setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface paramDialogInterface) {
+                                Bitmap bitmap = Bitmap.createScaledBitmap(
+                                        BitmapFactory.decodeFile(movie.getActiveThumb()), 
+                                        width / 2, 
+                                        height, 
+                                        true);
+                                Log.e("NEW IMAGE: ", movie.getActiveThumb());
+                                image.setImageBitmap(bitmap);
+                            }
+                        });
+                        dialog.show();
+                        return false;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogDb.log.error("Ошибка при загрузки изображения: ", e);
+        }
     }
 
     
@@ -53,9 +92,6 @@ public class InfoWidget extends LinearLayout {
         super.onLayout(changed, l, t, r, b);
         LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayoutMain);
         layout.setLayoutParams(new LayoutParams(width, height));
-        ImageView image = (ImageView) findViewById(R.id.imageViewPoster);
-        Log.d("h:", String.valueOf(image.getHeight()));
-        Log.d("w:", String.valueOf(image.getWidth()));
     }
 
     @Override
@@ -63,4 +99,5 @@ public class InfoWidget extends LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(width, height);
     }
+    
 }

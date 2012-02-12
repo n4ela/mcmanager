@@ -11,7 +11,6 @@ import mcmanager.android.utils.CloseUtils;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Pair;
 
 /**
  * Вспомогательный класс для связи актер - фильма
@@ -46,7 +45,7 @@ public class ActorToMovieHelper {
                 db.insert(TABLE_NAME, null, content);
                 log.trace("Cохранение связки актер: " + actorId + " с фильмом: " + filmId + " успешно завершенно");
             } else {
-                log.trace("Cохранение связки актер: " + actorId + " с фильмом: " + filmId + " не требуется");
+                log.trace("Cохранение связки актер: " + actorId + " с фильмом: " + filmId + " не требуется " + cursor.getCount());
             }
         } finally {
             CloseUtils.close(cursor);

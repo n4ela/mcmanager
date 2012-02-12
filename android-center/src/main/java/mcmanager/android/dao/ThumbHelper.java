@@ -8,6 +8,8 @@ import java.util.Set;
 
 import mcmanager.android.dao.WhereQuery.Type;
 import mcmanager.android.utils.CloseUtils;
+import mcmanager.android.utils.ImageUtils;
+import mcmanager.android.utils.ImageUtils.ImageType;
 import mcmanager.kinopoisk.info.Thumb;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -29,22 +31,23 @@ public class ThumbHelper {
             "preview TEXT, " +
             "season TEXT, " +
             "type TEXT, " +
-            "id_film INTEGER," +
+            "id_film INTEGER, " +
+            "cache_value TEXT, " +
             "PRIMARY KEY(value, id_film))";
     
-    /**
-     * Сохранить или обновить информацию о постере к фильму
-     * @param thumbs - список постеров к фильму
-     * @param filmId - ид фильма
-     * @param db     - база
-     */
-    public synchronized static void saveOrUpdate(List<Thumb> thumbs, long filmId, SQLiteDatabase db) {
-        log.trace("Начало сохранение/обновление информации о постерах к фильму id: " + filmId);
-        for (Thumb thumb : thumbs) {
-            saveOrUpdate(thumb, filmId, db);    
-        }
-        log.trace("Сохранение/обновление информации о постерах к фильму id: " + filmId + " прошло успешно");
-    }
+//    /**
+//     * Сохранить или обновить информацию о постере к фильму
+//     * @param thumbs - список постеров к фильму
+//     * @param filmId - ид фильма
+//     * @param db     - база
+//     */
+//    public synchronized static void saveOrUpdate(List<Thumb> thumbs, long filmId, SQLiteDatabase db) {
+//        log.trace("Начало сохранение/обновление информации о постерах к фильму id: " + filmId);
+//        for (Thumb thumb : thumbs) {
+//            saveOrUpdate(thumb, filmId, db);    
+//        }
+//        log.trace("Сохранение/обновление информации о постерах к фильму id: " + filmId + " прошло успешно");
+//    }
     
     public synchronized static Set<Thumb> load(long filmId, SQLiteDatabase db) {
         Cursor cursor = null;
@@ -57,7 +60,7 @@ public class ThumbHelper {
             Set<Thumb> thumbs = new LinkedHashSet<Thumb>();
             while (cursor.moveToNext()) {
                 Thumb thumb = new Thumb();
-                thumb.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                thumb.setValue(cursor.getString(cursor.getColumnIndex("cache_value")));
                 thumb.setColors(cursor.getString(cursor.getColumnIndex("colors")));
                 thumb.setDim(cursor.getString(cursor.getColumnIndex("dim")));
                 thumb.setPreview(cursor.getString(cursor.getColumnIndex("preview")));
@@ -80,16 +83,20 @@ public class ThumbHelper {
      * @param filmId - ид фильма
      * @param db     - база
      */    
-    private static void saveOrUpdate(Thumb thumb, long filmId, SQLiteDatabase db) {
+    public static void saveOrUpdate(Thumb thumb, String cacheThumb, long filmId, SQLiteDatabase db) {
         ContentValues content = new ContentValues();
         content.put("value", thumb.getValue());
         content.put("id_film", filmId);
         WhereQuery where = new WhereQuery(content, Type.AND);
         log.trace("Начало сохранение/обновление о информации постере: " + content + " к фильму id: " + filmId);
-        long result = db.update(TABLE_NAME, createContentValue(thumb, filmId), where.getWhere(), where.getArgs());
+        ContentValues contentUpdate = createContentValue(thumb, filmId);
+        contentUpdate.put("cache_value", ImageUtils.getCacheImage(thumb.getValue(), ImageType.THUMB, true).getAbsolutePath());
+        long result = db.update(TABLE_NAME, content, where.getWhere(), where.getArgs());
         if (result == 0) {
             log.trace("Сохранение информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
-            db.insert(TABLE_NAME, null, createContentValue(thumb, filmId));
+            ContentValues contentInsert = createContentValue(thumb, filmId);
+            contentInsert.put("cache_value", cacheThumb);
+            db.insert(TABLE_NAME, null, contentInsert);
         } else {
             log.trace("Обновление информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
         }

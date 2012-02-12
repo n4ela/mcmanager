@@ -1,12 +1,10 @@
 package mcmanager.android;
 
+import mcmanager.android.bobj.MovieAndroid;
 import mcmanager.android.dao.MovieHelper;
 import mcmanager.android.dao.WhereQuery;
 import mcmanager.android.gui.InfoWidget;
 import mcmanager.android.settings.Settings;
-import mcmanager.android.utils.UpdateDB;
-import mcmanager.kinopoisk.info.Movie;
-import mcmanager.kinopoisk.info.Thumb;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -25,48 +24,31 @@ public class AndroidMediaCenter extends Activity {
 
     private static String TAG = "android-center";
 
-    /**
-     * Called when the activity is first created.
-     * @param savedInstanceState If the activity is being re-initialized after 
-     * previously being shut down then this Bundle contains the data it most 
-     * recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         setContentView(R.layout.main_screen);
+        Log.d("RUNTIME: ", String.valueOf(Runtime.getRuntime().maxMemory()));
         try {
-//            UpdateDB.reload(this);
             Button button = (Button) findViewById(R.id.button);
-//            TableLayout filmLayout = (TableLayout) findViewById(R.id.tableLayoutFilm);
-//            TableRow tableRow = new TableRow(AndroidMediaCenter.this);
-            
-//            int width = getWindowManager().getDefaultDisplay().getWidth() / 3;
-//            int height = getWindowManager().getDefaultDisplay().getHeight() / 3;
-//            createViewMovie();
-            Movie movie = new Movie();
-            movie.setTitle("KLOPOLK");
-            movie.setPlot("XCVBNM<lkjhgfcvbnm");
-            Thumb thumb = new Thumb();
-            thumb.setValue("http://st.kinopoisk.ru/images/poster/800253.jpg");
-            movie.getThumb().add(thumb);
-//            tableRow.addView(widget);
-//            widget = new InfoWidget(movie, width, height, AndroidMediaCenter.this);
-//            tableRow.addView(widget);
-//            widget = new InfoWidget(movie, width, height, AndroidMediaCenter.this);
-//            tableRow.addView(widget);
-//            filmLayout.addView(tableRow);
-//            tableRow = new TableRow(AndroidMediaCenter.this);
-//            tableRow.addView(new Button(AndroidMediaCenter.this));
-//            tableRow.addView(new Button(AndroidMediaCenter.this));
-//            tableRow.addView(new Button(AndroidMediaCenter.this));
-//            filmLayout.addView(tableRow);
-            
             button.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View paramView) {
+//                    try {
+//                        UpdateDB.reload(AndroidMediaCenter.this);
+//                    } catch (Exception e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
                     createViewMovie();
+                }
+            });
+            ScrollView parentScroll = (ScrollView)findViewById(R.id.mainScroll);
+            parentScroll.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    findViewById(R.id.infoScroll).getParent().requestDisallowInterceptTouchEvent(false);
+                    return false;
                 }
             });
         } catch (Exception e) {
@@ -99,7 +81,7 @@ public class AndroidMediaCenter extends Activity {
         int colum = 0;
         TableLayout filmLayout = (TableLayout) findViewById(R.id.tableLayoutFilm);
         TableRow tableRow = new TableRow(AndroidMediaCenter.this);
-        for (Movie movie : movieHelper.load(new WhereQuery())) {
+        for (MovieAndroid movie : movieHelper.load(new WhereQuery())) {
             int width = getWindowManager().getDefaultDisplay().getWidth() / 3;
             int height = getWindowManager().getDefaultDisplay().getHeight() / 3;
             InfoWidget widget = new InfoWidget(movie, width, height, AndroidMediaCenter.this);
@@ -114,8 +96,8 @@ public class AndroidMediaCenter extends Activity {
                 tableRow = new TableRow(AndroidMediaCenter.this);
                 colum = 0;
             }
-            if (row == 6)
-                break;
+//            if (row == 9)
+//                break;
         }
     }
     
