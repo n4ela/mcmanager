@@ -5,18 +5,28 @@
     android:versionName="1.0-SNAPSHOT" >
 
     <supports-screens android:requiresSmallestWidthDp="720" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-sdk
+        android:minSdkVersion="11"/>
+
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" 
-        android:largeHeap="false"
-        >
+        android:label="@string/app_name"
+        android:largeHeap="false">
+<!--         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" > -->
         <activity android:name=".AndroidMediaCenter" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".gui.InfoMovie" >
+        </activity>
+        <activity android:name=".activity.MediaCenterPlayer" >
         </activity>
         <activity
             android:name="mcmanager.android.settings.Settings"

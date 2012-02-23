@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.ContentValues;
-import android.util.Log;
 import android.util.Pair;
 
 public class WhereQuery {

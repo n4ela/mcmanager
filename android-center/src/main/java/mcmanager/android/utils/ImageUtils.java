@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import mcmanager.android.utils.FileUtils.FileName;
+
 public class ImageUtils {
 
     public static enum ImageType {ACTOR, THUMB};
@@ -33,6 +35,8 @@ public class ImageUtils {
             }
         } catch (IOException e) {
             LogDb.log.error("Ошибка при разборе url: " + url, e);
+        } catch (Throwable e) {
+            LogDb.log.error("Критичная ошибка: " + url, e);
         } finally {
             if (conn != null) {
                 conn.disconnect();
@@ -57,49 +61,27 @@ public class ImageUtils {
             case ACTOR:
                 dir = FileUtils.getCacheActorDir();
                 break;
-            default:
-                dir = FileUtils.getCacheDir();
+            case THUMB:
+                dir = FileUtils.getCacheThumbDir();
                 break;
+            default:
+                throw new RuntimeException("ERROR");
         }
         if (replace == false) {
             file = prepareFile(url, dir);
         } else {
-            file = new FileName(dir, url).getPathFileName();
+            file = new FileName(url).getPathFileName(dir);
         }
         return file;
     }
     
     private static File prepareFile(String url, File cacheDir) {
         File file = null;
-        FileName fileName = new FileName(cacheDir, url);
+        FileName fileName = new FileName(url);
         do {
-            file = fileName.getFileName();
+            file = fileName.getFileName(cacheDir);
         } while (file.exists());
         return file;
     }
-    
-    static class FileName {
-        int count = 0;
-        String name = "";
-        String ext = "";
-        File dir;
-        
-        FileName(File dir, String fileName) {
-            fileName = fileName.lastIndexOf('/') == -1 ? fileName : fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-            int index = fileName.lastIndexOf('.');
-            name = fileName.substring(0, index);
-            ext = fileName.substring(index + 1);
-            this.dir = dir;
-        }
-
-        public File getPathFileName() {
-            return new File(dir, name + "." + ext);
-        }
-        
-        public File getFileName() {
-            return new File(dir, count++ == 0 ? name + "." + ext : name + "_" + String.valueOf(count) + "." + ext); 
-        }
-    }
-
 
 }

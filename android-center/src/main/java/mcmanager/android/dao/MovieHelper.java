@@ -3,7 +3,7 @@ package mcmanager.android.dao;
 import static mcmanager.android.utils.LogDb.log;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +15,6 @@ import mcmanager.android.utils.ImageUtils;
 import mcmanager.android.utils.ImageUtils.ImageType;
 import mcmanager.android.utils.StringUtils;
 import mcmanager.kinopoisk.info.Actor;
-import mcmanager.kinopoisk.info.Movie;
 import mcmanager.kinopoisk.info.Thumb;
 import android.content.ContentValues;
 import android.content.Context;
@@ -37,37 +36,38 @@ public class MovieHelper extends SQLiteOpenHelper {
     private final static String TABLE_NAME = "movie";
     private final static int VERSION = 1;
     public final static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " " + 
-                                              "(_id INTEGER, " +
-                                              "title TEXT, " +
-                                              "originaltitle TEXT, " +
-                                              "sorttitle TEXT, " +
-                                              "_set TEXT, " +
-                                              "rating TEXT, " +
-                                              "year TEXT, " +
-                                              "top250 TEXT, " +
-                                              "votes TEXT, " +
-                                              "outline TEXT, " +
-                                              "plot TEXT, " +
-                                              "tagline TEXT, " +
-                                              "runtime TEXT, " +
-                                              "mpaa TEXT, " +
-                                              "playcount TEXT, " +
-                                              "watched TEXT, " +
-                                              "ext_id TEXT, " +
-                                              "filenameandpath TEXT, " +
-                                              "trailer TEXT, " +
-                                              "genre TEXT, " +
-                                              "credits TEXT, " +
-                                              "artist TEXT, " +
-                                              "director TEXT, " +
-                                              "active_thumb TEXT, " +
-                                              "PRIMARY KEY(title, originaltitle, year))";
-    
-    
+            "(_id INTEGER, " +
+            "title TEXT, " +
+            "originaltitle TEXT, " +
+            "sorttitle TEXT, " +
+            "_set TEXT, " +
+            "rating TEXT, " +
+            "year TEXT, " +
+            "top250 TEXT, " +
+            "votes TEXT, " +
+            "outline TEXT, " +
+            "plot TEXT, " +
+            "tagline TEXT, " +
+            "runtime TEXT, " +
+            "mpaa TEXT, " +
+            "playcount TEXT, " +
+            "watched TEXT, " +
+            "ext_id TEXT, " +
+            "filenameandpath TEXT, " +
+            "trailer TEXT, " +
+            "genre TEXT, " +
+            "credits TEXT, " +
+            "artist TEXT, " +
+            "director TEXT, " +
+            "active_thumb TEXT, " +
+            "update_time INTEGER, " +
+            "PRIMARY KEY(title, originaltitle, year))";
+
+
     public MovieHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
-    
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
@@ -75,7 +75,7 @@ public class MovieHelper extends SQLiteOpenHelper {
         db.execSQL(ActorHelper.CREATE_TABLE);
         db.execSQL(ThumbHelper.CREATE_TABLE);
     }
-    
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
@@ -85,11 +85,11 @@ public class MovieHelper extends SQLiteOpenHelper {
      * @param movie - информация о фильме
      * @throws CoreException
      */
-    public synchronized void saveOrUpdate(Movie movie) throws CoreException {
+    public synchronized void saveOrUpdate(MovieAndroid movie) throws CoreException {
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = null;
         try {
-            
+
             ContentValues content = new ContentValues();
             content.put("title", movie.getTitle());
             content.put("originaltitle", movie.getOriginaltitle());
@@ -105,7 +105,10 @@ public class MovieHelper extends SQLiteOpenHelper {
                 } else {
                     cursor.moveToFirst();
                     long movieId = cursor.getLong(cursor.getColumnIndex("_id"));
-                    update(movie, movieId, db);
+                    Long updateTime = cursor.getLong(cursor.getColumnIndex("update_time"));
+                    if (movie.getUpdateTime() == null || updateTime < movie.getUpdateTime()) {
+                        update(movie, movieId, db);
+                    }
                 }
                 db.setTransactionSuccessful();
             } finally {
@@ -119,16 +122,16 @@ public class MovieHelper extends SQLiteOpenHelper {
         }
 
     }
-    
+
     /**
      * Сохранить информацию о фильме
      * @param movie - информация о фильме
      * @param db    - база
      * @throws CoreException
      */
-    private void save(Movie movie, SQLiteDatabase db) throws CoreException {
+    private void save(MovieAndroid movie, SQLiteDatabase db) throws CoreException {
         log.trace("Начало сохранение информации о фильме: " + movie.getTitle());
-        
+
         List<Pair<Thumb, String>> listCacheThumbs = new ArrayList<Pair<Thumb,String>>();
         for (Thumb thumb : movie.getThumb()) {
             String cacheThumb = ImageUtils.loadImage(thumb.getValue(), ImageType.THUMB, false);
@@ -143,7 +146,7 @@ public class MovieHelper extends SQLiteOpenHelper {
             content.put("active_thumb", listCacheThumbs.get(0).second);
         }
         long filmId = db.insert(TABLE_NAME, null, content);
-        new ActorHelper(filmId, db).saveOrUpdate(movie.getActor());
+        ActorHelper.saveOrUpdate(movie.getActor(), filmId, db);
         for (Pair<Thumb, String> thumb : listCacheThumbs) {
             ThumbHelper.saveOrUpdate(thumb.first, thumb.second, filmId, db);    
         }
@@ -151,7 +154,7 @@ public class MovieHelper extends SQLiteOpenHelper {
         //TODO
         //values.put("fileinfo", movie.getFileinfo());
     }
-    
+
     /**
      * Обновить информацию о фильме
      * @param movie - информация о фильме
@@ -159,20 +162,21 @@ public class MovieHelper extends SQLiteOpenHelper {
      * @param db    - база
      * @throws CoreException
      */
-    private void update(Movie movie, long id, SQLiteDatabase db) throws CoreException {
+    private void update(MovieAndroid movie, long id, SQLiteDatabase db) throws CoreException {
         log.trace("Начало обновления информации о фильме: " + movie.getTitle() + " id: " + id);
         Log.d("ID", String.valueOf(id));
-        db.update(TABLE_NAME, createContentValue(movie), "_id = ?", new String[] {String.valueOf(id)});
-        new ActorHelper(id, db).saveOrUpdate(movie.getActor());
+        ContentValues values = createContentValue(movie);
+        db.update(TABLE_NAME, values, "_id = ?", new String[] {String.valueOf(id)});
+        ActorHelper.saveOrUpdate(movie.getActor(), id, db);
         log.trace("Начало обновления информации о фильме: " + movie.getTitle() + " id: " + id);
     }
-    
+
     /**
      * Преобразовать контент для сохранения в базе
      * @param movie - информация о фильме
      * @return контент для сохранения в базе
      */
-    private ContentValues createContentValue(Movie movie) {
+    private ContentValues createContentValue(MovieAndroid movie) {
         ContentValues values = new ContentValues();
         values.put("title", movie.getTitle());
         values.put("originaltitle", movie.getOriginaltitle());
@@ -196,65 +200,82 @@ public class MovieHelper extends SQLiteOpenHelper {
         values.put("credits", movie.getCredits());
         values.put("director", movie.getDirector());
         values.put("artist", movie.getArtist());
+        values.put("update_time", new Date().getTime());
+        if (movie.getActiveThumb() != null) {
+            values.put("active_thumb", movie.getActiveThumb());
+        }
         return values;
     }
-    
+
     /**
      * Загрузить информацию о фильме по условию
      * @param where - условия запроса
      * @return 
      */
-    public Set<MovieAndroid> load(WhereQuery where) {
-        Set<MovieAndroid> movies = new LinkedHashSet<MovieAndroid>();
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = null;
-        try {
+    public LoadMovie load(WhereQuery where) {
+        return new LoadMovie(where);
+    }
+
+    public class LoadMovie {
+
+        private WhereQuery where;
+        private Cursor cursor = null;
+        private SQLiteDatabase db = null;
+
+        public LoadMovie(WhereQuery where) {
             if (where == null) {
                 where = new WhereQuery();
             }
-            cursor = db.query(TABLE_NAME, null, where.getWhere(), where.getArgs(), null, null, null);
-            while (cursor.moveToNext()) {
-                MovieAndroid movie = new MovieAndroid();
-                String id = cursor.getString(cursor.getColumnIndex("_id"));
-                movie.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-                movie.setOriginaltitle(cursor.getString(cursor.getColumnIndex("originaltitle")));
-                movie.setSorttitle(cursor.getString(cursor.getColumnIndex("sorttitle")));
-                movie.setSet(cursor.getString(cursor.getColumnIndex("_set")));
-                movie.setRating(cursor.getString(cursor.getColumnIndex("rating")));
-                movie.setYear(cursor.getString(cursor.getColumnIndex("year")));
-                movie.setTop250(cursor.getString(cursor.getColumnIndex("top250")));
-                movie.setVotes(cursor.getString(cursor.getColumnIndex("votes")));
-                movie.setOutline(cursor.getString(cursor.getColumnIndex("outline")));
-                movie.setPlot(cursor.getString(cursor.getColumnIndex("plot")));
-                movie.setTagline(cursor.getString(cursor.getColumnIndex("tagline")));
-                movie.setRuntime(cursor.getString(cursor.getColumnIndex("runtime")));
-                movie.setMpaa(cursor.getString(cursor.getColumnIndex("mpaa")));
-                movie.setPlaycount(cursor.getString(cursor.getColumnIndex("playcount")));
-                movie.setWatched(cursor.getString(cursor.getColumnIndex("watched")));
-                movie.setId(cursor.getString(cursor.getColumnIndex("ext_id")));
-                movie.setFilenameandpath(cursor.getString(cursor.getColumnIndex("filenameandpath")));
-                movie.setTrailer(cursor.getString(cursor.getColumnIndex("trailer")));
-                movie.setGenre(cursor.getString(cursor.getColumnIndex("genre")));
-                movie.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
-                movie.setDirector(cursor.getString(cursor.getColumnIndex("director")));
-                movie.setArtist(cursor.getString(cursor.getColumnIndex("artist")));
-                
-                Set<Actor> actors = new ActorHelper(Long.parseLong(id), db).load();
-                movie.getActor().addAll(actors);
-                
-                Set<Thumb> thumbs = ThumbHelper.load(Long.parseLong(id), db);
-                if (thumbs != null) {
-                    movie.getThumb().addAll(thumbs);
-                }
-                movie.setActiveThumb(cursor.getString(cursor.getColumnIndex("active_thumb")));
-                movies.add(movie);
+            this.where = where;
+        }
+
+        public MovieAndroid next() {
+            if (cursor == null) {
+                db = getWritableDatabase();
+                cursor = db.query(TABLE_NAME, null, where.getWhere(), where.getArgs(), null, null, null);
             }
-            return movies;
-        } finally {
+            if (cursor.moveToNext()) {
+                return buildMovie();
+            }
             CloseUtils.close(cursor);
+            return null;
+        }
+
+        private MovieAndroid buildMovie() {
+            MovieAndroid movie = new MovieAndroid();
+            String id = cursor.getString(cursor.getColumnIndex("_id"));
+            movie.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            movie.setOriginaltitle(cursor.getString(cursor.getColumnIndex("originaltitle")));
+            movie.setSorttitle(cursor.getString(cursor.getColumnIndex("sorttitle")));
+            movie.setSet(cursor.getString(cursor.getColumnIndex("_set")));
+            movie.setRating(cursor.getString(cursor.getColumnIndex("rating")));
+            movie.setYear(cursor.getString(cursor.getColumnIndex("year")));
+            movie.setTop250(cursor.getString(cursor.getColumnIndex("top250")));
+            movie.setVotes(cursor.getString(cursor.getColumnIndex("votes")));
+            movie.setOutline(cursor.getString(cursor.getColumnIndex("outline")));
+            movie.setPlot(cursor.getString(cursor.getColumnIndex("plot")));
+            movie.setTagline(cursor.getString(cursor.getColumnIndex("tagline")));
+            movie.setRuntime(cursor.getString(cursor.getColumnIndex("runtime")));
+            movie.setMpaa(cursor.getString(cursor.getColumnIndex("mpaa")));
+            movie.setPlaycount(cursor.getString(cursor.getColumnIndex("playcount")));
+            movie.setWatched(cursor.getString(cursor.getColumnIndex("watched")));
+            movie.setId(cursor.getString(cursor.getColumnIndex("ext_id")));
+            movie.setFilenameandpath(cursor.getString(cursor.getColumnIndex("filenameandpath")));
+            movie.setTrailer(cursor.getString(cursor.getColumnIndex("trailer")));
+            movie.setGenre(cursor.getString(cursor.getColumnIndex("genre")));
+            movie.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+            movie.setDirector(cursor.getString(cursor.getColumnIndex("director")));
+            movie.setArtist(cursor.getString(cursor.getColumnIndex("artist")));
+
+            Set<Actor> actors = ActorHelper.load(Long.parseLong(id), db);
+            movie.getActor().addAll(actors);
+
+            Set<Thumb> thumbs = ThumbHelper.load(Long.parseLong(id), db);
+            if (thumbs != null) {
+                movie.getThumb().addAll(thumbs);
+            }
+            movie.setActiveThumb(cursor.getString(cursor.getColumnIndex("active_thumb")));
+            return movie;
         }
     }
-
-
-
 }

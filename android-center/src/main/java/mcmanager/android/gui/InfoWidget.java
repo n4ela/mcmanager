@@ -8,12 +8,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -47,10 +49,21 @@ public class InfoWidget extends LinearLayout {
             }
         });
         
+        ImageButton buttonInfo = (ImageButton) findViewById(R.id.imageButtonInfo);
+        buttonInfo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, InfoMovie.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(InfoMovie.MOVIE_TAG, movie);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+        
         final ImageView image = (ImageView) findViewById(R.id.imageViewPoster);
         try {
             if (!StringUtils.isEmpty(movie.getActiveThumb())) {
-                Log.e("IMAGE", movie.getActiveThumb());
                 Bitmap bitmap = Bitmap.createScaledBitmap(
                         BitmapFactory.decodeFile(movie.getActiveThumb()), 
                         width / 2, 
@@ -60,7 +73,6 @@ public class InfoWidget extends LinearLayout {
                 image.setOnLongClickListener(new OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View paramView) {
-                        Log.e("LONG", "LONG");
                         ThumbDialog dialog = 
                                 new ThumbDialog(width, height * 2, context, movie);
                         dialog.setOnDismissListener(new OnDismissListener() {
@@ -71,7 +83,6 @@ public class InfoWidget extends LinearLayout {
                                         width / 2, 
                                         height, 
                                         true);
-                                Log.e("NEW IMAGE: ", movie.getActiveThumb());
                                 image.setImageBitmap(bitmap);
                             }
                         });

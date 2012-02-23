@@ -3,7 +3,6 @@ package mcmanager.android.dao;
 import static mcmanager.android.utils.LogDb.log;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import mcmanager.android.dao.WhereQuery.Type;
@@ -21,7 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
  *
  * Date: 29.01.2012
  */
-public class ThumbHelper {
+class ThumbHelper {
     private final static String TABLE_NAME = "thumb";
     
     public final static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
@@ -34,20 +33,6 @@ public class ThumbHelper {
             "id_film INTEGER, " +
             "cache_value TEXT, " +
             "PRIMARY KEY(value, id_film))";
-    
-//    /**
-//     * Сохранить или обновить информацию о постере к фильму
-//     * @param thumbs - список постеров к фильму
-//     * @param filmId - ид фильма
-//     * @param db     - база
-//     */
-//    public synchronized static void saveOrUpdate(List<Thumb> thumbs, long filmId, SQLiteDatabase db) {
-//        log.trace("Начало сохранение/обновление информации о постерах к фильму id: " + filmId);
-//        for (Thumb thumb : thumbs) {
-//            saveOrUpdate(thumb, filmId, db);    
-//        }
-//        log.trace("Сохранение/обновление информации о постерах к фильму id: " + filmId + " прошло успешно");
-//    }
     
     public synchronized static Set<Thumb> load(long filmId, SQLiteDatabase db) {
         Cursor cursor = null;

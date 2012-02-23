@@ -18,7 +18,7 @@ import android.database.sqlite.SQLiteDatabase;
  *
  * Date: 29.01.2012
  */
-public class ActorToMovieHelper {
+class ActorToMovieHelper {
 
     private final static String TABLE_NAME = "actor2movie";
     

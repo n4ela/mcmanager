@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class SqlCommonHelper {
+class SqlCommonHelper {
 
     public synchronized static String getId(String tableName, SQLiteDatabase db) {
         Cursor cursor = null;
@@ -20,19 +20,4 @@ public class SqlCommonHelper {
             }
         }
     }
-    
-//    public static String createWhere(ContentValues args) {
-//        StringBuilder builder = new StringBuilder("");
-//        for (String key : args.keySet()) {
-//            if (args.get(key) != null) {
-//                builder.append(key + " = '" + args.getAsString(key) + "' AND ");
-//            }
-//        }
-//        String result = builder.toString();
-//        if (result.length() > 0) {
-//            result = result.substring(0, result.length() - 5);
-//        }
-//        return result;
-//    }
-    
 }
