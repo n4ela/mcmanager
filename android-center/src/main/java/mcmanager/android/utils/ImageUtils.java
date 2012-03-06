@@ -67,12 +67,7 @@ public class ImageUtils {
             default:
                 throw new RuntimeException("ERROR");
         }
-        if (replace == false) {
-            file = prepareFile(url, dir);
-        } else {
-            file = new FileName(url).getPathFileName(dir);
-        }
-        return file;
+        return replace ? prepareFile(url, dir) : new FileName(url).getPathFileName(dir);
     }
     
     private static File prepareFile(String url, File cacheDir) {

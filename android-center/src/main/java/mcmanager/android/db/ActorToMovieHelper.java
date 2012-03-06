@@ -1,11 +1,11 @@
-package mcmanager.android.dao;
+package mcmanager.android.db;
 
 import static mcmanager.android.utils.LogDb.log;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import mcmanager.android.dao.WhereQuery.Type;
+import mcmanager.android.db.WhereQuery.Type;
 import mcmanager.android.exception.CoreException;
 import mcmanager.android.utils.CloseUtils;
 import android.content.ContentValues;
@@ -20,21 +20,25 @@ import android.database.sqlite.SQLiteDatabase;
  */
 class ActorToMovieHelper {
 
-    private final static String TABLE_NAME = "actor2movie";
-    
-    public final static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + 
-                                               "(actor_id INTEGER, " +
-                                               "movie_id INTEGER, " +
-                                               "PRIMARY KEY(actor_id, movie_id))";
-    
+    final static String TABLE_NAME = "actor2movie";
+
+    public final static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+            "(actor_id INTEGER, " +
+            "movie_id INTEGER, " +
+            "PRIMARY KEY(actor_id, movie_id))";
+
+    private final SQLiteDatabase db;
+    public ActorToMovieHelper(SQLiteDatabase db) {
+        this.db = db;
+    }
+
     /**
      * Сохрание информации об актере
      * @param actorId - ид актера
      * @param filmId  - ид фильма
-     * @param db      - база
      * @throws CoreException
      */
-    public synchronized static void save(long actorId, long filmId, SQLiteDatabase db) throws CoreException {
+    public void save(long actorId, long filmId) throws CoreException {
         log.trace("Начало сохранение связки актер: " + actorId + " с фильмом: " + filmId);
         Cursor cursor = null;
         try {
@@ -52,13 +56,13 @@ class ActorToMovieHelper {
         }
         log.trace("Cохранение связки актер: " + actorId + " с фильмом: " + filmId + " успешно завершенно");
     }
-    
+
     /**
      * Получить id актеров привязанного к фильму по ид  
      * @param filmId - ид фильма
      * @return список <ид фильма, ид актера> 
      */
-    public synchronized static Set<Long> load(long filmId, SQLiteDatabase db) {
+    public Set<Long> load(long filmId) {
         log.trace("Начало получени id актеров по id фильма: " + filmId);
         Cursor cursor = null;
         try {
@@ -72,20 +76,20 @@ class ActorToMovieHelper {
                 actorIds.add(actorId);
             }
             log.trace("Получени id актеров по id фильма: " + filmId + " успешно завершенно, " +
-            		  "полученно " + actorIds.size() + " записей");
+                    "полученно " + actorIds.size() + " записей");
             return actorIds;
         } finally {
             CloseUtils.close(cursor);
         }
     }
-    
+
     /**
      * Построить контент для таблицы на основе:
      * @param actorId - ид актера
      * @param filmId  - ид фильма
      * @return контент для сохранения в бд
      */
-    private static ContentValues createContentValue(long actorId, long filmId) {
+    private ContentValues createContentValue(long actorId, long filmId) {
         ContentValues content = new ContentValues();
         content.put("actor_id", actorId);
         content.put("movie_id", filmId);

@@ -1,6 +1,9 @@
-package mcmanager.android.gui;
+package mcmanager.android.activity.gui;
 
 import mcmanager.android.R;
+import mcmanager.android.activity.InfoMovie;
+import mcmanager.android.activity.InfoSerials;
+import mcmanager.android.bobj.DataBaseObject;
 import mcmanager.android.bobj.MovieAndroid;
 import mcmanager.android.utils.LogDb;
 import mcmanager.android.utils.StringUtils;
@@ -21,12 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class InfoWidget extends LinearLayout {
+public class MovieInfoWidget extends LinearLayout {
 
     private final int width;
     private final int height;
 
-    public InfoWidget(final MovieAndroid movie, final int width, final int height, final Activity context) {
+    public MovieInfoWidget(final DataBaseObject movie, final String tag, final int width, final int height, final Activity context) {
         super(context);
         this.width = width;
         this.height = height;
@@ -53,7 +56,8 @@ public class InfoWidget extends LinearLayout {
         buttonInfo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, InfoMovie.class);
+                Class clazz = tag.equals("movie") ? InfoMovie.class : InfoSerials.class;
+                Intent intent = new Intent(context, clazz);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(InfoMovie.MOVIE_TAG, movie);
                 intent.putExtras(bundle);

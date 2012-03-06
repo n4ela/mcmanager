@@ -1,14 +1,16 @@
-package mcmanager.android.dao;
+package mcmanager.android.db;
 
 import static mcmanager.android.utils.LogDb.log;
 
+import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import mcmanager.android.dao.WhereQuery.Type;
+import mcmanager.android.db.WhereQuery.Type;
 import mcmanager.android.utils.CloseUtils;
 import mcmanager.android.utils.ImageUtils;
 import mcmanager.android.utils.ImageUtils.ImageType;
+import mcmanager.android.utils.LogDb;
 import mcmanager.kinopoisk.info.Thumb;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -33,8 +35,13 @@ class ThumbHelper {
             "id_film INTEGER, " +
             "cache_value TEXT, " +
             "PRIMARY KEY(value, id_film))";
-    
-    public synchronized static Set<Thumb> load(long filmId, SQLiteDatabase db) {
+
+    private final SQLiteDatabase db;
+    public  ThumbHelper(SQLiteDatabase db) {
+        this.db = db;
+    }
+
+    public Set<Thumb> load(long filmId) {
         Cursor cursor = null;
         log.trace("Начало получения постеров по id фильма: " + filmId);
         try {
@@ -66,22 +73,19 @@ class ThumbHelper {
      * Сохранить или обновить информацию о постере к фильму
      * @param thumb  - постер к фильму
      * @param filmId - ид фильма
-     * @param db     - база
-     */    
-    public static void saveOrUpdate(Thumb thumb, String cacheThumb, long filmId, SQLiteDatabase db) {
+     */
+    public void saveOrUpdate(Thumb thumb, long filmId) {
         ContentValues content = new ContentValues();
         content.put("value", thumb.getValue());
         content.put("id_film", filmId);
         WhereQuery where = new WhereQuery(content, Type.AND);
         log.trace("Начало сохранение/обновление о информации постере: " + content + " к фильму id: " + filmId);
-        ContentValues contentUpdate = createContentValue(thumb, filmId);
-        contentUpdate.put("cache_value", ImageUtils.getCacheImage(thumb.getValue(), ImageType.THUMB, true).getAbsolutePath());
+        
+        content = createContentValue(thumb, filmId);
         long result = db.update(TABLE_NAME, content, where.getWhere(), where.getArgs());
         if (result == 0) {
             log.trace("Сохранение информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
-            ContentValues contentInsert = createContentValue(thumb, filmId);
-            contentInsert.put("cache_value", cacheThumb);
-            db.insert(TABLE_NAME, null, contentInsert);
+            db.insert(TABLE_NAME, null, content);
         } else {
             log.trace("Обновление информации о постере: " + content + " к фильму id: " + filmId + " прошло успешно");
         }
@@ -93,7 +97,7 @@ class ThumbHelper {
      * @param filmId - ид фильма
      * @return контент для сохранения в бд
      */
-    private static ContentValues createContentValue(Thumb thumb, long filmId) {
+    private ContentValues createContentValue(Thumb thumb, long filmId) {
         ContentValues content = new ContentValues();
         content.put("value", thumb.getValue());
         content.put("colors", thumb.getColors());
@@ -102,6 +106,18 @@ class ThumbHelper {
         content.put("season", thumb.getSeason());
         content.put("type", thumb.getType());
         content.put("id_film", filmId);
+        
+        File cacheValue = ImageUtils.getCacheImage(thumb.getValue(), ImageType.THUMB, true);
+        if (cacheValue.exists()) {
+            LogDb.log.info("YES");
+            content.put("cache_value", cacheValue.getAbsolutePath());
+        } else {
+            LogDb.log.info("NO");
+            String strPath = ImageUtils.loadImage(thumb.getValue(), ImageType.THUMB, true);
+            if (strPath != null) {
+                content.put("cache_value", strPath);
+            }
+        }
         return content;
     }
 

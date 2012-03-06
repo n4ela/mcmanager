@@ -1,4 +1,4 @@
-package mcmanager.android.dao;
+package mcmanager.android.db;
 
 import java.util.ArrayList;
 import java.util.List;

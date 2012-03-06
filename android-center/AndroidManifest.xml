@@ -9,23 +9,22 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <uses-sdk
-        android:minSdkVersion="11"/>
+    <uses-sdk android:minSdkVersion="11"/>
 
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:largeHeap="false">
-<!--         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" > -->
-        <activity android:name=".AndroidMediaCenter" >
+        <activity android:name=".activity.AndroidMediaCenter" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gui.InfoMovie" >
+        <activity android:name=".activity.InfoMovie" >
         </activity>
+        <activity android:name=".activity.InfoSerials" />
         <activity android:name=".activity.MediaCenterPlayer" >
         </activity>
         <activity

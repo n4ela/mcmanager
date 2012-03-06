@@ -9,7 +9,7 @@ import mcmanager.kinopoisk.info.Thumb;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MovieAndroid extends Movie implements Serializable {
+public class MovieAndroid extends Movie implements Serializable, DataBaseObject {
 
     private String activeThumb;
     

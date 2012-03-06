@@ -1,7 +1,6 @@
-package mcmanager.android.gui;
+package mcmanager.android.activity;
 
 import mcmanager.android.R;
-import mcmanager.android.activity.MediaCenterPlayer;
 import mcmanager.android.bobj.MovieAndroid;
 import mcmanager.android.utils.StringUtils;
 import android.app.Activity;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 
 public class InfoMovie extends Activity {
 
+
+    //TODO вынести т.к. используется в нескольких местах
     public static final String MOVIE_TAG = "movie";
     
     @Override

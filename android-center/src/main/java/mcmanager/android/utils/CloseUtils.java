@@ -1,12 +1,13 @@
 package mcmanager.android.utils;
 
-import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import mcmanager.android.dao.MovieHelper;
-
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import mcmanager.android.db.Loader;
 
 public class CloseUtils {
     public static void close(Cursor cursor) {
@@ -15,9 +16,9 @@ public class CloseUtils {
         }
     }
 
-    public static void close(MovieHelper movieHelper) {
-        if (movieHelper != null) {
-            movieHelper.close();
+    public static void close(SQLiteDatabase db) {
+        if (db != null) {
+            db.close();
         }
     }
 
@@ -29,5 +30,10 @@ public class CloseUtils {
             }
         }
     }
-    
+
+    public static void close(Loader loader) {
+        if (loader != null) {
+            loader.close();
+        }
+    }
 }

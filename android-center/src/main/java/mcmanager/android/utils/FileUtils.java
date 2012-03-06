@@ -38,8 +38,10 @@ public class FileUtils {
                 dir = filePath.substring(0, filePath.lastIndexOf('/'));
             }
             int index = fileName.lastIndexOf('.');
-            name = fileName.substring(0, index);
-            ext = fileName.substring(index + 1);
+            if (index != -1) {
+                name = fileName.substring(0, index);
+                ext = fileName.substring(index + 1);
+            }
         }
 
         public File getPathDir() {

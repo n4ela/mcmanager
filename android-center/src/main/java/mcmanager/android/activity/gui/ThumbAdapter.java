@@ -1,4 +1,4 @@
-package mcmanager.android.gui;
+package mcmanager.android.activity.gui;
 
 import java.util.List;
 
