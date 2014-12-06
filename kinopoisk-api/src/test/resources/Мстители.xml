@@ -1,0 +1,272 @@
+<ns2:movie xmlns:ns2="http://kinopoisk.mcmanager/info">
+    <title>Мстители The Avengers</title>
+    <originaltitle>The Avengers</originaltitle>
+    <rating>7.570</rating>
+    <year>2012</year>
+    <votes>463</votes>
+    <outline>Локи, сводный брат Тора, возвращается, и в этот раз он не один. Земля на грани порабощения, и только лучшие из лучших могут спасти человечество. Ник Фьюри, глава международной организации Щ. И. Т., собирает выдающихся поборников справедливости и добра, чтобы отразить атаку. Под предводительством Капитана Америки Железный Человек, Тор, Невероятный Халк, Соколиный глаз и Чёрная Вдова вступают в войну с захватчиком.</outline>
+    <plot>Локи, сводный брат Тора, возвращается, и в этот раз он не один. Земля на грани порабощения, и только лучшие из лучших могут спасти человечество. Ник Фьюри, глава международной организации Щ. И. Т., собирает выдающихся поборников справедливости и добра, чтобы отразить атаку. Под предводительством Капитана Америки Железный Человек, Тор, Невероятный Халк, Соколиный глаз и Чёрная Вдова вступают в войну с захватчиком.</plot>
+    <tagline>"Some assembly required"</tagline>
+    <mpaa>детям до 13 лет просмотр не желателен</mpaa>
+    <genre>фантастика/фэнтези/боевик/приключения</genre>
+    <credits>Джосс Уидон/Зак Пенн</credits>
+    <director>Джосс Уидон</director>
+    <actor>
+        <name>Роберт Дауни мл.</name>
+        <role>Tony Stark / Iron Man, $ 50 000 000</role>
+        <thumb>http://st.kp.yandex.net/images/actor/10096.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Крис Эванс</name>
+        <role>Steve Rogers / Captain America</role>
+        <thumb>http://st.kp.yandex.net/images/actor/49627.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Марк Руффало</name>
+        <role>Bruce Banner / The Hulk</role>
+        <thumb>http://st.kp.yandex.net/images/actor/10467.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Крис Хемсворт</name>
+        <role>Thor</role>
+        <thumb>http://st.kp.yandex.net/images/actor/1300401.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Скарлетт Йоханссон</name>
+        <role>Natasha Romanoff / Black Widow</role>
+        <thumb>http://st.kp.yandex.net/images/actor/3903.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Джереми Реннер</name>
+        <role>Clint Barton / Hawkeye</role>
+        <thumb>http://st.kp.yandex.net/images/actor/5468.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Том Хиддлстон</name>
+        <role>Loki</role>
+        <thumb>http://st.kp.yandex.net/images/actor/553143.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Сэмюэл Л. Джексон</name>
+        <role>Nick Fury</role>
+        <thumb>http://st.kp.yandex.net/images/actor/7164.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Кларк Грегг</name>
+        <role>Agent Phil Coulson</role>
+        <thumb>http://st.kp.yandex.net/images/actor/11536.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Коби Смолдерс</name>
+        <role>Agent Maria Hill</role>
+        <thumb>http://st.kp.yandex.net/images/actor/554916.jpg</thumb>
+    </actor>
+    <thumb>http://st.kp.yandex.net//images/film_big/263531.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279155.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279154.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279153.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279152.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279151.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279150.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279149.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279148.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2081417.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1944771.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1920839.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1908699.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1906465.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1901419.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1898576.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897877.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897147.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897146.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897145.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879020.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879019.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879018.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879017.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879016.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879015.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879014.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879013.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879012.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879011.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879010.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879009.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879008.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879007.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879006.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879005.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879004.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879003.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879002.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879001.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879000.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878999.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878998.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279155.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279154.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279153.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279152.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279151.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279150.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279149.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2279148.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/2081417.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1944771.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1920839.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1908699.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1906465.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1901419.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1898576.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897877.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897147.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897146.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1897145.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879020.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879019.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879018.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879017.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879016.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879015.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879014.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879013.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879012.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879011.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879010.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879009.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879008.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879007.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879006.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879005.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879004.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879003.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879002.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879001.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1879000.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878999.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878998.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878997.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878996.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878995.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878994.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878993.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878992.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878991.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878990.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878989.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878988.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878979.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878978.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878977.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878973.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878972.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878971.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878970.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878969.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878968.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878967.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878966.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878964.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878963.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878961.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878960.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878959.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878958.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878957.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878956.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878950.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878949.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878948.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878947.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878946.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878945.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878944.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878942.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878826.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878825.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878824.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878823.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878822.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878821.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878820.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878819.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878818.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878630.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878629.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878628.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878627.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878626.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878625.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878624.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878623.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878621.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878620.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878619.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878618.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878617.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1878616.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1876489.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1876488.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1875292.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1867584.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1864728.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1860545.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1860544.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1856837.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1856836.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1856708.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1855166.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852476.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852475.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852474.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852369.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852356.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852355.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1852354.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1851945.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1851944.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1851943.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1851942.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841707.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841653.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841652.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841651.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841650.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841649.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1841648.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838718.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838703.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838702.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838701.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838403.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838402.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838197.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838196.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838195.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838194.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838184.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838183.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838102.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838101.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838100.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1838099.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1837292.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1834014.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1830246.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1830245.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1796080.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1796079.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768211.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768210.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768209.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768208.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768207.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768206.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768205.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1768204.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1757423.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1757422.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1736394.jpg</thumb>
+    <thumb>http://st.kp.yandex.net/images/poster/1736393.jpg</thumb>
+</ns2:movie>

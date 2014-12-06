@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/Settings" android:title="Настройки"></item>
-    <item android:id="@+id/rebase_soft" android:title="Обновить базу"></item>
-    <item android:id="@+id/rebase_hard" android:title="Обновить базу (Полностью)"></item>
-
-</menu>
